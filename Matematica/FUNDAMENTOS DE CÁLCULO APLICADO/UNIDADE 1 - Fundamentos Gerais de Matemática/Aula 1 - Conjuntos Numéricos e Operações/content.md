@@ -26,11 +26,11 @@ Um conjunto pode ser entendido como uma coleção de objetos que possuem ao meno
 
 Os conjuntos são denotados, usualmente, por letras maiúsculas 𝐴, 𝐵, 𝐶, ..., e seus elementos geralmente são representados pelas letras minúsculas 𝑎, 𝑏, 𝑐, .... No caso do exemplo anterior, podemos chamar o conjunto de 𝐴 e utilizar a representação:
 
-$$A = \{1, 2, 3, 4, 5\}$$
+$$A = \lbrace 1, 2, 3, 4, 5 \rbrace$$
 
 Outra possível representação é a indicação de uma propriedade que caracteriza os elementos, o que nesse exemplo pode ser dado por:
 
-$$A = \{x \in \mathbb{N} ; 1 \le x \le 5\}$$
+$$A = \lbrace x \in \mathbb{N} ; 1 \le x \le 5 \rbrace$$
 
 o que pode ser lido como "o conjunto 𝐴 é formado pelos elementos 𝑥 pertencentes ao conjunto de números naturais (𝑥 ∈ ℕ), tais que 𝑥 é maior ou igual a 1 e menor ou igual a 5". Outra possível representação é utilizando os diagramas, conforme Figura 1, sendo mais utilizada para conjuntos com poucos elementos.
 
@@ -52,7 +52,7 @@ Os conjuntos numéricos são formados por números. Das diversas possibilidades 
 
 O conjunto de números naturais é dado por:
 
-$$\mathbb{N} = \{0, 1, 2, 3, 4, 5, \dots\}$$
+$$\mathbb{N} = \lbrace 0, 1, 2, 3, 4, 5, \dots \rbrace$$
 
 cujos elementos são usualmente empregados no processo de contagem. A partir dele, podemos construir outros subconjuntos como o subconjunto dos números naturais não nulos, o qual pode ser representado por ℕ* = {1, 2, 3, 4, 5, ...}.
 
@@ -60,7 +60,7 @@ cujos elementos são usualmente empregados no processo de contagem. A partir del
 
 O conjunto dos números inteiros é dado por:
 
-$$\mathbb{Z} = \{\dots, -3, -2, -1, 0, 1, 2, 3, \dots\}$$
+$$\mathbb{Z} = \lbrace \dots, -3, -2, -1, 0, 1, 2, 3, \dots \rbrace$$
 
 ou seja, contempla o zero, os inteiros positivos e os inteiros negativos. Observe que o conjunto de números naturais é um subconjunto de ℤ, relação esta que pode ser descrita por ℕ ⊂ ℤ.
 
@@ -78,7 +78,7 @@ A partir dos inteiros, podemos construir alguns subconjuntos importantes:
 
 O conjunto dos números racionais é formado por todos os números que podem ser representados na forma de uma fração $\dfrac{a}{b}$, em que 𝑎 e 𝑏 são números inteiros, com 𝑏 não nulo. Podemos representar esse conjunto na forma:
 
-$$\mathbb{Q} = \left\{ \dfrac{a}{b} \; ; \; a, b \in \mathbb{Z} \text{ e } b \ne 0 \right\}$$
+$$\mathbb{Q} = \lbrace \dfrac{a}{b} ; a, b \in \mathbb{Z} \text{ e } b \ne 0 \rbrace$$
 
 Nesse conjunto são incluídos os números naturais, os inteiros e, também, as dízimas periódicas. E assim como no caso dos inteiros, podemos construir os seguintes subconjuntos, adotando a mesma lógica utilizada no caso de ℤ:
 
@@ -94,7 +94,7 @@ Os números racionais podem ser representados tanto na forma de fração quanto 
 
 O conjunto dos números irracionais, diferente dos racionais, é composto por todas as dízimas não periódicas, isto é, pelos números que, quando representados na forma decimal, apresentam infinitas casas decimais, as quais não são periódicas, não repetindo um padrão predefinido. Assim:
 
-$$\mathbb{I} = \{x \; ; \; x \text{ é uma dízima não periódica}\}$$
+$$\mathbb{I} = \lbrace x ; x \text{ é uma dízima não periódica} \rbrace$$
 
 Nesse conjunto, podemos destacar dois números muito importantes:
 
