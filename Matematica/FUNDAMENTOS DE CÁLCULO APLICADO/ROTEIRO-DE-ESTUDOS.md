@@ -127,106 +127,102 @@ Gerado a partir da leitura de todos os `content.md` das 4 unidades (20 aulas). D
 
 ## Lista 2 — Checklist de estudo com vídeos recomendados
 
-**Canais usados nas recomendações (verificados por busca):**
-- 🎓 **Professor Ferretto** — forte em pré-cálculo/ensino médio (conjuntos, equações, potências, logaritmos, trigonometria, funções). Canal: https://www.youtube.com/professorferretto
-- 🎓 **Grings (O Matemático)** — especializado em Cálculo 1 a 4 (limites, derivadas, integrais). Canal: https://www.youtube.com/@OmatematicoGrings
-- 🎓 **Matemática em Exercícios** (Prof. Guilherme Miguel Rosa) — resolução de exercícios de matemática básica a Cálculo 1. Canal: https://www.youtube.com/channel/UCz5-HfBqc2WzfiI6PI5figA
-- 🎓 **Matemática Rio com Prof. Rafael Procópio** — canal tradicional (desde 2010), cobre desde básico até cálculo. Canal: https://www.youtube.com/channel/UCjIPRjJZtGhzWD2LrEKOHMA
+Cada tópico tem o link direto do melhor vídeo encontrado na busca (título, canal e foco do conteúdo conferidos antes de incluir).
 
 ### Unidade 1 — Fundamentos Gerais de Matemática
 
 - [ ] **Aula 1 assistida** — Conjuntos Numéricos e Operações
-  - [ ] Conjuntos numéricos (ℕ, ℤ, ℚ, 𝕀, ℝ) — *Ferretto: pesquise "conjuntos numéricos"*
-  - [ ] Operações com frações e MMC — *Matemática em Exercícios: pesquise "operações com frações"*
-  - [ ] Números complexos e plano de Argand-Gauss — *Ferretto: pesquise "números complexos"*
+  - [ ] Conjuntos numéricos (ℕ, ℤ, ℚ, 𝕀, ℝ, ℂ): https://www.youtube.com/watch?v=yZP9rLJQRqA
+  - [ ] Operações com frações e MMC: https://www.youtube.com/watch?v=HunWcKjwRzs
+  - [ ] Números complexos e plano de Argand-Gauss (Me Salva!): https://www.youtube.com/watch?v=RDA71S_2CC8
 
 - [ ] **Aula 2 assistida** — Equações e Inequações
-  - [ ] Equações de 1º grau — *Ferretto: pesquise "equação de 1º grau"*
-  - [ ] Equações de 2º grau / fórmula de Bhaskara — vídeo verificado: [A Fórmula de Bhaskara — Lucas Borguezan](https://www.youtube.com/watch?v=9_7M5k2tWiA)
-  - [ ] Inequações de 1º grau (uma e duas variáveis) — *Ferretto: pesquise "inequação do 1º grau"*
+  - [ ] Equações de 1º grau: https://www.youtube.com/watch?v=HIWC8RU8Ze0
+  - [ ] Equações de 2º grau / fórmula de Bhaskara (Lucas Borguezan): https://www.youtube.com/watch?v=9_7M5k2tWiA
+  - [ ] Inequações de 1º grau (uma e duas variáveis, solução gráfica): https://www.youtube.com/watch?v=0n-o8B1hoN4
 
 - [ ] **Aula 3 assistida** — Potências e Logaritmos
-  - [ ] Propriedades de potências — *Ferretto: pesquise "propriedades da potenciação"*
-  - [ ] Definição e propriedades de logaritmos — *Ferretto: pesquise "logaritmos"*
-  - [ ] Log decimal e natural (ln) — *Ferretto: pesquise "logaritmo natural"*
+  - [ ] Propriedades de potências: https://www.youtube.com/watch?v=pzZXpIziFzc
+  - [ ] Definição e propriedades de logaritmos: https://www.youtube.com/watch?v=qMv1AgBnsUE
+  - [ ] Logaritmo natural (ln): https://www.youtube.com/watch?v=2YVoS2E-_7c
 
 - [ ] **Aula 4 assistida** — Tópicos de Trigonometria
-  - [ ] Teorema de Pitágoras — *Ferretto: pesquise "teorema de Pitágoras"*
-  - [ ] Graus e radianos — *Ferretto: pesquise "graus e radianos"*
-  - [ ] Razões trigonométricas (seno, cosseno, tangente) e ângulos notáveis — *Ferretto: pesquise "razões trigonométricas triângulo retângulo"*
+  - [ ] Teorema de Pitágoras (demonstração geométrica): https://www.youtube.com/watch?v=2NOzQtdoSZg
+  - [ ] Graus e radianos (aula completa + exercícios): https://www.youtube.com/watch?v=4uVr4sWMMtU
+  - [ ] Razões trigonométricas (seno, cosseno, tangente) e ângulos notáveis: https://www.youtube.com/watch?v=4sTUs4ll3dI
 
 - [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
 
 ### Unidade 2 — Fundamentos Gerais sobre Funções
 
 - [ ] **Aula 1 assistida** — Funções Afim e Quadrática
-  - [ ] Conceito de função (domínio, contradomínio, imagem) — *Ferretto: pesquise "o que é uma função"*
-  - [ ] Função afim (gráfico, coef. angular/linear) — *Ferretto: pesquise "função afim"*
-  - [ ] Função quadrática (vértice, discriminante, concavidade) — *Ferretto: pesquise "função quadrática vértice"*
+  - [ ] Conceito de função (domínio, contradomínio, imagem): https://www.youtube.com/watch?v=Eq3Zqj0po98
+  - [ ] Função afim (gráfico, coef. angular/linear): https://www.youtube.com/watch?v=TgoAYYAjGCM
+  - [ ] Função quadrática (gráfico, parábola, vértice): https://www.youtube.com/watch?v=aIOKZ0rFzS4
 
 - [ ] **Aula 2 assistida** — Função Exponencial
-  - [ ] Gráfico e propriedades da função exponencial — *Ferretto: pesquise "função exponencial"*
-  - [ ] Equações exponenciais — *Ferretto: pesquise "equação exponencial"*
+  - [ ] Função exponencial: definição e gráfico: https://www.youtube.com/watch?v=3lR3guqfbUg
+  - [ ] Equações exponenciais: https://www.youtube.com/watch?v=7EPKmS68KT0
 
 - [ ] **Aula 3 assistida** — Função Logarítmica
-  - [ ] Gráfico da função logarítmica — *Ferretto: pesquise "função logarítmica"*
-  - [ ] Equações logarítmicas e mudança de base — *Ferretto: pesquise "equação logarítmica"*
-  - [ ] Relação função exponencial ↔ logarítmica (inversas) — *Ferretto: pesquise "função inversa exponencial logarítmica"*
+  - [ ] Função logarítmica: definição, gráfico e propriedades: https://www.youtube.com/watch?v=UxUJ6JzHdmc
+  - [ ] Logaritmo — mudança de base (base para equações logarítmicas): https://www.youtube.com/watch?v=2k3roMqyFi0
+  - [ ] Relação função exponencial ↔ logarítmica (funções inversas): https://www.youtube.com/watch?v=AEadWN8paRc
 
 - [ ] **Aula 4 assistida** — Função Trigonométrica
-  - [ ] Ciclo trigonométrico — *Ferretto: pesquise "ciclo trigonométrico"*
-  - [ ] Funções seno, cosseno e tangente (gráfico e período) — *Ferretto: pesquise "função seno cosseno gráfico"*
-  - [ ] Parâmetros a, b, c, d na senoide — *Matemática em Exercícios: pesquise "transformações função seno"*
+  - [ ] Ciclo trigonométrico: https://www.youtube.com/watch?v=PjqZMWZ6t9Q
+  - [ ] Função seno e cosseno (gráfico, imagem, período) — Grings: https://www.youtube.com/watch?v=kMdNnFSFXAo
+  - [ ] Transformações f(x) = a + b·sen(cx+d): amplitude, período, deslocamento: https://www.youtube.com/watch?v=-0QJ6816R2c
 
 - [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
 
 ### Unidade 3 — Fundamentos Gerais sobre Limites e Derivadas
 
 - [ ] **Aula 1 assistida** — Introdução aos Limites
-  - [ ] Noção intuitiva e definição de limite — vídeo verificado: [Cálculo: Introdução e Noção Intuitiva de Limites (Aula 1 de 15)](https://www.youtube.com/watch?v=DkCHV5Kbx4o)
-  - [ ] Limite bilateral e limites laterais — vídeo verificado: [GRINGS — Introdução aos limites, aula 1](https://www.youtube.com/watch?v=v-VYli2XQo0)
-  - [ ] Propriedades dos limites e teorema do confronto — *Grings: pesquise "propriedades dos limites" no canal*
+  - [ ] Noção intuitiva e definição de limite: https://www.youtube.com/watch?v=DkCHV5Kbx4o
+  - [ ] Limite bilateral e limites laterais (Grings): https://www.youtube.com/watch?v=v-VYli2XQo0
+  - [ ] Propriedades dos limites e teorema do confronto (sanduíche): https://www.youtube.com/watch?v=k3FOy1uibO8
 
 - [ ] **Aula 2 assistida** — Limites Infinitos e no Infinito
-  - [ ] Limites infinitos e assíntota vertical — *Grings: pesquise "limites infinitos assíntota"*
-  - [ ] Limites no infinito (funções racionais) — *Grings: pesquise "limite no infinito função racional"*
-  - [ ] Limite fundamental sen(x)/x e limite exponencial fundamental — *Grings: pesquise "limite fundamental trigonométrico"*
+  - [ ] Limites infinitos e assíntota vertical (Me Salva!): https://www.youtube.com/watch?v=-FfodxO713c
+  - [ ] Limites no infinito de função racional: https://www.youtube.com/watch?v=pn65RYdGTE0
+  - [ ] Limite fundamental trigonométrico sen(x)/x: https://www.youtube.com/watch?v=26kuEBbAeBY
 
 - [ ] **Aula 3 assistida** — Continuidade de Funções
-  - [ ] Definição de continuidade em um ponto — *Grings: pesquise "continuidade de funções"*
-  - [ ] Tipos de descontinuidade (removível, salto, infinita) — *Matemática em Exercícios: pesquise "tipos de descontinuidade"*
-  - [ ] Teorema do Valor Intermediário — *Grings: pesquise "teorema do valor intermediário"*
+  - [ ] O que é uma função contínua / definição de continuidade: https://www.youtube.com/watch?v=a4c_ikClct4
+  - [ ] Tipos de descontinuidade (removível, salto, infinita): https://www.youtube.com/watch?v=VglKgsmUglk
+  - [ ] Teorema do Valor Intermediário: https://www.youtube.com/watch?v=67FFCySNMXs
 
 - [ ] **Aula 4 assistida** — Introdução às Derivadas
-  - [ ] Problema da reta tangente e definição de derivada — vídeo verificado: [Grings — Curso básico de derivadas, aula 1](https://www.youtube.com/watch?v=Nwy4NILJDxw)
-  - [ ] Regras básicas de derivação (constante, potência, soma) — *Grings: pesquise "regras básicas de derivação"*
-  - [ ] Derivabilidade × continuidade — *Grings: pesquise "derivada e continuidade"*
+  - [ ] Problema da reta tangente e definição de derivada (Grings): https://www.youtube.com/watch?v=Nwy4NILJDxw
+  - [ ] Regras básicas de derivação (constante, potência, soma): https://www.youtube.com/watch?v=Rhf3u-82fwg
+  - [ ] Relação entre derivabilidade e continuidade: https://www.youtube.com/watch?v=6qUo0cdnvFg
 
 - [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
 
 ### Unidade 4 — Fundamentos Gerais sobre Cálculo Diferencial e Integral
 
 - [ ] **Aula 1 assistida** — Regras de Derivação
-  - [ ] Regra do produto e do quociente — *Grings: pesquise "regra do produto e quociente derivada"*
-  - [ ] Regra da cadeia — *Grings: pesquise "regra da cadeia"*
-  - [ ] Derivadas de exponencial, log e trigonométricas — *Grings: pesquise "derivada exponencial logarítmica trigonométrica"*
+  - [ ] Regra do produto e do quociente: https://www.youtube.com/watch?v=KlOwwJQbp_U
+  - [ ] Regra da cadeia (passo a passo): https://www.youtube.com/watch?v=pstE4oJrm3w
+  - [ ] Derivadas de exponencial, logarítmica e trigonométricas na prática: https://www.youtube.com/watch?v=8piOdjEI4iw
 
 - [ ] **Aula 2 assistida** — Derivadas e Otimização
-  - [ ] Pontos críticos, máximos e mínimos — *Grings: pesquise "máximos e mínimos derivada"*
-  - [ ] Teste da 1ª e 2ª derivada, concavidade e ponto de inflexão — *Grings: pesquise "teste da segunda derivada concavidade"*
+  - [ ] Pontos críticos, extremos e teste da 1ª derivada: https://www.youtube.com/watch?v=D7Y9Hj9CE3M
+  - [ ] Concavidade e pontos de inflexão (teste da 2ª derivada): https://www.youtube.com/watch?v=AR-nEYOUTkM
 
 - [ ] **Aula 3 assistida** — Introdução às Integrais
-  - [ ] Soma de Riemann e integral definida — *Grings: pesquise "soma de Riemann integral definida"*
-  - [ ] Teorema Fundamental do Cálculo — *Grings: pesquise "teorema fundamental do cálculo"*
-  - [ ] Integral indefinida e tabela de integrais imediatas — *Grings: pesquise "integrais imediatas"*
+  - [ ] Integral definida: áreas e soma de Riemann: https://www.youtube.com/watch?v=CWWbjoOjYOg
+  - [ ] Teorema Fundamental do Cálculo (com exemplos resolvidos): https://www.youtube.com/watch?v=qRMvrwLt96s
+  - [ ] Integrais imediatas / tabela de integrais (Grings): https://www.youtube.com/watch?v=ZLiZRIN1-FE
 
 - [ ] **Aula 4 assistida** — Calculando Integrais
-  - [ ] Integração por substituição — *Grings: pesquise "integração por substituição"*
-  - [ ] Integração por partes — *Grings: pesquise "integração por partes"*
-  - [ ] Área entre curvas — *Grings: pesquise "área entre curvas integral"*
+  - [ ] Integração por substituição (método infalível): https://www.youtube.com/watch?v=fHom2rFJGjg
+  - [ ] Integração por partes (Grings, aula 1): https://www.youtube.com/watch?v=BIz6JNgzhWQ
+  - [ ] Área entre curvas: https://www.youtube.com/watch?v=hBRCUKM-9p4
 
 - [ ] **Aula 5 assistida** — Encerramento da Unidade
-  - [ ] Taxas relacionadas — *Matemática Rio (Rafael Procópio): pesquise "taxas relacionadas"*
+  - [ ] Taxas relacionadas (Grings, aula 1): https://www.youtube.com/watch?v=UR7HJFuJkAw
 
 ---
 
