@@ -131,27 +131,27 @@ Cada tópico tem o link direto do melhor vídeo encontrado na busca (título, ca
 
 ### Unidade 1 — Fundamentos Gerais de Matemática
 
-- [ ] **Aula 1 assistida** — Conjuntos Numéricos e Operações
-  - [ ] Conjuntos numéricos (ℕ, ℤ, ℚ, 𝕀, ℝ, ℂ): https://www.youtube.com/watch?v=yZP9rLJQRqA
-  - [ ] Operações com frações e MMC: https://www.youtube.com/watch?v=HunWcKjwRzs
-  - [ ] Números complexos e plano de Argand-Gauss (Me Salva!): https://www.youtube.com/watch?v=RDA71S_2CC8
+- [x] **Aula 1 assistida** — Conjuntos Numéricos e Operações
+  - [x] Conjuntos numéricos (ℕ, ℤ, ℚ, 𝕀, ℝ, ℂ): https://www.youtube.com/watch?v=yZP9rLJQRqA
+  - [x] Operações com frações e MMC: https://www.youtube.com/watch?v=HunWcKjwRzs
+  - [x] Números complexos e plano de Argand-Gauss (Me Salva!): https://www.youtube.com/watch?v=RDA71S_2CC8
 
-- [ ] **Aula 2 assistida** — Equações e Inequações
-  - [ ] Equações de 1º grau: https://www.youtube.com/watch?v=HIWC8RU8Ze0
-  - [ ] Equações de 2º grau / fórmula de Bhaskara (Lucas Borguezan): https://www.youtube.com/watch?v=9_7M5k2tWiA
-  - [ ] Inequações de 1º grau (uma e duas variáveis, solução gráfica): https://www.youtube.com/watch?v=0n-o8B1hoN4
+- [x] **Aula 2 assistida** — Equações e Inequações
+  - [x] Equações de 1º grau: https://www.youtube.com/watch?v=HIWC8RU8Ze0
+  - [x] Equações de 2º grau / fórmula de Bhaskara (Lucas Borguezan): https://www.youtube.com/watch?v=9_7M5k2tWiA
+  - [x] Inequações de 1º grau (uma e duas variáveis, solução gráfica): https://www.youtube.com/watch?v=0n-o8B1hoN4
 
-- [ ] **Aula 3 assistida** — Potências e Logaritmos
-  - [ ] Propriedades de potências: https://www.youtube.com/watch?v=pzZXpIziFzc
-  - [ ] Definição e propriedades de logaritmos: https://www.youtube.com/watch?v=qMv1AgBnsUE
-  - [ ] Logaritmo natural (ln): https://www.youtube.com/watch?v=2YVoS2E-_7c
+- [x] **Aula 3 assistida** — Potências e Logaritmos
+  - [x] Propriedades de potências: https://www.youtube.com/watch?v=pzZXpIziFzc
+  - [x] Definição e propriedades de logaritmos: https://www.youtube.com/watch?v=qMv1AgBnsUE
+  - [x] Logaritmo natural (ln): https://www.youtube.com/watch?v=2YVoS2E-_7c
 
-- [ ] **Aula 4 assistida** — Tópicos de Trigonometria
-  - [ ] Teorema de Pitágoras (demonstração geométrica): https://www.youtube.com/watch?v=2NOzQtdoSZg
-  - [ ] Graus e radianos (aula completa + exercícios): https://www.youtube.com/watch?v=4uVr4sWMMtU
-  - [ ] Razões trigonométricas (seno, cosseno, tangente) e ângulos notáveis: https://www.youtube.com/watch?v=4sTUs4ll3dI
+- [x] **Aula 4 assistida** — Tópicos de Trigonometria
+  - [x] Teorema de Pitágoras (demonstração geométrica): https://www.youtube.com/watch?v=2NOzQtdoSZg
+  - [x] Graus e radianos (aula completa + exercícios): https://www.youtube.com/watch?v=4uVr4sWMMtU
+  - [x] Razões trigonométricas (seno, cosseno, tangente) e ângulos notáveis: https://www.youtube.com/watch?v=4sTUs4ll3dI
 
-- [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
+- [x] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
 
 ### Unidade 2 — Fundamentos Gerais sobre Funções
 
