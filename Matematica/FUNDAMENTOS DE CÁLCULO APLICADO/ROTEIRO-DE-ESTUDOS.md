@@ -129,6 +129,8 @@ Gerado a partir da leitura de todos os `content.md` das 4 unidades (20 aulas). D
 
 Cada tópico tem o link direto do melhor vídeo encontrado na busca (título, canal e foco do conteúdo conferidos antes de incluir).
 
+> Canais preferidos (nessa ordem de prioridade, quando houver vídeo adequado ao tópico): 1. [@sandrocuriodicasdemat](https://www.youtube.com/@sandrocuriodicasdemat) (Dicasdemat Sandro Curió), 2. [@equacionamatematica](https://www.youtube.com/@equacionamatematica) (Equaciona Com Paulo Pereira), 3. @explicabem. Nas aulas ainda não assistidas (Unidades 2-4), os vídeos abaixo foram atualizados priorizando esses canais. Nas aulas já assistidas (Unidade 1), os vídeos originais foram mantidos e — onde havia vídeo desses canais cobrindo o mesmo tópico — foi adicionada uma referência extra com checkbox próprio.
+
 ### Unidade 1 — Fundamentos Gerais de Matemática
 
 - [x] **Aula 1 assistida** — Conjuntos Numéricos e Operações
@@ -139,90 +141,96 @@ Cada tópico tem o link direto do melhor vídeo encontrado na busca (título, ca
 - [x] **Aula 2 assistida** — Equações e Inequações
   - [x] Equações de 1º grau: https://www.youtube.com/watch?v=HIWC8RU8Ze0
   - [x] Equações de 2º grau / fórmula de Bhaskara (Lucas Borguezan): https://www.youtube.com/watch?v=9_7M5k2tWiA
+  - [ ] Equações de 2º grau / Bhaskara — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=ZZ9gGsqwrpo
   - [x] Inequações de 1º grau (uma e duas variáveis, solução gráfica): https://www.youtube.com/watch?v=0n-o8B1hoN4
+  - [ ] Inequações de 1º grau — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=qrnOtSD1vF8
 
 - [x] **Aula 3 assistida** — Potências e Logaritmos
   - [x] Propriedades de potências: https://www.youtube.com/watch?v=pzZXpIziFzc
+  - [ ] Propriedades de potências ("Potenciação em 10 minutos") — Dicasdemat Sandro Curió (@sandrocuriodicasdemat), ~10min: https://www.youtube.com/watch?v=FzkAWvOAEUI
   - [x] Definição e propriedades de logaritmos: https://www.youtube.com/watch?v=qMv1AgBnsUE
   - [x] Logaritmo natural (ln): https://www.youtube.com/watch?v=2YVoS2E-_7c
 
 - [x] **Aula 4 assistida** — Tópicos de Trigonometria
   - [x] Teorema de Pitágoras (demonstração geométrica): https://www.youtube.com/watch?v=2NOzQtdoSZg
   - [x] Graus e radianos (aula completa + exercícios): https://www.youtube.com/watch?v=4uVr4sWMMtU
+  - [ ] Círculo trigonométrico (contexto de graus/radianos) — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=9FgfEQM1a3c
   - [x] Razões trigonométricas (seno, cosseno, tangente) e ângulos notáveis: https://www.youtube.com/watch?v=4sTUs4ll3dI
+  - [ ] Razões trigonométricas no triângulo retângulo ("em 13 minutos") — Dicasdemat Sandro Curió (@sandrocuriodicasdemat), ~13min: https://www.youtube.com/watch?v=C7NrVLmEYcs
 
 - [x] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
 
 ### Unidade 2 — Fundamentos Gerais sobre Funções
 
 - [ ] **Aula 1 assistida** — Funções Afim e Quadrática
-  - [ ] Conceito de função (domínio, contradomínio, imagem): https://www.youtube.com/watch?v=Eq3Zqj0po98
-  - [ ] Função afim (gráfico, coef. angular/linear): https://www.youtube.com/watch?v=TgoAYYAjGCM
-  - [ ] Função quadrática (gráfico, parábola, vértice): https://www.youtube.com/watch?v=aIOKZ0rFzS4
+  - [ ] Conceito de função (domínio, contradomínio, imagem) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=GkuG8xZrYbs
+  - [ ] Função afim (gráfico, coef. angular/linear, raiz) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=JgGseIonmYI
+  - [ ] Função quadrática (gráfico, parábola, vértice) — Dicasdemat Sandro Curió, ~21min: https://www.youtube.com/watch?v=ZpW9Xb5iyt4
 
 - [ ] **Aula 2 assistida** — Função Exponencial
-  - [ ] Função exponencial: definição e gráfico: https://www.youtube.com/watch?v=3lR3guqfbUg
-  - [ ] Equações exponenciais: https://www.youtube.com/watch?v=7EPKmS68KT0
+  - [ ] Função exponencial: definição e gráfico — Dicasdemat Sandro Curió, ~15min: https://www.youtube.com/watch?v=zU2nPaGyauc
+  - [ ] Equações exponenciais — Dicasdemat Sandro Curió, ~15min: https://www.youtube.com/watch?v=Ggh77h1Cs4M
 
 - [ ] **Aula 3 assistida** — Função Logarítmica
-  - [ ] Função logarítmica: definição, gráfico e propriedades: https://www.youtube.com/watch?v=UxUJ6JzHdmc
-  - [ ] Logaritmo — mudança de base (base para equações logarítmicas): https://www.youtube.com/watch?v=2k3roMqyFi0
-  - [ ] Relação função exponencial ↔ logarítmica (funções inversas): https://www.youtube.com/watch?v=AEadWN8paRc
+  - [ ] Função logarítmica: definição, gráfico e propriedades — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=oza6zrCMOPM
+  - [ ] Logaritmo — mudança de base (base para equações logarítmicas) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=MYOLeCwp_kc
+  - [ ] Relação função exponencial ↔ logarítmica (funções inversas): https://www.youtube.com/watch?v=Gg-xMSMI4VY
 
 - [ ] **Aula 4 assistida** — Função Trigonométrica
-  - [ ] Ciclo trigonométrico: https://www.youtube.com/watch?v=PjqZMWZ6t9Q
-  - [ ] Função seno e cosseno (gráfico, imagem, período) — Grings: https://www.youtube.com/watch?v=kMdNnFSFXAo
-  - [ ] Transformações f(x) = a + b·sen(cx+d): amplitude, período, deslocamento: https://www.youtube.com/watch?v=-0QJ6816R2c
+  - [ ] Ciclo trigonométrico — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=9FgfEQM1a3c
+  - [ ] Função seno (gráfico, imagem, período) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=FwTbL4hewlY
+  - [ ] Função cosseno e transformações (amplitude, período, deslocamento) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=vUvWnRDcBrc
 
-- [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
+- [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima — reaproveitar os vídeos das Aulas 1-4)
 
 ### Unidade 3 — Fundamentos Gerais sobre Limites e Derivadas
 
 - [ ] **Aula 1 assistida** — Introdução aos Limites
-  - [ ] Noção intuitiva e definição de limite: https://www.youtube.com/watch?v=DkCHV5Kbx4o
-  - [ ] Limite bilateral e limites laterais (Grings): https://www.youtube.com/watch?v=v-VYli2XQo0
-  - [ ] Propriedades dos limites e teorema do confronto (sanduíche): https://www.youtube.com/watch?v=k3FOy1uibO8
+  - [ ] Definição de limite (Cálculo 1 #3) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=voBexx2V7gw
+  - [ ] Limites laterais (Cálculo 1 #7) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=HwHO_w6V_No
+  - [ ] Propriedades dos limites e teorema do confronto (sanduíche) — Grings, ~15min: https://www.youtube.com/watch?v=k3FOy1uibO8
 
 - [ ] **Aula 2 assistida** — Limites Infinitos e no Infinito
-  - [ ] Limites infinitos e assíntota vertical (Me Salva!): https://www.youtube.com/watch?v=-FfodxO713c
-  - [ ] Limites no infinito de função racional: https://www.youtube.com/watch?v=pn65RYdGTE0
-  - [ ] Limite fundamental trigonométrico sen(x)/x: https://www.youtube.com/watch?v=26kuEBbAeBY
+  - [ ] Limites no infinito e limites infinitos (Cálculo 1 #9) — Equaciona Com Paulo Pereira (@equacionamatematica), ~10min: https://www.youtube.com/watch?v=8uWVkjgzB7A
+  - [ ] Limites no infinito de função racional, com macete (Cálculo 1 #10) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=nX6XtwX5dV4
+  - [ ] Limite fundamental trigonométrico sen(x)/x (Cálculo 1 #12) — Equaciona Com Paulo Pereira (@equacionamatematica), ~12min: https://www.youtube.com/watch?v=nxpW6EqN2Jc
 
 - [ ] **Aula 3 assistida** — Continuidade de Funções
-  - [ ] O que é uma função contínua / definição de continuidade: https://www.youtube.com/watch?v=a4c_ikClct4
-  - [ ] Tipos de descontinuidade (removível, salto, infinita): https://www.youtube.com/watch?v=VglKgsmUglk
-  - [ ] Teorema do Valor Intermediário: https://www.youtube.com/watch?v=67FFCySNMXs
+  - [ ] Funções contínuas — definição e tipos de descontinuidade (Cálculo 1 #13) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=PW_Y2pvJg4s
+  - [ ] Propriedades das funções contínuas / continuidade em intervalo (Cálculo 1 #14) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=4L4E_N3EaJs
+  - [ ] Teorema do Valor Intermediário (Cálculo 1 #15) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=xtAd5bI5LyQ
 
 - [ ] **Aula 4 assistida** — Introdução às Derivadas
-  - [ ] Problema da reta tangente e definição de derivada (Grings): https://www.youtube.com/watch?v=Nwy4NILJDxw
-  - [ ] Regras básicas de derivação (constante, potência, soma): https://www.youtube.com/watch?v=Rhf3u-82fwg
-  - [ ] Relação entre derivabilidade e continuidade: https://www.youtube.com/watch?v=6qUo0cdnvFg
+  - [ ] Derivada — definição e cálculo, reta tangente (Cálculo 1 #16) — Equaciona Com Paulo Pereira (@equacionamatematica), ~10min: https://www.youtube.com/watch?v=cWBEMN75IMc
+  - [ ] Regras básicas de derivação (Cálculo 1 #18) — Equaciona Com Paulo Pereira (@equacionamatematica), ~10min: https://www.youtube.com/watch?v=2NBVVW3XvZc
+  - [ ] Relação entre derivabilidade e continuidade — Grings, ~12min: https://www.youtube.com/watch?v=6qUo0cdnvFg
 
-- [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
+- [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima — reaproveitar os vídeos das Aulas 1-4)
 
 ### Unidade 4 — Fundamentos Gerais sobre Cálculo Diferencial e Integral
 
 - [ ] **Aula 1 assistida** — Regras de Derivação
-  - [ ] Regra do produto e do quociente: https://www.youtube.com/watch?v=KlOwwJQbp_U
-  - [ ] Regra da cadeia (passo a passo): https://www.youtube.com/watch?v=pstE4oJrm3w
-  - [ ] Derivadas de exponencial, logarítmica e trigonométricas na prática: https://www.youtube.com/watch?v=8piOdjEI4iw
+  - [ ] Regra do produto — Prof. Murakami, ~4min: https://www.youtube.com/watch?v=CkWcC5PxAIs
+  - [ ] Regra do quociente — Prof. Murakami, ~14min: https://www.youtube.com/watch?v=QwYxbUHhsuI
+  - [ ] Regra da cadeia (Cálculo 1 #19) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=b5m864fIKvA
+  - [ ] Derivada da exponencial e do logaritmo (Cálculo 1 #21) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=91UN2cbzBGY (derivadas trigonométricas específicas não encontradas nos canais prioritários — pesquisar à parte)
 
 - [ ] **Aula 2 assistida** — Derivadas e Otimização
-  - [ ] Pontos críticos, extremos e teste da 1ª derivada: https://www.youtube.com/watch?v=D7Y9Hj9CE3M
-  - [ ] Concavidade e pontos de inflexão (teste da 2ª derivada): https://www.youtube.com/watch?v=AR-nEYOUTkM
+  - [ ] Pontos críticos, extremos e teste da 1ª derivada — máximos e mínimos (Cálculo 1 #34) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=dDwWaoJlSlA
+  - [ ] Concavidade e pontos de inflexão — teste da 2ª derivada (Cálculo 1 #37) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=PMOEMs00Jz4
 
 - [ ] **Aula 3 assistida** — Introdução às Integrais
-  - [ ] Integral definida: áreas e soma de Riemann: https://www.youtube.com/watch?v=CWWbjoOjYOg
-  - [ ] Teorema Fundamental do Cálculo (com exemplos resolvidos): https://www.youtube.com/watch?v=qRMvrwLt96s
-  - [ ] Integrais imediatas / tabela de integrais (Grings): https://www.youtube.com/watch?v=ZLiZRIN1-FE
+  - [ ] Integral definida: áreas e soma de Riemann (Cálculo 1 #44) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=CWWbjoOjYOg
+  - [ ] Teorema Fundamental do Cálculo (Cálculo 1 #45) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=qRMvrwLt96s
+  - [ ] Integral indefinida / antiderivada (Cálculo 1 #41) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=M_xCxHcBdBo
 
 - [ ] **Aula 4 assistida** — Calculando Integrais
-  - [ ] Integração por substituição (método infalível): https://www.youtube.com/watch?v=fHom2rFJGjg
-  - [ ] Integração por partes (Grings, aula 1): https://www.youtube.com/watch?v=BIz6JNgzhWQ
-  - [ ] Área entre curvas: https://www.youtube.com/watch?v=hBRCUKM-9p4
+  - [ ] Integração por substituição — método infalível (Cálculo 1 #42) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=fHom2rFJGjg
+  - [ ] Integração por partes (Cálculo 1 #43) — Equaciona Com Paulo Pereira (@equacionamatematica): https://www.youtube.com/watch?v=E3ZILV7ER54
+  - [ ] Área entre curvas — BOTE FÉ NA MATEMÁTICA (nenhum dos 3 canais prioritários tinha conteúdo específico): https://www.youtube.com/watch?v=hBRCUKM-9p4
 
 - [ ] **Aula 5 assistida** — Encerramento da Unidade
-  - [ ] Taxas relacionadas (Grings, aula 1): https://www.youtube.com/watch?v=UR7HJFuJkAw
+  - [ ] Taxas relacionadas — Isaías Lima Matemática (nenhum dos 3 canais prioritários tinha conteúdo específico): https://www.youtube.com/watch?v=1FUq77TB18U
 
 ---
 
