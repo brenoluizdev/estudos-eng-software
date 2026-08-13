@@ -141,40 +141,39 @@ Cada tópico tem o link direto do melhor vídeo encontrado na busca (título, ca
 - [x] **Aula 2 assistida** — Equações e Inequações
   - [x] Equações de 1º grau: https://www.youtube.com/watch?v=HIWC8RU8Ze0
   - [x] Equações de 2º grau / fórmula de Bhaskara (Lucas Borguezan): https://www.youtube.com/watch?v=9_7M5k2tWiA
-  - [ ] Equações de 2º grau / Bhaskara — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=ZZ9gGsqwrpo
+  - [x] Equações de 2º grau / Bhaskara — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=ZZ9gGsqwrpo
   - [x] Inequações de 1º grau (uma e duas variáveis, solução gráfica): https://www.youtube.com/watch?v=0n-o8B1hoN4
-  - [ ] Inequações de 1º grau — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=qrnOtSD1vF8
+  - [x] Inequações de 1º grau — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=qrnOtSD1vF8
 
 - [x] **Aula 3 assistida** — Potências e Logaritmos
   - [x] Propriedades de potências: https://www.youtube.com/watch?v=pzZXpIziFzc
-  - [ ] Propriedades de potências ("Potenciação em 10 minutos") — Dicasdemat Sandro Curió (@sandrocuriodicasdemat), ~10min: https://www.youtube.com/watch?v=FzkAWvOAEUI
+  - [x] Propriedades de potências ("Potenciação em 10 minutos") — Dicasdemat Sandro Curió (@sandrocuriodicasdemat), ~10min: https://www.youtube.com/watch?v=FzkAWvOAEUI
   - [x] Definição e propriedades de logaritmos: https://www.youtube.com/watch?v=qMv1AgBnsUE
   - [x] Logaritmo natural (ln): https://www.youtube.com/watch?v=2YVoS2E-_7c
 
 - [x] **Aula 4 assistida** — Tópicos de Trigonometria
   - [x] Teorema de Pitágoras (demonstração geométrica): https://www.youtube.com/watch?v=2NOzQtdoSZg
   - [x] Graus e radianos (aula completa + exercícios): https://www.youtube.com/watch?v=4uVr4sWMMtU
-  - [ ] Círculo trigonométrico (contexto de graus/radianos) — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=9FgfEQM1a3c
+  - [x] Círculo trigonométrico (contexto de graus/radianos) — Dicasdemat Sandro Curió (@sandrocuriodicasdemat): https://www.youtube.com/watch?v=9FgfEQM1a3c
   - [x] Razões trigonométricas (seno, cosseno, tangente) e ângulos notáveis: https://www.youtube.com/watch?v=4sTUs4ll3dI
-  - [ ] Razões trigonométricas no triângulo retângulo ("em 13 minutos") — Dicasdemat Sandro Curió (@sandrocuriodicasdemat), ~13min: https://www.youtube.com/watch?v=C7NrVLmEYcs
+  - [x] * Razões trigonométricas no triângulo retângulo ("em 13 minutos") — Dicasdemat Sandro Curió (@sandrocuriodicasdemat), ~13min: https://www.youtube.com/watch?v=C7NrVLmEYcs
 
 - [x] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima)
 
 ### Unidade 2 — Fundamentos Gerais sobre Funções
 
-- [ ] **Aula 1 assistida** — Funções Afim e Quadrática
-  - [ ] Conceito de função (domínio, contradomínio, imagem) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=GkuG8xZrYbs
-  - [ ] Função afim (gráfico, coef. angular/linear, raiz) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=JgGseIonmYI
-  - [ ] Função quadrática (gráfico, parábola, vértice) — Dicasdemat Sandro Curió, ~21min: https://www.youtube.com/watch?v=ZpW9Xb5iyt4
+- [x] **Aula 1 assistida** — Funções Afim e Quadrática
+  - [x] Conceito de função (domínio, contradomínio, imagem) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=GkuG8xZrYbs
+  - [x] Função afim (gráfico, coef. angular/linear, raiz) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=JgGseIonmYI
+  - [x] Função quadrática (gráfico, parábola, vértice) — Dicasdemat Sandro Curió, ~21min: https://www.youtube.com/watch?v=ZpW9Xb5iyt4
 
-- [ ] **Aula 2 assistida** — Função Exponencial
-  - [ ] Função exponencial: definição e gráfico — Dicasdemat Sandro Curió, ~15min: https://www.youtube.com/watch?v=zU2nPaGyauc
-  - [ ] Equações exponenciais — Dicasdemat Sandro Curió, ~15min: https://www.youtube.com/watch?v=Ggh77h1Cs4M
+- [x] **Aula 2 assistida** — Função Exponencial
+  - [x] Função exponencial: definição e gráfico — Dicasdemat Sandro Curió, ~15min: https://www.youtube.com/watch?v=zU2nPaGyauc
 
-- [ ] **Aula 3 assistida** — Função Logarítmica
-  - [ ] Função logarítmica: definição, gráfico e propriedades — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=oza6zrCMOPM
-  - [ ] Logaritmo — mudança de base (base para equações logarítmicas) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=MYOLeCwp_kc
-  - [ ] Relação função exponencial ↔ logarítmica (funções inversas): https://www.youtube.com/watch?v=Gg-xMSMI4VY
+- [x] **Aula 3 assistida** — Função Logarítmica
+  - [x] Função logarítmica: definição, gráfico e propriedades — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=oza6zrCMOPM
+  - [x] Logaritmo — mudança de base (base para equações logarítmicas) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=MYOLeCwp_kc
+  - [x] Relação função exponencial ↔ logarítmica (funções inversas): https://www.youtube.com/watch?v=Gg-xMSMI4VY
 
 - [ ] **Aula 4 assistida** — Função Trigonométrica
   - [ ] Ciclo trigonométrico — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=9FgfEQM1a3c
