@@ -175,14 +175,18 @@ Cada tópico tem o link direto do melhor vídeo encontrado na busca (título, ca
   - [x] Logaritmo — mudança de base (base para equações logarítmicas) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=MYOLeCwp_kc
   - [x] Relação função exponencial ↔ logarítmica (funções inversas): https://www.youtube.com/watch?v=Gg-xMSMI4VY
 
-- [ ] **Aula 4 assistida** — Função Trigonométrica
-  - [ ] Ciclo trigonométrico — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=9FgfEQM1a3c
-  - [ ] Função seno (gráfico, imagem, período) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=FwTbL4hewlY
-  - [ ] Função cosseno e transformações (amplitude, período, deslocamento) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=vUvWnRDcBrc
+- [x] **Aula 4 assistida** — Função Trigonométrica
+  - [x] Ciclo trigonométrico — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=9FgfEQM1a3c
+  - [x] Função seno (gráfico, imagem, período) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=FwTbL4hewlY
+  - [x] Função cosseno e transformações (amplitude, período, deslocamento) — Dicasdemat Sandro Curió: https://www.youtube.com/watch?v=vUvWnRDcBrc
 
-- [ ] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima — reaproveitar os vídeos das Aulas 1-4)
+- [x] **Aula 5 assistida** — Encerramento da Unidade (revisão dos pontos acima — reaproveitar os vídeos das Aulas 1-4)
 
 ### Unidade 3 — Fundamentos Gerais sobre Limites e Derivadas
+
+> Caso você tenha dificuldade em entender limites assim como eu tive ao assistir as aulas da Prof. da faculdade, ou pelas aulas no youtube, recomendo esse site: 
+> ### https://pt.khanacademy.org/math/ap-calculus-ab
+> ~
 
 - [ ] **Aula 1 assistida** — Introdução aos Limites
   - [ ] Definição de limite (Cálculo 1 #3) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=voBexx2V7gw
