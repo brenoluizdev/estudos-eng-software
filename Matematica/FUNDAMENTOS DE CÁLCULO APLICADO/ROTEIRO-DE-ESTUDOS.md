@@ -189,7 +189,7 @@ Cada tópico tem o link direto do melhor vídeo encontrado na busca (título, ca
 > ~
 
 - [ ] **Aula 1 assistida** — Introdução aos Limites
-  - [ ] Definição de limite (Cálculo 1 #3) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=voBexx2V7gw
+  - [x] Definição de limite (Cálculo 1 #3) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=voBexx2V7gw
   - [ ] Limites laterais (Cálculo 1 #7) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=HwHO_w6V_No
   - [ ] Propriedades dos limites e teorema do confronto (sanduíche) — Grings, ~15min: https://www.youtube.com/watch?v=k3FOy1uibO8
 

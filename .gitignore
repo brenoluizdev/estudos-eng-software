@@ -1,2 +1,8 @@
 CLAUDE.md
 .claude
+matriz-curricular-original-assinada.pdf
+
+# PDFs brutos de provas (Studocu) — ficam só no repo privado
+# provas-pdfs-privado, nunca aqui (ver estudos/provas/INDEX.md)
+estudos/provas/**/pdfs/
+estudos/transcricoes/**/*.pdf
