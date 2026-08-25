@@ -188,20 +188,20 @@ Cada tópico tem o link direto do melhor vídeo encontrado na busca (título, ca
 > ### https://pt.khanacademy.org/math/ap-calculus-ab
 > ~
 
-- [ ] **Aula 1 assistida** — Introdução aos Limites
+- [x] **Aula 1 assistida** — Introdução aos Limites
   - [x] Definição de limite (Cálculo 1 #3) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=voBexx2V7gw
-  - [ ] Limites laterais (Cálculo 1 #7) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=HwHO_w6V_No
-  - [ ] Propriedades dos limites e teorema do confronto (sanduíche) — Grings, ~15min: https://www.youtube.com/watch?v=k3FOy1uibO8
+  - [x] Limites laterais (Cálculo 1 #7) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=HwHO_w6V_No
+  - [x] Propriedades dos limites e teorema do confronto (sanduíche) — Grings, ~15min: https://www.youtube.com/watch?v=k3FOy1uibO8
 
 - [ ] **Aula 2 assistida** — Limites Infinitos e no Infinito
-  - [ ] Limites no infinito e limites infinitos (Cálculo 1 #9) — Equaciona Com Paulo Pereira (@equacionamatematica), ~10min: https://www.youtube.com/watch?v=8uWVkjgzB7A
-  - [ ] Limites no infinito de função racional, com macete (Cálculo 1 #10) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=nX6XtwX5dV4
+  - [x] Limites no infinito e limites infinitos (Cálculo 1 #9) — Equaciona Com Paulo Pereira (@equacionamatematica), ~10min: https://www.youtube.com/watch?v=8uWVkjgzB7A
+  - [x] Limites no infinito de função racional, com macete (Cálculo 1 #10) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=nX6XtwX5dV4
   - [ ] Limite fundamental trigonométrico sen(x)/x (Cálculo 1 #12) — Equaciona Com Paulo Pereira (@equacionamatematica), ~12min: https://www.youtube.com/watch?v=nxpW6EqN2Jc
 
 - [ ] **Aula 3 assistida** — Continuidade de Funções
-  - [ ] Funções contínuas — definição e tipos de descontinuidade (Cálculo 1 #13) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=PW_Y2pvJg4s
-  - [ ] Propriedades das funções contínuas / continuidade em intervalo (Cálculo 1 #14) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=4L4E_N3EaJs
-  - [ ] Teorema do Valor Intermediário (Cálculo 1 #15) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=xtAd5bI5LyQ
+  - [x] Funções contínuas — definição e tipos de descontinuidade (Cálculo 1 #13) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=PW_Y2pvJg4s
+  - [x] Propriedades das funções contínuas / continuidade em intervalo (Cálculo 1 #14) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=4L4E_N3EaJs
+  - [x] Teorema do Valor Intermediário (Cálculo 1 #15) — Equaciona Com Paulo Pereira (@equacionamatematica), ~8min: https://www.youtube.com/watch?v=xtAd5bI5LyQ
 
 - [ ] **Aula 4 assistida** — Introdução às Derivadas
   - [ ] Derivada — definição e cálculo, reta tangente (Cálculo 1 #16) — Equaciona Com Paulo Pereira (@equacionamatematica), ~10min: https://www.youtube.com/watch?v=cWBEMN75IMc
