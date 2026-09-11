@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado — Fundamentos de Cálculo Aplicado</title>
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --ink:#1e2433;
+    --muted:#5b6478;
+    --line:#e2e6f0;
+    --accent:#3454d1;
+    --accent-dark:#233a9e;
+    --accent-soft:#eaf0ff;
+    --good:#1a8f5e;
+    --good-soft:#e7f7ef;
+    --bad:#c93838;
+    --bad-soft:#fdecec;
+    --u1:#3454d1;
+    --u2:#1a8f5e;
+    --u3:#b8860b;
+    --u4:#8a3ffc;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:"Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5;
+  }
+  header.exam{
+    background:linear-gradient(135deg, var(--accent-dark), var(--accent));
+    color:#fff; padding:28px 20px 22px;
+  }
+  header.exam .wrap{max-width:880px;margin:0 auto;}
+  header.exam .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-bottom:6px;}
+  header.exam h1{margin:0 0 10px;font-size:26px;}
+  header.exam .meta{display:flex;flex-wrap:wrap;gap:14px 26px;font-size:13.5px;opacity:.95;}
+  header.exam .meta b{display:block;font-weight:600;}
+  .container{max-width:880px;margin:0 auto;padding:22px 20px 80px;}
+  .notice{
+    background:#fff8e6;border:1px solid #f0d98c;color:#6b5410;
+    border-radius:var(--radius);padding:14px 16px;font-size:13.5px;margin-bottom:22px;
+  }
+  .progress-wrap{
+    position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0 10px;
+  }
+  .progress-bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
+  .progress-bar > div{height:100%;background:var(--accent);width:0%;transition:width .25s ease;}
+  .progress-label{font-size:12px;color:var(--muted);margin-top:6px;text-align:right;}
+  .unit-title{
+    margin:34px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--line);
+    display:flex;align-items:center;gap:10px;
+  }
+  .unit-title .dot{width:12px;height:12px;border-radius:50%;flex:none;}
+  .unit-title h2{font-size:17px;margin:0;color:var(--ink);}
+  .unit-title span{font-size:12.5px;color:var(--muted);}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 2px rgba(20,25,50,.03);
+  }
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;}
+  .qnum{font-weight:700;font-size:14.5px;color:var(--accent-dark);}
+  .qtag{font-size:11px;color:#fff;background:var(--accent);padding:2px 9px;border-radius:99px;white-space:nowrap;}
+  .statement{font-size:14.8px;margin-bottom:12px;}
+  .statement code{background:#f1f3f9;padding:1px 5px;border-radius:5px;font-size:.95em;}
+  figure.qfig{margin:8px 0 14px;text-align:center;}
+  figure.qfig svg{max-width:100%;height:auto;background:#fbfcff;border:1px solid var(--line);border-radius:10px;}
+  figure.qfig figcaption{font-size:11.5px;color:var(--muted);margin-top:5px;}
+  ul.affirm{margin:6px 0 12px;padding-left:20px;font-size:14.3px;}
+  ul.affirm li{margin-bottom:3px;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .opt{
+    display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;cursor:pointer;font-size:14.3px;transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--accent);background:var(--accent-soft);}
+  .opt input{margin-top:3px;flex:none;accent-color:var(--accent);}
+  .opt .letter{font-weight:700;color:var(--accent-dark);margin-right:2px;}
+  .opt.correct{border-color:var(--good);background:var(--good-soft);}
+  .opt.incorrect{border-color:var(--bad);background:var(--bad-soft);}
+  .opt.correct .letter::after{content:" ✓";}
+  .opt.incorrect .letter::after{content:" ✗";}
+  .explain{
+    display:none;margin-top:12px;padding:12px 14px;background:#f7f9ff;
+    border-left:4px solid var(--accent); border-radius:0 8px 8px 0; font-size:13.8px; color:#2a3150;
+  }
+  .explain.show{display:block;}
+  .explain b{color:var(--accent-dark);}
+  .card.answered .qtag.unanswered{background:#c7cbd8;}
+  .card.correct-card{border-color:var(--good);}
+  .card.incorrect-card{border-color:var(--bad);}
+  .actions{position:sticky;bottom:0;background:linear-gradient(180deg, rgba(244,246,251,0), var(--bg) 30%);padding:18px 0 6px;text-align:center;}
+  button#submitBtn, button#retryBtn{
+    background:var(--accent);color:#fff;border:none;padding:14px 34px;font-size:15.5px;
+    border-radius:99px;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(52,84,209,.35);
+  }
+  button#submitBtn:hover, button#retryBtn:hover{background:var(--accent-dark);}
+  button#submitBtn:disabled{background:#aab2c8;box-shadow:none;cursor:not-allowed;}
+  #results{display:none;margin-top:10px;}
+  #results.show{display:block;}
+  .score-hero{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 22px;text-align:center;margin-bottom:20px;
+  }
+  .score-hero .big{font-size:44px;font-weight:800;color:var(--accent-dark);}
+  .score-hero .sub{color:var(--muted);font-size:14px;margin-top:4px;}
+  .bars{display:flex;flex-direction:column;gap:12px;margin-top:18px;}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;font-size:13px;}
+  .bar-track{height:14px;background:var(--line);border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;}
+  .review-list{margin-top:8px;}
+  .review-list a{
+    display:block;padding:8px 12px;margin-bottom:6px;border-radius:8px;background:var(--bad-soft);
+    color:#7a1f1f;text-decoration:none;font-size:13.3px;border:1px solid #f2c9c9;
+  }
+  .review-list a:hover{background:#fbdada;}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:40px;}
+</style>
+</head>
+<body>
+
+<header class="exam">
+  <div class="wrap">
+    <div class="kicker">Simulado &middot; Não vale nota</div>
+    <h1>Fundamentos de Cálculo Aplicado</h1>
+    <div class="meta">
+      <div><b>Aluno</b>Breno</div>
+      <div><b>Instituição</b>Anhanguera (EE0102)</div>
+      <div><b>Prova real</b>04/09/2026 às 20h</div>
+      <div><b>Questões</b>35 · múltipla escolha</div>
+      <div><b>Unidades</b>1 a 4 (conteúdo completo)</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="notice">
+    Responda todas as questões e clique em <b>Corrigir simulado</b> no final. As respostas certas e as explicações só aparecem depois da correção — tente resolver sem consultar o material antes. Depois, foque em revisar exatamente os assuntos das questões que você errou.
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div id="progressFill"></div></div>
+    <div class="progress-label"><span id="progressText">0 / 35 respondidas</span></div>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="actions">
+    <button id="submitBtn">Corrigir simulado</button>
+  </div>
+
+  <div id="results">
+    <div class="score-hero">
+      <div class="big" id="scoreBig">0%</div>
+      <div class="sub" id="scoreSub">0 de 35 corretas</div>
+      <div class="bars" id="unitBars"></div>
+    </div>
+    <div class="card" id="reviewCard" style="display:none">
+      <b>Questões para revisar</b>
+      <div class="review-list" id="reviewList"></div>
+    </div>
+    <div class="actions"><button id="retryBtn">Refazer o simulado</button></div>
+  </div>
+
+  <footer>Gerado a partir do material das 4 unidades de Fundamentos de Cálculo Aplicado &middot; bons estudos até 04/09!</footer>
+</div>
+
+<script>
+/* ---------- Helper SVGs (inline strings) ---------- */
+const svg = {
+  triangle: `<svg viewBox="0 0 260 180" width="260">
+    <polygon points="30,150 220,150 220,30" fill="#eaf0ff" stroke="#3454d1" stroke-width="2.5"/>
+    <rect x="205" y="135" width="15" height="15" fill="none" stroke="#3454d1" stroke-width="2"/>
+    <text x="118" y="168" font-size="14" fill="#1e2433">8 cm</text>
+    <text x="228" y="95" font-size="14" fill="#1e2433">6 cm</text>
+    <text x="105" y="105" font-size="14" fill="#c93838">?</text>
+    <line x1="30" y1="150" x2="220" y2="30" stroke="#c93838" stroke-width="2.5" stroke-dasharray="5,4"/>
+  </svg>`,
+  parabola: `<svg viewBox="0 0 300 220" width="300">
+    <line x1="20" y1="190" x2="290" y2="190" stroke="#94a0bd" stroke-width="1.5"/>
+    <line x1="30" y1="10" x2="30" y2="210" stroke="#94a0bd" stroke-width="1.5"/>
+    <path d="M 45 190 Q 140 -10 235 190" fill="none" stroke="#3454d1" stroke-width="2.5"/>
+    <circle cx="140" cy="150" r="4.5" fill="#c93838"/>
+    <text x="148" y="150" font-size="13" fill="#c93838">vértice</text>
+    <text x="270" y="205" font-size="12" fill="#5b6478">x</text>
+    <text x="12" y="20" font-size="12" fill="#5b6478">y</text>
+    <text x="34" y="203" font-size="11" fill="#5b6478">1</text>
+    <text x="228" y="203" font-size="11" fill="#5b6478">3</text>
+  </svg>`,
+  unitCircle: `<svg viewBox="0 0 240 240" width="240">
+    <circle cx="120" cy="120" r="90" fill="#eaf0ff" stroke="#3454d1" stroke-width="2"/>
+    <line x1="20" y1="120" x2="220" y2="120" stroke="#94a0bd" stroke-width="1.2"/>
+    <line x1="120" y1="20" x2="120" y2="220" stroke="#94a0bd" stroke-width="1.2"/>
+    <line x1="120" y1="120" x2="45" y2="42" stroke="#c93838" stroke-width="2.5"/>
+    <path d="M 150 120 A 30 30 0 0 1 141 92" fill="none" stroke="#b8860b" stroke-width="2"/>
+    <text x="152" y="98" font-size="13" fill="#b8860b">120°</text>
+    <circle cx="45" cy="42" r="4" fill="#c93838"/>
+    <text x="205" y="115" font-size="11" fill="#5b6478">0°</text>
+  </svg>`,
+  sine: `<svg viewBox="0 0 320 180" width="320">
+    <line x1="10" y1="90" x2="310" y2="90" stroke="#94a0bd" stroke-width="1.2"/>
+    <line x1="20" y1="10" x2="20" y2="170" stroke="#94a0bd" stroke-width="1.2"/>
+    <path d="M 20 90 C 45 20, 75 20, 100 90 S 155 160, 180 90 S 235 20, 260 90 S 305 160, 310 120"
+      fill="none" stroke="#1a8f5e" stroke-width="2.5"/>
+    <line x1="20" y1="30" x2="310" y2="30" stroke="#c93838" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="20" y1="150" x2="310" y2="150" stroke="#c93838" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="290" y="26" font-size="11" fill="#c93838">máx = 5</text>
+    <text x="285" y="163" font-size="11" fill="#c93838">mín = 1</text>
+    <text x="24" y="24" font-size="11" fill="#5b6478">g(x) = 3 + 2·sen(x)</text>
+  </svg>`,
+  tangent: `<svg viewBox="0 0 300 220" width="300">
+    <line x1="15" y1="200" x2="290" y2="200" stroke="#94a0bd" stroke-width="1.2"/>
+    <line x1="30" y1="10" x2="30" y2="215" stroke="#94a0bd" stroke-width="1.2"/>
+    <path d="M 40 195 Q 160 195 250 20" fill="none" stroke="#3454d1" stroke-width="2.5"/>
+    <line x1="120" y1="230" x2="280" y2="10" stroke="#c93838" stroke-width="2" stroke-dasharray="6,4"/>
+    <circle cx="220" cy="83" r="4.5" fill="#1a8f5e"/>
+    <text x="225" y="80" font-size="12" fill="#1a8f5e">P(3, f(3))</text>
+    <text x="255" y="200" font-size="11" fill="#5b6478">x</text>
+  </svg>`,
+  area: `<svg viewBox="0 0 300 200" width="300">
+    <line x1="15" y1="180" x2="290" y2="180" stroke="#94a0bd" stroke-width="1.2"/>
+    <line x1="30" y1="10" x2="30" y2="190" stroke="#94a0bd" stroke-width="1.2"/>
+    <path d="M 30 180 L 30 180 Q 100 175 150 100 Q 190 40 220 20 L 220 180 Z" fill="#c8d6ff" stroke="none" opacity="0.8"/>
+    <path d="M 30 180 Q 100 175 150 100 Q 190 40 220 20" fill="none" stroke="#3454d1" stroke-width="2.5"/>
+    <line x1="30" y1="182" x2="30" y2="176" stroke="#1e2433" stroke-width="2"/>
+    <text x="24" y="196" font-size="11" fill="#5b6478">0</text>
+    <line x1="220" y1="182" x2="220" y2="176" stroke="#1e2433" stroke-width="2"/>
+    <text x="214" y="196" font-size="11" fill="#5b6478">2</text>
+    <text x="110" y="140" font-size="12" fill="#233a9e">A = ∫ x² dx</text>
+  </svg>`,
+  holeLimit: `<svg viewBox="0 0 300 190" width="300">
+    <line x1="15" y1="170" x2="290" y2="170" stroke="#94a0bd" stroke-width="1.2"/>
+    <line x1="30" y1="10" x2="30" y2="180" stroke="#94a0bd" stroke-width="1.2"/>
+    <path d="M 40 155 L 150 90" fill="none" stroke="#3454d1" stroke-width="2.5"/>
+    <path d="M 150 90 L 260 25" fill="none" stroke="#3454d1" stroke-width="2.5"/>
+    <circle cx="150" cy="90" r="6" fill="#fbfcff" stroke="#c93838" stroke-width="2.5"/>
+    <line x1="150" y1="172" x2="150" y2="90" stroke="#c93838" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="140" y="185" font-size="11" fill="#c93838">x = 2</text>
+    <text x="160" y="85" font-size="11" fill="#5b6478">"buraco" em x=2</text>
+  </svg>`,
+  expLog: `<svg viewBox="0 0 260 260" width="260">
+    <line x1="10" y1="230" x2="250" y2="230" stroke="#94a0bd" stroke-width="1.2"/>
+    <line x1="30" y1="10" x2="30" y2="250" stroke="#94a0bd" stroke-width="1.2"/>
+    <line x1="30" y1="230" x2="230" y2="30" stroke="#94a0bd" stroke-width="1" stroke-dasharray="4,4"/>
+    <path d="M 30 220 Q 100 220 130 150 Q 170 60 210 20" fill="none" stroke="#3454d1" stroke-width="2.5"/>
+    <path d="M 40 230 Q 60 190 130 150 Q 200 110 220 40" fill="none" stroke="#1a8f5e" stroke-width="2.5"/>
+    <text x="205" y="35" font-size="11" fill="#3454d1">f(x)=2ˣ</text>
+    <text x="150" y="115" font-size="11" fill="#1a8f5e">g(x)=log₂x</text>
+    <text x="185" y="60" font-size="10" fill="#5b6478">y = x</text>
+  </svg>`
+};
+
+/* ---------- Question bank ---------- */
+const questions = [
+// ===== UNIDADE 1 =====
+{unit:1, statement:`A dízima <code>0,333...</code> (período 3) é um número que pertence a qual conjunto numérico?`,
+ options:["É um número irracional, pois tem infinitas casas decimais.","Não pertence a nenhum conjunto numérico usual, pois nunca termina.","É um número racional, pois toda dízima periódica pode ser representada como fração (nesse caso, 1/3).","É um número natural, pois é positivo.","É um número inteiro, pois pode ser arredondado."],
+ correct:2,
+ explain:`Toda dízima <b>periódica</b> é racional — pode sempre ser escrita como fração. Aqui, 0,333... = 1/3. Dízimas <b>não periódicas</b> (como π) é que são irracionais (ver Aula 1, Unidade 1).`},
+
+{unit:1, statement:`Um terreno de 60 alqueires tem 1/4 de sua área como reserva permanente e 1/6 como construções. Qual fração do terreno está livre para outros usos?`,
+ options:["5/12","1/12","7/12","12/7","7/5"],
+ correct:2,
+ explain:`mmc(4,6)=12. Reservado: 1/4 + 1/6 = 3/12 + 2/12 = 5/12. Livre: 1 − 5/12 = <b>7/12</b>. É exatamente o mesmo raciocínio do problema do fazendeiro na Aula 1.`},
+
+{unit:1, statement:`Resolva a equação do 2º grau x² − 5x + 6 = 0 usando a fórmula de Bhaskara.`,
+ options:["x = −2 ou x = −3","x = 1 ou x = 6","x = 2 ou x = −3","x = 2 ou x = 3","Δ &lt; 0, não há raízes reais"],
+ correct:3,
+ explain:`Δ = (−5)² − 4·1·6 = 25 − 24 = 1. x = (5 ± 1)/2 → x = 3 ou x = 2. Como Δ &gt; 0, há <b>duas raízes reais distintas</b>.`},
+
+{unit:1, statement:`Qual o conjunto solução da inequação 3x − 4 &lt; 2x + 5?`,
+ options:["x &gt; 9","x &lt; 9","x &lt; −9","x &gt; −9","x &lt; 1"],
+ correct:1,
+ explain:`3x − 4 &lt; 2x + 5 → 3x − 2x &lt; 5 + 4 → <b>x &lt; 9</b>. Repare que aqui não dividimos por número negativo, então o sentido da desigualdade não muda.`},
+
+{unit:1, statement:`Simplifique a expressão: (2³ · 2⁻⁵) / 2⁻⁴`,
+ options:["1/4","8","16","2","4"],
+ correct:4,
+ explain:`Aplicando as propriedades de potência de mesma base: expoente final = 3 + (−5) − (−4) = 3 − 5 + 4 = 2. Logo 2² = <b>4</b>.`},
+
+{unit:1, statement:`Calcule: log₃(81) + log₂(1/8)`,
+ options:["7","−1","4","12","1"],
+ correct:4,
+ explain:`log₃81 = 4, pois 3⁴=81. log₂(1/8) = log₂(2⁻³) = −3. Soma: 4 + (−3) = <b>1</b>.`},
+
+{unit:1, statement:`Um triângulo retângulo tem catetos medindo 6 cm e 8 cm. Qual é a medida da hipotenusa?`,
+ options:["14 cm","100 cm","48 cm","7 cm","10 cm"],
+ correct:4,
+ svg:svg.triangle, caption:"Triângulo retângulo com os catetos indicados",
+ explain:`Teorema de Pitágoras: a² = b² + c² = 6² + 8² = 36 + 64 = 100. a = √100 = <b>10 cm</b>.`},
+
+{unit:1, statement:`Converta o ângulo de 135° para radianos.`,
+ options:["π/4 rad","2π/3 rad","π/3 rad","5π/6 rad","3π/4 rad"],
+ correct:4,
+ explain:`φ(rad) = α(°) · π/180 = 135 · π/180 = 135π/180 = <b>3π/4 rad</b> (simplificando por 45).`},
+
+// ===== UNIDADE 2 =====
+{unit:2, statement:`Considere a função afim f(x) = 3x − 6. Qual é a raiz (zero) dessa função?`,
+ options:["x = −2","x = 6","x = −6","x = 0","x = 2"],
+ correct:4,
+ explain:`A raiz ocorre quando f(x) = 0: 3x − 6 = 0 → 3x = 6 → <b>x = 2</b>.`},
+
+{unit:2, statement:`Qual é o vértice da parábola descrita por f(x) = x² − 4x + 3?`,
+ options:["(4, 3)","(−2, −1)","(2, 1)","(0, 3)","(2, −1)"],
+ svg:svg.parabola, caption:"Parábola com concavidade voltada para cima e seu vértice",
+ correct:4,
+ explain:`xv = −b/2a = −(−4)/2 = 2. Δ = 16 − 12 = 4, então yv = −Δ/4a = −4/4 = −1. Vértice: <b>(2, −1)</b> — é ponto de mínimo, pois a=1&gt;0.`},
+
+{unit:2, statement:`Resolva a equação exponencial: 3^(x−1) = 27`,
+ options:["x = 3","x = 27","x = 2","x = 4","x = 1"],
+ correct:3,
+ explain:`27 = 3³, então 3^(x−1) = 3³ → x − 1 = 3 → <b>x = 4</b>.`},
+
+{unit:2, statement:`Resolva a equação logarítmica: log₂(x − 1) = 3`,
+ options:["x = 8","x = 3","x = 9","x = 6","x = 7"],
+ correct:2,
+ explain:`Pela definição de logaritmo: 2³ = x − 1 → 8 = x − 1 → <b>x = 9</b>. (Confira a condição de existência: x − 1 &gt; 0 → x &gt; 1, ok.)`},
+
+{unit:2, statement:`Os gráficos de f(x) = 2ˣ e g(x) = log₂(x) são simétricos em relação a qual reta?`,
+ options:["Ao eixo x","Ao eixo y","À reta y = x","À reta y = −x","Não são simétricos"],
+ svg:svg.expLog, caption:"Função exponencial e sua inversa, a função logarítmica",
+ correct:2,
+ explain:`Como f e g são funções inversas uma da outra (mesma base 2), seus gráficos são sempre simétricos em relação à <b>reta y = x</b>.`},
+
+{unit:2, statement:`Para a função g(x) = 3 + 2·sen(x), quais são os valores máximo e mínimo?`,
+ options:["máx = 2, mín = −2","máx = 3, mín = 2","máx = 1, mín = 5","máx = 5, mín = 1","máx = 5, mín = −5"],
+ svg:svg.sine, caption:"g(x) = 3 + 2·sen(x): deslocamento vertical (a=3) e amplitude (b=2)",
+ correct:3,
+ explain:`sen(x) varia entre −1 e 1. Com a=3 (desloca) e b=2 (amplitude): máx = 3+2·1 = 5, mín = 3+2·(−1) = 1.`},
+
+{unit:2, statement:`Qual é o período da função g(x) = sen(3x)?`,
+ options:["2π/3","3π","2π","π/3","6π"],
+ correct:0,
+ explain:`Para g(x) = sen(c·x), o período é p = 2π/c. Aqui c = 3, então p = <b>2π/3</b>.`},
+
+{unit:2, statement:`No ciclo trigonométrico, qual é o valor de cos(120°)?`,
+ options:["1/2","−√3/2","0","√3/2","−1/2"],
+ svg:svg.unitCircle, caption:"Ângulo de 120° no ciclo trigonométrico (2º quadrante)",
+ correct:4,
+ explain:`120° está no 2º quadrante, onde o cosseno é negativo. 120° = 180° − 60°, então cos(120°) = −cos(60°) = <b>−1/2</b>.`},
+
+// ===== UNIDADE 3 =====
+{unit:3, statement:`Calcule o limite por substituição direta: lim(x→2) (x² + 3x − 1)`,
+ options:["4","6","9","0","13"],
+ correct:2,
+ explain:`Função polinomial: basta substituir x=2 diretamente. lim = P(2) = 2² + 3·2 − 1 = 4 + 6 − 1 = <b>9</b>.`},
+
+{unit:3, statement:`Calcule: lim(x→2) (x² − 4)/(x − 2)`,
+ options:["Não existe","0","2","∞","4"],
+ svg:svg.holeLimit, caption:"Função com descontinuidade removível em x = 2",
+ correct:4,
+ explain:`Indeterminação 0/0. Fatorando: (x²−4)/(x−2) = (x+2)(x−2)/(x−2) = x+2 (para x≠2). lim(x→2) (x+2) = <b>4</b>. É uma descontinuidade removível.`},
+
+{unit:3, statement:`Calcule: lim(x→∞) (2x + 1)/(x² − 3)`,
+ options:["2","1/3","∞","0","O limite não existe"],
+ correct:3,
+ explain:`Grau do numerador (1) &lt; grau do denominador (2). Dividindo tudo pelo termo de maior grau (x²), os termos tendem a zero, restando <b>0</b>.`},
+
+{unit:3, statement:`Calcule: lim(x→∞) 3x³/(x + 1)`,
+ options:["3","0","1/3","O limite tende a +∞ (não existe como número real)","1"],
+ correct:3,
+ explain:`Grau do numerador (3) &gt; grau do denominador (1). Quando o numerador tem grau maior, a função cresce indefinidamente: <b>o limite tende a +∞</b>.`},
+
+{unit:3, statement:`Usando o limite fundamental trigonométrico, calcule: lim(x→0) sen(5x)/x`,
+ options:["1","5","1/5","0","∞"],
+ correct:1,
+ explain:`Sabendo que lim(x→0) sen(x)/x = 1, reescrevemos sen(5x)/x = 5 · sen(5x)/(5x). Fazendo u=5x (u→0), o limite fica 5 · lim sen(u)/u = 5·1 = <b>5</b>.`},
+
+{unit:3, statement:`Para que uma função f seja contínua em x = a, quais condições precisam ser satisfeitas simultaneamente?<br><br>I. f(a) está definida.<br>II. lim(x→a) f(x) existe.<br>III. lim(x→a) f(x) = f(a).`,
+ asAffirmations:true,
+ options:["Apenas I e II","Apenas III","Apenas II e III","I, II e III (as três são necessárias)","Apenas I"],
+ correct:3,
+ explain:`As <b>três condições</b> juntas definem continuidade em um ponto — nenhuma delas sozinha é suficiente. Faltar qualquer uma gera algum tipo de descontinuidade (removível, salto ou infinita).`},
+
+{unit:3, statement:`Usando a regra da potência, qual é o coeficiente angular (inclinação) da reta tangente ao gráfico de f(x) = x² no ponto x = 3?`,
+ options:["9","3","f'(3) = 6","f'(3) = x²","2"],
+ svg:svg.tangent, caption:"Reta tangente ao gráfico de f no ponto P",
+ correct:2,
+ explain:`f'(x) = 2x pela regra da potência. No ponto x=3: f'(3) = 2·3 = <b>6</b>. Esse valor é a inclinação da reta tangente nesse ponto — a própria definição de derivada.`},
+
+{unit:3, statement:`Sobre a relação entre derivabilidade e continuidade, assinale a afirmação correta:`,
+ options:["Toda função contínua é derivável em todos os pontos.","Derivabilidade e continuidade são conceitos independentes, sem relação.","Toda função derivável em um ponto é contínua nesse ponto, mas a recíproca não é verdadeira (ex: f(x)=|x| em x=0).","Toda função descontínua em um ponto é derivável nesse ponto.","Nenhuma função contínua pode deixar de ser derivável."],
+ correct:2,
+ explain:`Derivabilidade <b>implica</b> continuidade, mas o contrário não é garantido. O exemplo clássico é f(x) = |x|: é contínua em x=0 (sem saltos), mas tem um "bico" e não é derivável ali, pois as derivadas laterais são diferentes (−1 e 1).`},
+
+// ===== UNIDADE 4 =====
+{unit:4, statement:`Usando a regra do produto, derive f(x) = x² · sen(x).`,
+ options:["f'(x) = 2x·cos(x)","f'(x) = 2x·sen(x) − x²·cos(x)","f'(x) = 2x·sen(x) + x²·cos(x)","f'(x) = x²·cos(x)","f'(x) = 2x + cos(x)"],
+ correct:2,
+ explain:`Regra do produto: (fg)' = f'g + fg'. Com f=x² (f'=2x) e g=sen(x) (g'=cos(x)): f'(x) = 2x·sen(x) + x²·cos(x).`},
+
+{unit:4, statement:`Usando a regra do quociente, derive f(x) = x/(x + 1).`,
+ options:["f'(x) = 1/(x+1)","f'(x) = x/(x+1)²","f'(x) = 1/(x+1)²","f'(x) = −1/(x+1)²","f'(x) = 1"],
+ correct:2,
+ explain:`(f/g)' = (f'g − fg')/g². Com f=x (f'=1) e g=x+1 (g'=1): [(1)(x+1) − x(1)]/(x+1)² = (x+1−x)/(x+1)² = <b>1/(x+1)²</b>.`},
+
+{unit:4, statement:`Usando a regra da cadeia, derive f(x) = (3x + 1)⁴.`,
+ options:["f'(x) = 4(3x+1)³","f'(x) = 3(3x+1)³","f'(x) = 12(3x+1)³","f'(x) = 4(3x+1)⁴","f'(x) = 12(3x+1)⁴"],
+ correct:2,
+ explain:`Derivada da "de fora" aplicada na "de dentro", vezes derivada da "de dentro": 4(3x+1)³ · 3 = <b>12(3x+1)³</b>.`},
+
+{unit:4, statement:`Derive f(x) = e^(2x).`,
+ options:["f'(x) = e^(2x)","f'(x) = 2x·e^(2x)","f'(x) = 2e^(2x)","f'(x) = e²ˣ·ln(2)","f'(x) = 2"],
+ correct:2,
+ explain:`Pela regra da cadeia com a exponencial de base e: d/dx(e^u) = e^u · u'. Com u=2x, u'=2: f'(x) = <b>2e^(2x)</b>.`},
+
+{unit:4, statement:`Derive f(x) = ln(5x).`,
+ options:["f'(x) = 5/x","f'(x) = ln(5)","f'(x) = 1/(5x)","f'(x) = 1/x","f'(x) = 5"],
+ correct:3,
+ explain:`Pela propriedade dos logaritmos, ln(5x) = ln(5) + ln(x). Como ln(5) é constante (derivada 0): f'(x) = <b>1/x</b>. (Também sai direto pela regra da cadeia: 1/(5x) · 5 = 1/x.)`},
+
+{unit:4, statement:`A função f(x) = x² − 4x + 1 tem um ponto crítico em x = 2. Que tipo de ponto é esse?`,
+ options:["Ponto de inflexão","Máximo local","Não é possível determinar","Mínimo local, pois f''(x) = 2 &gt; 0","Mínimo global apenas se o domínio for limitado"],
+ correct:3,
+ explain:`f'(x) = 2x − 4. f'(x)=0 → x=2 (ponto crítico). f''(x) = 2 &gt; 0 para todo x, então pelo teste da 2ª derivada, x=2 é <b>mínimo local</b> (e, como a parábola tem concavidade sempre para cima, é também mínimo global).`},
+
+{unit:4, statement:`Para f(x) = x³ − 3x, calcule f''(x) e identifique o ponto de inflexão.`,
+ options:["f''(x) = 3x², ponto de inflexão em x=0","f''(x) = 6x, ponto de inflexão em x=1","f''(x) = 6x, ponto de inflexão em x=0","f''(x) = 6, não há ponto de inflexão","f''(x) = 3x² − 3, ponto de inflexão em x=1"],
+ correct:2,
+ explain:`f'(x)=3x²−3, f''(x)=6x. f''(x)=0 → x=0. Como f'' muda de sinal (negativa para x&lt;0, positiva para x&gt;0), há mudança de concavidade: <b>ponto de inflexão em x=0</b>.`},
+
+{unit:4, statement:`Calcule a integral indefinida: ∫(4x³ − 2x) dx`,
+ options:["4x⁴ − x² + C","x⁴ − x² + C","x⁴ − 2x² + C","12x² − 2 + C","x⁴/4 − x²/2 + C"],
+ correct:1,
+ explain:`Usando a regra da potência para integrais (∫xʳdx = xʳ⁺¹/(r+1)): ∫4x³dx = x⁴, ∫−2x dx = −x². Resultado: <b>x⁴ − x² + C</b>.`},
+
+{unit:4, statement:`Calcule a integral definida usando o Teorema Fundamental do Cálculo: ∫[0,2] x² dx`,
+ options:["4","2","8/3","8","2/3"],
+ svg:svg.area, caption:"Área sob a curva y = x² entre x=0 e x=2",
+ correct:2,
+ explain:`Primitiva: F(x) = x³/3. F(2) − F(0) = 8/3 − 0 = <b>8/3</b>. Esse número representa a área hachurada sob a curva.`},
+
+{unit:4, statement:`Calcule por substituição: ∫ 2x·(x² + 1)³ dx`,
+ options:["(x²+1)⁴ + C","2(x²+1)⁴ + C","(x²+1)⁴/4 + C","4(x²+1)³ + C","(x²+1)³/3 + C"],
+ correct:2,
+ explain:`Fazendo u = x²+1, du = 2x dx (que já está no integrando!). ∫u³ du = u⁴/4 + C = <b>(x²+1)⁴/4 + C</b>.`},
+
+{unit:4, statement:`Calcule por partes: ∫ x·eˣ dx`,
+ options:["x·eˣ + C","eˣ + C","x·eˣ − eˣ + C","x²·eˣ/2 + C","x·eˣ + eˣ + C"],
+ correct:2,
+ explain:`Integração por partes ∫u dv = uv − ∫v du, com u=x (du=dx) e dv=eˣdx (v=eˣ): x·eˣ − ∫eˣ dx = <b>x·eˣ − eˣ + C</b>.`}
+];
+
+/* ---------- Render ---------- */
+const unitInfo = {
+  1:{name:"Unidade 1 — Fundamentos Gerais de Matemática", color:"var(--u1)"},
+  2:{name:"Unidade 2 — Funções", color:"var(--u2)"},
+  3:{name:"Unidade 3 — Limites e Derivadas", color:"var(--u3)"},
+  4:{name:"Unidade 4 — Cálculo Diferencial e Integral", color:"var(--u4)"}
+};
+const letters = ["A","B","C","D","E"];
+const quiz = document.getElementById("quiz");
+let lastUnit = null;
+
+questions.forEach((q, i) => {
+  if (q.unit !== lastUnit) {
+    lastUnit = q.unit;
+    const info = unitInfo[q.unit];
+    const ut = document.createElement("div");
+    ut.className = "unit-title";
+    ut.innerHTML = `<div class="dot" style="background:${info.color}"></div><h2>${info.name}</h2>`;
+    quiz.appendChild(ut);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.id = "card-" + i;
+
+  let figHtml = "";
+  if (q.svg) {
+    figHtml = `<figure class="qfig">${q.svg}<figcaption>${q.caption || ""}</figcaption></figure>`;
+  }
+
+  let optsHtml = q.options.map((opt, j) => `
+    <label class="opt" id="opt-${i}-${j}">
+      <input type="radio" name="q${i}" value="${j}" onchange="onAnswer(${i})">
+      <span><span class="letter">${letters[j]}</span> ${opt}</span>
+    </label>
+  `).join("");
+
+  card.innerHTML = `
+    <div class="qhead">
+      <span class="qnum">Questão ${i + 1}</span>
+      <span class="qtag unanswered" id="tag-${i}">não respondida</span>
+    </div>
+    <div class="statement">${q.statement}</div>
+    ${figHtml}
+    <div class="options">${optsHtml}</div>
+    <div class="explain" id="explain-${i}"><b>Explicação:</b> ${q.explain}</div>
+  `;
+  quiz.appendChild(card);
+});
+
+function onAnswer(i) {
+  document.getElementById("tag-" + i).textContent = "respondida";
+  document.getElementById("tag-" + i).classList.remove("unanswered");
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = questions.filter((_, i) => getSelected(i) !== null).length;
+  document.getElementById("progressFill").style.width = (answered / questions.length * 100) + "%";
+  document.getElementById("progressText").textContent = answered + " / " + questions.length + " respondidas";
+}
+
+function getSelected(i) {
+  const el = document.querySelector(`input[name="q${i}"]:checked`);
+  return el ? parseInt(el.value) : null;
+}
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const unanswered = questions.map((_, i) => i).filter(i => getSelected(i) === null);
+  if (unanswered.length > 0) {
+    const ok = confirm(`Você ainda não respondeu ${unanswered.length} questão(ões). Corrigir mesmo assim?`);
+    if (!ok) return;
+  }
+
+  let score = 0;
+  const unitScore = {1:{c:0,t:0},2:{c:0,t:0},3:{c:0,t:0},4:{c:0,t:0}};
+  const wrongList = [];
+
+  questions.forEach((q, i) => {
+    const sel = getSelected(i);
+    unitScore[q.unit].t++;
+    const card = document.getElementById("card-" + i);
+    const tag = document.getElementById("tag-" + i);
+
+    q.options.forEach((_, j) => {
+      const optEl = document.getElementById(`opt-${i}-${j}`);
+      const input = optEl.querySelector("input");
+      input.disabled = true;
+      if (j === q.correct) optEl.classList.add("correct");
+      else if (j === sel) optEl.classList.add("incorrect");
+    });
+
+    if (sel === q.correct) {
+      score++;
+      unitScore[q.unit].c++;
+      card.classList.add("correct-card");
+      tag.textContent = "correta";
+      tag.style.background = "var(--good)";
+    } else {
+      card.classList.add("incorrect-card");
+      tag.textContent = sel === null ? "sem resposta" : "incorreta";
+      tag.style.background = "var(--bad)";
+      wrongList.push(i);
+    }
+    document.getElementById("explain-" + i).classList.add("show");
+  });
+
+  const pct = Math.round(score / questions.length * 100);
+  document.getElementById("scoreBig").textContent = pct + "%";
+  document.getElementById("scoreSub").textContent = score + " de " + questions.length + " corretas";
+
+  const barsEl = document.getElementById("unitBars");
+  barsEl.innerHTML = "";
+  Object.keys(unitScore).forEach(u => {
+    const s = unitScore[u];
+    const p = s.t ? Math.round(s.c / s.t * 100) : 0;
+    const row = document.createElement("div");
+    row.className = "bar-row";
+    row.innerHTML = `
+      <div>${unitInfo[u].name.split("—")[0].trim()}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${unitInfo[u].color}"></div></div>
+      <div>${s.c}/${s.t}</div>`;
+    barsEl.appendChild(row);
+  });
+
+  if (wrongList.length > 0) {
+    document.getElementById("reviewCard").style.display = "block";
+    const rl = document.getElementById("reviewList");
+    rl.innerHTML = "";
+    wrongList.forEach(i => {
+      const a = document.createElement("a");
+      a.href = "#card-" + i;
+      a.textContent = `Questão ${i + 1} — ${unitInfo[questions[i].unit].name}`;
+      rl.appendChild(a);
+    });
+  } else {
+    document.getElementById("reviewCard").style.display = "none";
+  }
+
+  document.getElementById("results").classList.add("show");
+  document.getElementById("submitBtn").disabled = true;
+  document.getElementById("results").scrollIntoView({behavior:"smooth"});
+});
+
+document.getElementById("retryBtn").addEventListener("click", () => location.reload());
+
+updateProgress();
+</script>
+</body>
+</html>
