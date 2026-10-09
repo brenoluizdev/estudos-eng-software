@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado Python</title>
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --ink:#1e2433;
+    --muted:#5b6478;
+    --line:#e2e6f0;
+    --accent:#3454d1;
+    --accent-dark:#233a9e;
+    --accent-soft:#eaf0ff;
+    --good:#1a8f5e;
+    --good-soft:#e7f7ef;
+    --bad:#c93838;
+    --bad-soft:#fdecec;
+    --warn-bg:#fff8e6;
+    --warn-line:#f0d98c;
+    --warn-ink:#6b5410;
+    --code-bg:#1f2433;
+    --code-ink:#e6e9f2;
+    --inline-code:#eef1f8;
+    --explain-bg:#f7f9ff;
+    --u1:#3454d1;
+    --u2:#1a8f5e;
+    --u3:#b8860b;
+    --u4:#8a3ffc;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12151d; --card:#1b1f2a; --ink:#e4e7ef; --muted:#9aa3b8; --line:#2c3242;
+      --accent:#6f8cff; --accent-dark:#9fb3ff; --accent-soft:#232b45;
+      --good:#3cc68a; --good-soft:#15291f; --bad:#ff6b6b; --bad-soft:#2e1a1c;
+      --warn-bg:#2a2414; --warn-line:#5c4c1c; --warn-ink:#f0d98c;
+      --code-bg:#0d1017; --code-ink:#e6e9f2; --inline-code:#262c3b; --explain-bg:#1f2536;
+      --u1:#6f8cff; --u2:#3cc68a; --u3:#e0b243; --u4:#b58cff;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12151d; --card:#1b1f2a; --ink:#e4e7ef; --muted:#9aa3b8; --line:#2c3242;
+    --accent:#6f8cff; --accent-dark:#9fb3ff; --accent-soft:#232b45;
+    --good:#3cc68a; --good-soft:#15291f; --bad:#ff6b6b; --bad-soft:#2e1a1c;
+    --warn-bg:#2a2414; --warn-line:#5c4c1c; --warn-ink:#f0d98c;
+    --code-bg:#0d1017; --code-ink:#e6e9f2; --inline-code:#262c3b; --explain-bg:#1f2536;
+    --u1:#6f8cff; --u2:#3cc68a; --u3:#e0b243; --u4:#b58cff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:"Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.55;
+  }
+  header.exam{
+    background:linear-gradient(135deg, #233a9e, #3454d1);
+    color:#fff; padding:28px 16px 22px;
+  }
+  header.exam .wrap{max-width:880px;margin:0 auto;}
+  header.exam .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-bottom:6px;}
+  header.exam h1{margin:0 0 10px;font-size:26px;}
+  header.exam .meta{display:flex;flex-wrap:wrap;gap:14px 26px;font-size:13.5px;opacity:.95;}
+  header.exam .meta b{display:block;font-weight:600;}
+  .container{max-width:880px;margin:0 auto;padding:22px 16px 80px;}
+  .notice{
+    background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);
+    border-radius:var(--radius);padding:14px 16px;font-size:13.5px;margin-bottom:18px;
+  }
+  .notice p{margin:0 0 6px;} .notice p:last-child{margin:0;}
+  .progress-wrap{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0 10px;}
+  .progress-bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
+  .progress-bar > div{height:100%;background:var(--accent);width:0%;transition:width .25s ease;}
+  .progress-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12px;color:var(--muted);margin-top:6px;}
+  .progress-row .nav a{color:var(--accent);text-decoration:none;margin-right:12px;font-weight:600;}
+  .part-title{
+    margin:34px 0 6px;padding:16px 18px;border-radius:var(--radius);
+    background:var(--card);border:1px solid var(--line);border-left:6px solid var(--accent);
+  }
+  .part-title h2{margin:0 0 4px;font-size:19px;}
+  .part-title p{margin:0;font-size:13.5px;color:var(--muted);}
+  .unit-title{
+    margin:28px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--line);
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .unit-title .dot{width:12px;height:12px;border-radius:50%;flex:none;}
+  .unit-title h3{font-size:16px;margin:0;}
+  .unit-title span{font-size:12.5px;color:var(--muted);}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 2px rgba(20,25,50,.03);
+    scroll-margin-top:70px;
+  }
+  .qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .qnum{font-weight:700;font-size:14.5px;color:var(--accent-dark);}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .qtag{font-size:11px;color:#fff;background:#8a93a8;padding:2px 9px;border-radius:99px;white-space:nowrap;}
+  .qtag.src{background:transparent;color:var(--muted);border:1px solid var(--line);}
+  .statement{font-size:14.8px;margin-bottom:12px;}
+  .statement p{margin:0 0 8px;}
+  code{background:var(--inline-code);padding:1px 5px;border-radius:5px;font-size:.92em;font-family:"Cascadia Code","Fira Code",Consolas,monospace;}
+  pre.code{
+    background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:12px 14px;
+    overflow-x:auto;font-size:13px;line-height:1.5;margin:8px 0 12px;
+  }
+  pre.code code{background:none;padding:0;font-size:inherit;color:inherit;}
+  table.df{border-collapse:collapse;font-size:13px;margin:8px 0 12px;display:block;overflow-x:auto;}
+  table.df th, table.df td{border:1px solid var(--line);padding:4px 10px;text-align:right;}
+  table.df th{background:var(--accent-soft);}
+  ul.affirm{margin:6px 0 12px;padding-left:20px;font-size:14.3px;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .opt{
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+    font-size:14.3px;transition:border-color .15s, background .15s;
+  }
+  .opt label{display:flex;align-items:flex-start;gap:10px;cursor:pointer;}
+  .card:not(.done) .opt:hover{border-color:var(--accent);background:var(--accent-soft);}
+  .opt input{margin-top:4px;flex:none;width:17px;height:17px;accent-color:var(--accent);}
+  .opt .letter{font-weight:700;color:var(--accent-dark);margin-right:4px;}
+  .card.done .opt label{cursor:default;}
+  .opt.correct{border-color:var(--good);background:var(--good-soft);}
+  .opt.incorrect{border-color:var(--bad);background:var(--bad-soft);}
+  .opt.correct .letter::after{content:" ✓";color:var(--good);}
+  .opt.incorrect .letter::after{content:" ✗";color:var(--bad);}
+  .why{display:none;margin:8px 0 0 27px;font-size:13.4px;color:var(--ink);opacity:.92;}
+  .why b{font-weight:700;}
+  .opt.correct .why b.verdict{color:var(--good);}
+  .opt:not(.correct) .why b.verdict{color:var(--bad);}
+  .card.done .why{display:block;}
+  .explain{
+    display:none;margin-top:12px;padding:12px 14px;background:var(--explain-bg);
+    border-left:4px solid var(--accent);border-radius:0 8px 8px 0;font-size:13.8px;
+  }
+  .explain p{margin:0 0 6px;} .explain p:last-child{margin:0;}
+  .card.done .explain{display:block;}
+  .explain .note{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);}
+  .card.correct-card{border-color:var(--good);}
+  .card.incorrect-card{border-color:var(--bad);}
+  .result-box{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px 20px;margin-top:36px;scroll-margin-top:70px;
+  }
+  .result-box h2{margin:0 0 4px;font-size:19px;}
+  .score-hero{text-align:center;margin:10px 0 6px;}
+  .score-hero .big{font-size:44px;font-weight:800;color:var(--accent-dark);}
+  .score-hero .sub{color:var(--muted);font-size:14px;}
+  .bars{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+  .bar-row{display:grid;grid-template-columns:minmax(110px,190px) 1fr 64px;gap:10px;align-items:center;font-size:13px;}
+  .bar-track{height:14px;background:var(--line);border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;transition:width .3s ease;}
+  .review-list{margin-top:14px;}
+  .review-list a{
+    display:block;padding:8px 12px;margin-bottom:6px;border-radius:8px;background:var(--bad-soft);
+    color:var(--bad);text-decoration:none;font-size:13.3px;border:1px solid var(--bad);
+  }
+  .btn{
+    background:var(--accent);color:#fff;border:none;padding:12px 28px;font-size:15px;
+    border-radius:99px;cursor:pointer;font-weight:600;margin-top:18px;
+  }
+  .btn:hover{filter:brightness(1.08);}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:40px;}
+  @media (max-width:560px){
+    .card{padding:14px 14px;}
+    header.exam h1{font-size:22px;}
+    .bar-row{grid-template-columns:96px 1fr 52px;}
+    .why{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+
+<header class="exam">
+  <div class="wrap">
+    <div class="kicker">Simulado &middot; Não vale nota</div>
+    <h1>Linguagem de Programação — Python</h1>
+    <div class="meta">
+      <div><b>Instituição</b>Anhanguera / UNOPAR</div>
+      <div><b>Parte 1</b><span id="metaP1"></span> questões dos exercícios</div>
+      <div><b>Parte 2</b><span id="metaP2"></span> questões de complemento</div>
+      <div><b>Unidades</b>1 a 4 (20 aulas)</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="notice">
+    <p><b>Como funciona:</b> clique em uma alternativa e a correção aparece na hora — a questão trava, a certa fica verde, e <b>cada uma das 5 alternativas ganha uma explicação</b> (por que é certa ou por que é errada), além de um resumo do conceito.</p>
+    <p>A <b>Parte 1</b> reproduz as 20 questões de <code>EXERCICIOS DAS UNIDADES/</code>. A <b>Parte 2</b> tem questões novas, no mesmo estilo, que cobrem o que os exercícios não cobraram.</p>
+    <p>Suas respostas ficam salvas neste navegador. O placar por unidade está no final da página.</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div id="progressFill"></div></div>
+    <div class="progress-row">
+      <span class="nav"><a href="#part-p1">Parte 1</a><a href="#part-p2">Parte 2</a><a href="#results">Resultado</a></span>
+      <span id="progressText"></span>
+    </div>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="result-box" id="results">
+    <h2>Seu resultado</h2>
+    <div class="score-hero">
+      <div class="big" id="scoreBig">—</div>
+      <div class="sub" id="scoreSub"></div>
+    </div>
+    <div class="bars" id="bars"></div>
+    <div class="review-list" id="reviewList"></div>
+    <div style="text-align:center"><button class="btn" id="retryBtn">Apagar respostas e recomeçar</button></div>
+  </div>
+
+  <footer>Gerado a partir dos <code>content.md</code> das 4 unidades e dos exercícios em <code>EXERCICIOS DAS UNIDADES/</code>.</footer>
+</div>
+
+<script>
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+/* bloco de código Python */
+const py = s => `<pre class="code"><code>${esc(s.replace(/^\n+/, "").replace(/\s+$/, ""))}</code></pre>`;
+/* código inline */
+const c = s => `<code>${esc(s)}</code>`;
+/* alternativa: [texto, explicação] */
+const o = (t, why) => ({ t, why });
+
+const unitInfo = {
+  1: { name: "Unidade 1 — Introdução ao Python", color: "var(--u1)" },
+  2: { name: "Unidade 2 — Recursos do Python", color: "var(--u2)" },
+  3: { name: "Unidade 3 — Análise de Dados", color: "var(--u3)" },
+  4: { name: "Unidade 4 — Aplicações com Python", color: "var(--u4)" },
+};
+</script>
+<script>
+/* =====================================================================
+   PARTE 1 — Questões dos exercícios (EXERCICIOS DAS UNIDADES/exercicio1-4.md)
+   Os enunciados e as respostas corretas são os mesmos dos arquivos. Os
+   arquivos guardam só o comentário de cada alternativa, então o texto das
+   alternativas erradas foi reconstruído a partir desses comentários.
+   ===================================================================== */
+const part1 = [
+/* ---------------- UNIDADE 1 ---------------- */
+{
+  unit: 1, aula: "Aula 4", src: "Exercício U1 · Q1",
+  statement: `<p>Explorando funções em Python para compreender as funções "built-in" que estão disponíveis na linguagem. Funções "built-in" são funções pré-definidas que fazem parte da biblioteca padrão do Python.</p>
+  <p><b>O que são funções "built-in" em Python?</b></p>`,
+  options: [
+    o(`Funções que precisam ser definidas pelo usuário antes de serem usadas.`,
+      `Quem precisa ser definida pelo usuário (com ${c("def")}) é a <i>função definida pelo usuário</i>. As built-in já vêm prontas: você chama ${c("print()")}, ${c("len()")}, ${c("int()")} sem escrever nada antes.`),
+    o(`Funções usadas exclusivamente por desenvolvedores experientes.`,
+      `Não existe restrição de nível. O primeiro código de qualquer iniciante, ${c('print("hello world!")')}, já usa uma função built-in.`),
+    o(`Funções que fazem parte da biblioteca padrão de Python e estão prontas para uso.`,
+      `É exatamente a definição da Aula 4: funções "pré-instaladas, incorporadas ao coração da linguagem, sem necessidade de instalação adicional". Exemplos: ${c("print")}, ${c("int")}, ${c("range")}, ${c("len")}, ${c("sum")}, ${c("round")}, ${c("max")}.`),
+    o(`Funções criadas apenas para fins de depuração.`,
+      `Elas servem para tudo: entrada/saída (${c("input")}, ${c("print")}), conversão (${c("int")}, ${c("float")}), agregação (${c("sum")}, ${c("max")}). Não são só para depurar.`),
+    o(`Funções que não são suportadas pela linguagem Python.`,
+      `É o contrário: elas fazem parte da própria linguagem. O material cita um repertório de cerca de 70 funções built-in.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Conceito-chave:</b> built-in = já vem com o Python, sem ${c("import")} e sem ${c("def")}. A lista completa fica em <a href="https://docs.python.org/pt-br/3/library/functions.html" target="_blank" rel="noopener">docs.python.org — Funções embutidas</a>.</p>`
+},
+{
+  unit: 1, aula: "Aula 3", src: "Exercício U1 · Q2",
+  statement: `<p>Você está desenvolvendo um programa em Python que requer a leitura de números de um arquivo e a impressão dos números pares encontrados.</p>
+  <p><b>Qual estrutura de repetição é mais apropriada para ler os números de um arquivo linha por linha e imprimir apenas os números pares?</b></p>`,
+  options: [
+    o(`${c("if-else")}`, `${c("if-else")} é uma estrutura <b>condicional</b> e não repete nada. Ela até aparece dentro do laço (para testar se o número é par), mas não é o laço.`),
+    o(`${c("for")}`, `O ${c("for")} percorre os elementos de uma coleção um a um, e as linhas de um arquivo são uma coleção desse tipo. A Aula 3 diz que ele é ideal "quando temos uma coleção de itens a serem processados".`),
+    o(`${c("while")}`, `${c("while")} também repete, mas é indicado quando <b>não sabemos</b> quando vamos parar (ex.: "até o usuário digitar 0"). Para percorrer as linhas, ele exigiria mais código de controle.`),
+    o(`${c("def")}`, `${c("def")} serve para <b>definir funções</b>, não para repetir.`),
+    o(`${c("try-except")}`, `${c("try-except")} trata exceções (erros), não percorre coleções.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Regra prática:</b> quando você sabe sobre o que vai iterar (lista, string, range, linhas de arquivo), use <b>for</b>. Quando a parada depende de uma condição que muda durante a execução, use <b>while</b>.</p>${py(`
+for numero in [3, 8, 11, 14]:
+    if numero % 2 == 0:
+        print(numero)   # 8 e 14`)}`
+},
+{
+  unit: 1, aula: "Aula 4", src: "Exercício U1 · Q3",
+  statement: `<p>Observe o código:</p>${py(`
+def encontrar_maior_numero(lista_numeros):
+    maior = max(lista_numeros)
+    return maior
+
+numeros = [56, 72, 89, 45, 62]
+maior_numero = encontrar_maior_numero(numeros)`)}
+  <p><b>Com base no código fornecido, qual é a finalidade da função ${c("encontrar_maior_numero")}?</b></p>`,
+  options: [
+    o(`Calcula a média dos números da lista.`, `Para a média seria preciso ${c("sum(lista) / len(lista)")}. O código usa ${c("max")}.`),
+    o(`Encontra o menor número da lista.`, `O menor seria obtido com ${c("min()")}. Aqui é ${c("max()")}.`),
+    o(`Encontra o maior número da lista.`, `${c("max(lista)")} devolve o maior elemento, e a função só repassa esse valor com ${c("return")}. Com a lista dada, ${c("maior_numero")} vale <b>89</b>.`),
+    o(`Verifica se a lista está vazia.`, `Não há nenhum teste de lista vazia (seria algo como ${c("if len(lista) == 0")}). Aliás, ${c("max([])")} geraria erro.`),
+    o(`Calcula a média ponderada da lista.`, `Média ponderada exige pesos, e não há nenhum peso no código.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Anatomia da função:</b> ${c("def")} + nome + parâmetros → corpo → ${c("return")} devolve o resultado para quem chamou. Aqui a função definida pelo usuário "embrulha" uma built-in (${c("max")}).</p>`
+},
+{
+  unit: 1, aula: "Aula 4", src: "Exercício U1 · Q4",
+  statement: `<p>Em Python as finalidades das funções anônimas, também conhecidas como "lambda", são extremamente importante para aplicações de funções de forma pontual.</p>
+  <p><b>O que são funções anônimas em Python?</b></p>`,
+  options: [
+    o(`Funções que não têm nome e, por isso, não podem ser chamadas.`, `Elas podem ser chamadas, sim. No material: ${c("soma = lambda a, b: a + b")} e depois ${c("soma(3, 4)")} → 7.`),
+    o(`Funções que só podem ser chamadas uma única vez.`, `Uma lambda guardada numa variável pode ser chamada quantas vezes você quiser, igual a uma função com ${c("def")}.`),
+    o(`Funções que não podem receber parâmetros.`, `Podem receber um ou vários: ${c("lambda a, b: a + b")} recebe dois.`),
+    o(`Funções que não têm um corpo definido.`, `É a resposta do gabarito: a lambda não tem um <b>bloco</b> de corpo com ${c("def")}/${c("return")}. Ela é escrita numa linha só, com uma expressão, e usada para tarefas pequenas e pontuais.`),
+    o(`Funções usadas apenas por desenvolvedores experientes.`, `Qualquer pessoa pode usar. Na Aula 4, a lambda aparece para arredondar uma média: ${c("lambda media: round(media, 2)")}.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Comparação direta:</b></p>${py(`
+def dobro(x):          # função com nome, bloco de corpo e return
+    return x * 2
+
+dobro = lambda x: x * 2   # mesma coisa numa expressão só`)}`,
+  note: `Atenção ao texto do gabarito: dizer que a lambda "não tem corpo" é uma simplificação. Ela tem corpo, mas é uma única <b>expressão</b> (${c("x * 2")}), sem bloco indentado e sem ${c("return")} explícito. Na prova, marque a alternativa do gabarito, mas saiba a diferença.`
+},
+{
+  unit: 1, aula: "Aula 4", src: "Exercício U1 · Q5",
+  statement: `<p>Imagine que você é um desenvolvedor de software e está trabalhando em um projeto de gerenciamento de tarefas. Uma situação comum é a necessidade de calcular a data de vencimento de uma tarefa com base na data de início e no prazo estabelecido, levando em consideração os dias úteis.</p>
+  <p>Suponha que uma tarefa comece no dia 10 de dezembro de 2023 e tenha um prazo de 7 dias úteis.</p>
+  <p><b>Qual função built-in do Python você deve utilizar para calcular a data de vencimento dessa tarefa com precisão, levando em consideração os dias úteis?</b></p>`,
+  options: [
+    o(`${c("time.sleep()")}`, `${c("sleep")} só <b>pausa</b> a execução do programa por alguns segundos. Não faz nenhuma conta com datas.`),
+    o(`${c("datetime.date()")}`, `${c("date()")} <b>cria</b> uma data (ex.: ${c("date(2023, 12, 10)")}), mas não soma intervalos de tempo.`),
+    o(`${c("datetime.timedelta()")}`, `${c("timedelta")} representa um <b>intervalo de tempo</b> que pode ser somado a uma data: ${c("date(2023,12,10) + timedelta(days=1)")}. É a alternativa correta no gabarito.`),
+    o(`${c("calendar.calculate()")}`, `Essa função não existe no módulo ${c("calendar")}.`),
+    o(`${c("math.add()")}`, `Essa função não existe no módulo ${c("math")}. Soma se faz com o operador ${c("+")}.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Ideia central:</b> data + intervalo = nova data. O módulo ${c("datetime")} é um módulo built-in (Unidade 2, Aula 4) e aparece de novo na Unidade 3 com ${c("date.today()")}.</p>`,
+  note: `O gabarito diz que ${c("timedelta")} "considera dias úteis", mas isso não é verdade: ${c("timedelta(days=7)")} soma 7 dias corridos. Para pular fins de semana, você somaria 1 dia por vez num laço e só contaria os dias em que ${c("data.weekday() < 5")} (segunda a sexta). Mesmo assim, entre as opções dadas, ${c("timedelta")} é a única que faz conta com datas.`
+},
+
+/* ---------------- UNIDADE 2 ---------------- */
+{
+  unit: 2, aula: "Aula 4", src: "Exercício U2 · Q1",
+  statement: `<p>Em Python, módulos e bibliotecas desempenham um papel fundamental na organização e reutilização de código. Módulos são arquivos Python que contêm definições de funções, classes e variáveis, enquanto bibliotecas são coleções de módulos que oferecem funcionalidades específicas.</p>
+  <p><b>Qual das seguintes afirmações é verdadeira em relação a módulos e bibliotecas em Python?</b></p>`,
+  options: [
+    o(`Uma biblioteca é um único arquivo Python, enquanto um módulo reúne vários arquivos.`, `Está invertido. O <b>módulo</b> é um arquivo ${c(".py")}, e a <b>biblioteca</b> reúne vários módulos.`),
+    o(`Módulos são apenas arquivos de texto simples, sem código executável.`, `Módulos contêm código Python de verdade: funções, classes e variáveis. O ${c("math")} tem ${c("sqrt")}, ${c("log2")}, ${c("cos")}...`),
+    o(`Módulos são equivalentes a funções individuais.`, `Um módulo pode ter <b>várias</b> funções e classes. ${c("os")}, por exemplo, tem ${c("getcwd")}, ${c("listdir")}, ${c("mkdir")} e muitas outras.`),
+    o(`Não há diferença significativa entre módulos e bibliotecas.`, `Os termos são próximos (o material até diz que "um módulo pode ser considerado uma biblioteca de códigos"), mas há diferença de escala: a biblioteca agrupa módulos relacionados.`),
+    o(`Um módulo é uma coleção de funções e classes, enquanto uma biblioteca é uma coleção de vários módulos relacionados.`, `Correta. Módulo = um arquivo ${c(".py")} com definições. Biblioteca = conjunto de módulos (ex.: Matplotlib contém o módulo ${c("pyplot")}).`),
+  ],
+  correct: 4,
+  tip: `<p><b>Exemplo concreto:</b> em ${c("import matplotlib.pyplot as plt")}, ${c("matplotlib")} é a biblioteca e ${c("pyplot")} é um dos módulos dela.</p>`
+},
+{
+  unit: 2, aula: "Aula 3", src: "Exercício U2 · Q2",
+  statement: `<p>O polimorfismo em programação orientada a objetos refere-se à capacidade de diferentes classes responderem de forma diferente à mesma mensagem. Isso é possível graças à herança e às respostas específicas de cada classe às mensagens.</p>
+  <p><b>O que é polimorfismo em programação orientada a objetos?</b></p>`,
+  options: [
+    o(`É a capacidade de uma classe possuir vários construtores.`, `Polimorfismo não tem relação com quantidade de construtores. Em Python, a classe tem um único ${c("__init__")}.`),
+    o(`Polimorfismo é a capacidade de diferentes classes responderem de forma diferente à mesma mensagem, permitindo tratar objetos de diferentes classes de maneira uniforme.`, `Correta. No material, ${c("Cachorro")} e ${c("Gato")} respondem ao mesmo ${c("fazer_barulho()")} com "Latir" e "Miar". Quem chama não precisa saber qual é o animal.`),
+    o(`É a ocultação de atributos e métodos de uma classe.`, `Isso descreve o <b>encapsulamento</b>: combinar dados e métodos e controlar o acesso a eles.`),
+    o(`É o processo de criação de classes em Python.`, `Criar classes se faz com a palavra ${c("class")}. Isso não tem nome de pilar da orientação a objetos.`),
+    o(`É uma técnica para criação de listas em Python.`, `Listas são estruturas de dados (Unidade 2, Aula 1). Não têm relação com esse pilar.`),
+  ],
+  correct: 1,
+  tip: `${py(`
+for animal in [Cachorro("Rex"), Gato("Whiskers")]:
+    print(animal.fazer_barulho())   # Latir / Miar  -> mesma chamada, respostas diferentes`)}<p>Os pilares da orientação a objetos citados no material são <b>abstração, encapsulamento, herança e polimorfismo</b>.</p>`
+},
+{
+  unit: 2, aula: "Aula 4", src: "Exercício U2 · Q3",
+  statement: `<p>Python é conhecido por sua comunidade ativa e por ter uma vasta biblioteca de módulos e pacotes de terceiros disponíveis para uso. Muitos desses módulos são gerenciados e distribuídos por meio do Python Package Index (PyPI).</p>
+  <p><b>Qual é uma das principais vantagens de usar módulos de terceiros em Python?</b></p>`,
+  options: [
+    o(`Módulos de terceiros não são confiáveis e devem ser evitados.`, `Muitos são amplamente usados e mantidos por comunidades ativas, como NumPy, pandas e Matplotlib. O cuidado recomendado no material é verificar a licença e a qualidade da manutenção, não evitar esses módulos.`),
+    o(`Módulos de terceiros são incorporados automaticamente ao núcleo do Python.`, `Não são. Eles ficam <b>fora</b> da biblioteca padrão e precisam ser instalados com ${c("pip install ...")}.`),
+    o(`Módulos de terceiros oferecem apenas funcionalidades básicas.`, `Ao contrário: muitos oferecem recursos avançados, como machine learning (TensorFlow) e análise de dados (pandas).`),
+    o(`Módulos de terceiros permitem que os desenvolvedores ampliem as funcionalidades de seus projetos sem precisar desenvolver tudo do zero.`, `Correta. É a ideia de "não reinventar a roda": com um ${c("pip install")} você ganha anos de trabalho da comunidade.`),
+    o(`Módulos de terceiros são sempre pagos.`, `A grande maioria é de código aberto e gratuita. Pode haver exceções proprietárias, e por isso o material fala em conhecer as licenças.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Três categorias de módulos (Unidade 2, Aula 4):</b> <b>built-in</b> (vêm no interpretador: ${c("math")}, ${c("os")}, ${c("datetime")}), <b>de terceiros</b> (instalados do PyPI via pip: NumPy, pandas, Matplotlib) e <b>próprios</b> (os que você escreve).</p>`
+},
+{
+  unit: 2, aula: "Aula 3", src: "Exercício U2 · Q4",
+  statement: `<p>A herança é um conceito fundamental na programação orientada a objetos que permite que as classes herdem características e comportamentos de outras classes.</p>
+  <p>Suponha que temos uma classe-pai chamada "Animal" com um método "fazer_barulho()" que retorna o som que um animal faz. Se criarmos uma classe-filha chamada "Cachorro" que herda de "Animal" e define um método "fazer_barulho()" que retorna "Latir",</p>
+  <p><b>qual será o resultado da chamada ao método "fazer_barulho()" em uma instância da classe "Cachorro"?</b></p>`,
+  options: [
+    o(`Retornará "Miar".`, `"Miar" é o retorno da classe ${c("Gato")} no exemplo da aula, não de ${c("Cachorro")}.`),
+    o(`Retornará "Zurro".`, `Nenhuma classe do cenário retorna "Zurro".`),
+    o(`O método "fazer_barulho()" em uma instância de "Cachorro" retornará "Latir".`, `Correta. Quando a classe-filha redefine (<b>sobrescreve</b>) um método com o mesmo nome, o Python usa a versão da filha. A versão de ${c("Animal")} (que só tem ${c("pass")}) é ignorada.`),
+    o(`Não retornará nenhum valor.`, `Isso só aconteceria se o método de ${c("Animal")} fosse usado, porque ele tem apenas ${c("pass")}. Mas ${c("Cachorro")} tem a própria versão, que retorna "Latir".`),
+    o(`Gerará um erro, pois o método já existe na classe-pai.`, `Redefinir um método herdado é permitido e é justamente o que faz o polimorfismo funcionar.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Como o Python procura um método:</b> primeiro na classe do objeto e, se não encontrar, na classe-pai. Por isso a versão de ${c("Cachorro")} "ganha".</p>`
+},
+{
+  unit: 2, aula: "Aula 1", src: "Exercício U2 · Q5",
+  statement: `<p>Analise as afirmações a seguir:</p>
+  <ul class="affirm">
+    <li><b>I.</b> As tuplas em Python são objetos mutáveis.</li>
+    <li><b>II.</b> A função ${c("in()")} em Python é usada para verificar se um elemento está presente em uma sequência.</li>
+    <li><b>III.</b> A utilização de tuplas ou sequência não faz diferença na programação, visto que ambas têm a mesma função e aplicação.</li>
+  </ul>
+  <p><b>Selecione a opção que descreve corretamente a relação entre as afirmações.</b></p>`,
+  options: [
+    o(`I e III são verdadeiras.`, `I é falsa porque tuplas são <b>imutáveis</b>. III também é falsa: a tupla é um <i>tipo</i> de sequência, com usos próprios (imutabilidade), e não é igual a qualquer sequência.`),
+    o(`Apenas I é verdadeira.`, `I é falsa. Tentar ${c("t[0] = 5")} numa tupla gera ${c("TypeError")}.`),
+    o(`I e II são verdadeiras.`, `II está certa, mas I é falsa (tuplas são imutáveis).`),
+    o(`Apenas II é verdadeira.`, `Correta pelo gabarito. ${c("x in s")} devolve ${c("True")}/${c("False")} dependendo de x estar ou não em s (Quadro 1 da Aula 1).`),
+    o(`II e III são verdadeiras.`, `III é falsa: listas são sequências mutáveis, tuplas são imutáveis, e essa diferença importa na hora de escolher qual usar.`),
+  ],
+  correct: 3,
+  tip: `${py(`
+cores = ("azul", "verde")
+print("azul" in cores)     # True
+cores[0] = "roxo"          # TypeError: tupla é imutável`)}`,
+  note: `Dois detalhes que a questão simplifica: (1) ${c("in")} é um <b>operador</b>, não uma função, e por isso se escreve ${c('"a" in lista')} e não ${c("in(...)")}; (2) nem toda sequência é mutável: ${c("str")} e ${c("tuple")} são sequências imutáveis, e ${c("list")} é mutável.`
+},
+
+/* ---------------- UNIDADE 3 ---------------- */
+{
+  unit: 3, aula: "Aula 4", src: "Exercício U3 · Q1",
+  statement: `<p>Observe o exemplo:</p>${py(`
+import pandas as pd
+
+dados = {
+    'Produto': ['A', 'B', 'C'],
+    'qtde_vendida': [33, 50, 45]
+    }
+
+df = pd.DataFrame(dados)
+df.plot(x='Produto', y='qtde_vendida', kind='!!!')`)}
+  <p><b>No exemplo fornecido, se eu desejo um gráfico de barras, qual parâmetro devo utilizar no lugar do "!!!"?</b></p>`,
+  options: [
+    o(`${c("barras")}`, `Os valores de ${c("kind")} são em inglês. ${c("'barras'")} gera erro.`),
+    o(`${c("pie")}`, `${c("pie")} = gráfico de <b>pizza</b>.`),
+    o(`${c("line")}`, `${c("line")} = gráfico de <b>linhas</b> (é o padrão quando você não informa ${c("kind")}).`),
+    o(`${c("bar")}`, `Correta. ${c("kind='bar'")} gera barras verticais.`),
+    o(`${c("pizza")}`, `Nome em português, não existe no pandas. Para pizza use ${c("'pie'")}.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Para decorar:</b> ${c("bar")} = barras, ${c("pie")} = pizza, ${c("line")} = linha. O ${c(".plot()")} do pandas usa o Matplotlib por baixo.</p>`
+},
+{
+  unit: 3, aula: "Aula 3", src: "Exercício U3 · Q2",
+  statement: `<p>Os métodos de leitura de dados estruturados no pandas têm em comum o prefixo "pd.read_XXXX", sendo "pd" o alias frequentemente utilizado ao importar a biblioteca e "XXXX" a parte restante da sintaxe específica de cada método.</p>
+  <p><b>Qual dos métodos do Pandas é usado para ler dados a partir de um arquivo no formato JSON?</b></p>`,
+  options: [
+    o(`${c("read_csv")}`, `Lê arquivos <b>CSV</b> (valores separados por vírgula).`),
+    o(`${c("read_fwf")}`, `Lê texto com campos de <b>largura fixa</b> (fixed-width file).`),
+    o(`${c("read_json")}`, `Correta. Na Aula 3 ele é usado para ler a taxa Selic direto da API do Banco Central: ${c("pd.read_json('https://api.bcb.gov.br/...formato=json')")}.`),
+    o(`${c("read_excel")}`, `Lê planilhas do <b>MS Excel</b> (e também OpenDocument).`),
+    o(`${c("read_html")}`, `Lê <b>tabelas de páginas web</b> e devolve uma lista de DataFrames (Aula 2).`),
+  ],
+  correct: 2,
+  tip: `<p><b>Padrão de nomes:</b> ler = ${c("read_<formato>")}, escrever = ${c("to_<formato>")}. Exemplos: ${c("read_json")}/${c("to_json")}, ${c("read_csv")}/${c("to_csv")}, ${c("read_excel")}/${c("to_excel")}.</p>`
+},
+{
+  unit: 3, aula: "Aula 4", src: "Exercício U3 · Q3",
+  statement: `<p>Observe o exemplo:</p>${py(`
+import pandas as pd
+
+dados = {
+    'Produto': ['A', 'B', 'C'],
+    'qtde_vendida': [33, 50, 45]
+    }
+
+df = pd.DataFrame(dados)
+df.plot(x='Produto', y='qtde_vendida', kind='bar')
+df.plot(x='Produto', y='qtde_vendida', kind='pie')
+df.plot(x='Produto', y='qtde_vendida', kind='line')`)}
+  <p><b>No exemplo fornecido, qual método é usado para criar visualizações gráficas com base nos dados em um DataFrame do Pandas?</b></p>`,
+  options: [
+    o(`${c("graph()")}`, `Não existe método ${c("graph()")} no DataFrame.`),
+    o(`${c("plot()")}`, `Correta. Series e DataFrame têm o método ${c("plot()")}, construído sobre o Matplotlib, e o tipo do gráfico é escolhido no parâmetro ${c("kind")}.`),
+    o(`${c("chart()")}`, `Não existe método ${c("chart()")} no pandas.`),
+    o(`${c("draw()")}`, `Não é o método do pandas para gerar gráficos.`),
+    o(`${c("show()")}`, `${c("plt.show()")} é do <b>Matplotlib</b> e apenas <b>exibe</b> o gráfico já criado. Quem cria o gráfico a partir do DataFrame é o ${c("plot()")}.`),
+  ],
+  correct: 1,
+  tip: `<p>As três linhas do exemplo usam o <b>mesmo método</b>. Só o ${c("kind")} muda.</p>`
+},
+{
+  unit: 3, aula: "Aula 1", src: "Exercício U3 · Q4",
+  statement: `<p>O SQLite é um mecanismo de banco de dados SQL que oferece uma abordagem diferente em relação à maioria dos sistemas de gerenciamento de bancos de dados SQL.</p>
+  <p><b>Qual é uma característica fundamental que distingue o SQLite da maioria dos outros RDBMS?</b></p>`,
+  options: [
+    o(`Requer um servidor separado para funcionar.`, `É justamente o contrário: o que diferencia o SQLite é <b>não</b> precisar de servidor.`),
+    o(`Armazena o banco de dados em vários arquivos separados.`, `O SQLite guarda o banco inteiro (tabelas, índices, triggers, views) em <b>um único arquivo</b>, como ${c("exemplo.db")}.`),
+    o(`Suporta múltiplas linguagens de programação.`, `Muitos RDBMS fazem isso, então não é o que distingue o SQLite.`),
+    o(`Opera sem a necessidade de um servidor separado.`, `Correta. Ele lê e escreve direto em arquivos no disco. Por isso ${c("sqlite3.connect('exemplo.db')")} simplesmente abre (ou cria) um arquivo.`),
+    o(`Utiliza uma linguagem de consulta proprietária.`, `O SQLite usa SQL padrão: ${c("CREATE")}, ${c("INSERT")}, ${c("SELECT")}, ${c("UPDATE")}, ${c("DELETE")}.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Resumo:</b> SQLite = biblioteca escrita em C + banco num arquivo só + sem servidor. Em Python, o módulo ${c("sqlite3")} já vem na instalação.</p>`
+},
+{
+  unit: 3, aula: "Aula 3", src: "Exercício U3 · Q5",
+  statement: `<p>Observe as primeiras cinco linhas do DataFrame ${c("df_selic")}:</p>
+  <table class="df">
+    <tr><th></th><th>data</th><th>valor</th><th>data_extracao</th><th>responsavel</th></tr>
+    <tr><th>0</th><td>04/06/1986</td><td>0.065041</td><td>2023-11-02</td><td>Autor</td></tr>
+    <tr><th>1</th><td>05/06/1986</td><td>0.067397</td><td>2023-11-02</td><td>Autor</td></tr>
+    <tr><th>2</th><td>06/06/1986</td><td>0.066740</td><td>2023-11-02</td><td>Autor</td></tr>
+    <tr><th>3</th><td>09/06/1986</td><td>0.068247</td><td>2023-11-02</td><td>Autor</td></tr>
+    <tr><th>4</th><td>10/06/1986</td><td>0.067041</td><td>2023-11-02</td><td>Autor</td></tr>
+  </table>
+  <p><b>Como você pode acessar as informações do DataFrame ${c("df_selic")} para os valores de "data" e "valor" da primeira linha usando a função ${c("loc")}?</b></p>`,
+  options: [
+    o(`${c("df_selic.loc[0]['data']")} e ${c("df_selic.loc[0]['valor']")}`, `Correta. ${c("loc[0]")} pega a linha de <b>rótulo</b> 0 (vem como uma Series) e ${c("['data']")} escolhe a coluna dentro dela.`),
+    o(`${c("df_selic.loc['data'][0]")} e ${c("df_selic.loc['valor'][0]")}`, `O primeiro colchete do ${c("loc")} é sempre a <b>linha</b>. Não existe linha com rótulo ${c("'data'")}, então dá ${c("KeyError")}.`),
+    o(`${c("df_selic.loc['data', 0]")} e ${c("df_selic.loc['valor', 0]")}`, `A forma ${c("loc[linha, coluna]")} existe, mas aqui a ordem está invertida. O certo seria ${c("loc[0, 'data']")}.`),
+    o(`${c("df_selic['data'][0]")} e ${c("df_selic['valor'][0]")}`, `Esse código até funciona, mas <b>não usa ${c("loc")}</b>: seleciona a coluna primeiro e depois o índice. A questão pede ${c("loc")}.`),
+    o(`${c("df_selic[0]['data']")} e ${c("df_selic[0]['valor']")}`, `Em um DataFrame, ${c("df[0]")} procura uma <b>coluna</b> chamada 0, e essa coluna não existe.`),
+  ],
+  correct: 0,
+  tip: `<p><b>Regra do ${c("loc")}:</b> ${c("df.loc[linha]")} devolve uma linha e ${c("df.loc[linha, coluna]")} devolve uma célula. Então ${c("df_selic.loc[0, 'data']")} também seria uma resposta válida, com o mesmo valor ${c("'04/06/1986'")}.</p>`
+},
+
+/* ---------------- UNIDADE 4 ---------------- */
+{
+  unit: 4, aula: "Aula 4", src: "Exercício U4 · Q1",
+  statement: `<p>Considere o seguinte código Python:</p>${py(`
+import tensorflow as tf
+import gym
+
+# Ambiente CartPole do Gym
+env = gym.make('CartPole-v1')
+
+# Modelo Simples para Aprendizado por Reforço
+model_reinforcement = tf.keras.Sequential([
+    tf.keras.layers.Dense(24, activation='relu', input_shape=(env.observation_space.shape[0],)),
+    tf.keras.layers.Dense(env.action_space.n, activation='linear')
+])
+model_reinforcement.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss='mse')
+
+max_episodes = 1000
+for episode in range(max_episodes):
+    state = env.reset()
+    done = False
+    while not done:
+        action = env.action_space.sample()
+        next_state, reward, done, _ = env.step(action)
+        target = reward + 0.95 * tf.reduce_max(model_reinforcement.predict(next_state.reshape(1, -1)))
+        target_f = model_reinforcement.predict(state.reshape(1, -1))
+        target_f[0][action] = target
+        model_reinforcement.fit(state.reshape(1, -1), target_f, epochs=1, verbose=0)
+        state = next_state
+    # ... condição de parada`)}
+  <p><b>Qual tipo de treinamento é feito no enunciado?</b></p>`,
+  options: [
+    o(`Treinamento de um modelo de classificação com dados rotulados.`, `Não há nenhum conjunto de dados rotulado (pares entrada → saída esperada). O modelo aprende interagindo com o ambiente.`),
+    o(`Treinamento supervisionado com dados históricos.`, `No supervisionado o modelo recebe exemplos com a resposta certa. Aqui não há respostas prontas, só <b>recompensas</b> (${c("reward")}).`),
+    o(`Treinamento por reforço em um ambiente dinâmico.`, `Correta. As pistas são: um <b>ambiente</b> (${c("gym.make('CartPole-v1')")}), <b>ações</b> (${c("env.step(action)")}), <b>recompensas</b> (${c("reward")}) e episódios.`),
+    o(`Agrupamento de dados (clustering).`, `Agrupamento (ex.: K-Means) é não supervisionado e junta dados parecidos. Não há grupos sendo formados aqui.`),
+    o(`Treinamento não supervisionado para encontrar padrões.`, `O não supervisionado usa dados sem rótulo e sem ambiente. O exemplo da aula para esse caso é o autoencoder.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Como reconhecer o tipo de treinamento pelo código:</b> ${c("fit(X, y)")} com rótulos → supervisionado; ${c("fit(X, X)")} ou K-Means → não supervisionado; ${c("env")}, ${c("action")}, ${c("reward")} → reforço.</p>`,
+  note: `No exercício original, o enunciado diz "código que usa a biblioteca Pandas para ler dados de uma página da web", mas o código não usa pandas. É um erro de copiar-e-colar da instituição. Ignore essa frase e analise o código.`
+},
+{
+  unit: 4, aula: "Aula 4", src: "Exercício U4 · Q2",
+  statement: `<p>Os tipos de treinamento são estratégias fundamentais no desenvolvimento de modelos de Machine Learning, determinando como o algoritmo aprenderá com os dados disponíveis.</p>
+  <p><b>O que caracteriza o treinamento supervisionado em Machine Learning?</b></p>`,
+  options: [
+    o(`O modelo trabalha com dados não rotulados e procura padrões por conta própria.`, `Isso é o treinamento <b>não supervisionado</b> (ex.: agrupar clientes por padrão de compra).`),
+    o(`Um agente interage com um ambiente dinâmico e aprende com recompensas.`, `Isso é o treinamento <b>por reforço</b> (ex.: um agente que aprende a jogar).`),
+    o(`O modelo é alimentado com um conjunto de dados rotulado, consistindo em pares de entrada e saída esperada.`, `Correta. O modelo aprende a mapear entrada → saída certa. Exemplo do material: classificar e-mails como "spam" ou "não spam".`),
+    o(`O modelo agrupa dados semelhantes sem conhecer as saídas.`, `Agrupamento sem saída conhecida é <b>não supervisionado</b> (K-Means).`),
+    o(`O modelo aprende por tentativa e erro, maximizando recompensas ao longo do tempo.`, `Maximizar recompensas é a definição de <b>reforço</b>.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Três palavras-chave:</b> supervisionado = <b>rótulo</b>; não supervisionado = <b>padrão</b> sem rótulo; reforço = <b>recompensa</b>.</p>`
+},
+{
+  unit: 4, aula: "Aula 2", src: "Exercício U4 · Q3",
+  statement: `<p>Os widgets desempenham um papel fundamental no desenvolvimento de interfaces de usuário interativas. No contexto do KivyMD (Material Design Components for Kivy), os widgets são os blocos de construção essenciais para criar aplicativos visualmente atraentes.</p>
+  <p>${c("MDTabs")} é um widget poderoso do KivyMD projetado para facilitar a organização de conteúdo em diferentes abas. Isso é particularmente útil quando você precisa exibir várias seções ou funcionalidades em um aplicativo sem sobrecarregar a tela principal.</p>
+  <p><b>Qual é o papel fundamental dos widgets no desenvolvimento de interfaces de usuário interativas, conforme mencionado no texto-base?</b></p>`,
+  options: [
+    o(`Permitir o desenvolvimento exclusivo para dispositivos Android.`, `O KivyMD é <b>multiplataforma</b>: Android, iOS, Windows, Linux e macOS.`),
+    o(`Facilitar a organização de conteúdo em diferentes abas.`, `Correta pelo gabarito, porque é o papel do ${c("MDTabs")} descrito no texto-base.`),
+    o(`Substituir a linguagem Python na criação de interfaces.`, `O KivyMD é uma biblioteca <b>de</b> Python. Ele não substitui a linguagem.`),
+    o(`Criar apenas interfaces simples e estáticas.`, `Os widgets servem para interfaces <b>interativas</b>, com botões, campos de texto e abas.`),
+    o(`Sobrecarregar a tela principal com todo o conteúdo do aplicativo.`, `O texto diz o oposto: as abas existem para <b>evitar</b> sobrecarregar a tela principal.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Vocabulário:</b> Kivy = framework Python multitouch; KivyMD = extensão do Kivy com o <b>Material Design</b> do Google; widget = componente de interface (botão, campo, aba...).</p>`,
+  note: `A pergunta fala do "papel dos widgets" em geral, mas a resposta certa é o papel específico do ${c("MDTabs")}. Isso acontece em provas: quando o enunciado diz "conforme o texto-base", procure a frase do texto que responde.`
+},
+{
+  unit: 4, aula: "Aula 3", src: "Exercício U4 · Q4",
+  statement: `<p>As assertions são expressões utilizadas para verificar as condições de verdade durante a execução do código. Elas são fundamentais para a detecção precoce de erros, garantindo que as suposições sobre o comportamento do programa sejam atendidas.</p>${py(`
+def divide(x, y):
+    assert y != 0, "Divisão por zero!"
+    return x / y
+
+result = divide(6, 0)   # AssertionError: Divisão por zero!`)}
+  <p><b>Qual é o papel das assertions no código apresentado e por que são consideradas fundamentais?</b></p>
+  <p style="font-size:12.5px;color:var(--muted)">(O código acima é o exemplo da Aula 3 ao qual a questão se refere.)</p>`,
+  options: [
+    o(`As assertions servem para criar funções de divisão.`, `Quem cria a função é o ${c("def")}. O ${c("assert")} só verifica uma condição dentro dela.`),
+    o(`As assertions são fundamentais para evitar erros durante a execução do código.`, `Correta pelo gabarito. O ${c("assert")} barra o caso inválido (${c("y == 0")}) antes da divisão acontecer, com uma mensagem clara.`),
+    o(`As assertions garantem que o código seja executado sem falhas.`, `Não garantem. Elas <b>detectam</b> uma condição inválida e <b>interrompem</b> o programa com ${c("AssertionError")}.`),
+    o(`As assertions não são úteis na programação.`, `São úteis para detectar erros cedo e documentar o que o código espera receber.`),
+    o(`As assertions servem exclusivamente para detectar erros em loops.`, `Podem ser usadas em qualquer ponto do código: funções, loops, testes...`),
+  ],
+  correct: 1,
+  tip: `<p><b>Sintaxe:</b> ${c("assert condição, 'mensagem'")}. Se a condição for ${c("False")}, o Python lança ${c("AssertionError: mensagem")}. Se for ${c("True")}, nada acontece e o código segue.</p>`,
+  note: `Mais precisamente, a assertion não "evita" o erro: ela o <b>detecta cedo</b> e interrompe o programa com uma mensagem clara, em vez de deixar o erro aparecer mais adiante de forma confusa.`
+},
+{
+  unit: 4, aula: "Aula 3", src: "Exercício U4 · Q5",
+  statement: `<p>Observe o código:</p>${py(`
+import unittest
+
+def add(a, b):
+    return a + b
+
+class TestAddition(unittest.TestCase):
+    def test_add_positive_numbers(self):
+        self.assertEqual(add(2, 3), 5)
+
+    def test_add_negative_numbers(self):
+        self.assertEqual(add(-2, -3), -5)
+
+if __name__ == '__main__':
+    import unittest
+    unittest.main(argv=['first-arg-is-ignored'], exit=False)
+    print()`)}
+  <p><b>O que indica a condição ${c("if __name__ == '__main__':")} no exemplo apresentado?</b></p>`,
+  options: [
+    o(`Define que a função ${c("add")} só pode ser usada dentro desse arquivo.`, `A condição não tem relação com a definição de ${c("add")}, que pode ser importada normalmente por outros arquivos.`),
+    o(`Faz a classe ${c("TestAddition")} ser executada apenas quando o arquivo for importado como módulo.`, `É o inverso: o bloco roda quando o arquivo é executado <b>diretamente</b>, e não quando é importado.`),
+    o(`Obriga a classe ${c("TestAddition")} a herdar de ${c("unittest.TestCase")}.`, `A herança vem de ${c("class TestAddition(unittest.TestCase)")}. Essa condição não tem nada a ver com isso.`),
+    o(`Garante que a suíte de testes seja executada apenas se o script for executado diretamente (não importado como módulo).`, `Correta. Ao rodar o arquivo diretamente, ${c("__name__")} vale ${c("'__main__'")}. Ao ser importado, vale o nome do módulo e o bloco é pulado.`),
+    o(`Substitui a chamada explícita a ${c("unittest.main()")}.`, `Não substitui: a chamada ${c("unittest.main(...)")} está <b>dentro</b> do bloco. A condição só decide se o bloco roda.`),
+  ],
+  correct: 3,
+  tip: `<p>O mesmo ${c("if __name__ == '__main__':")} aparece no Flask (Aula 1) e no Kivy (Aula 2). É o jeito padrão de dizer "rode isso só se este arquivo for o programa principal".</p>`
+},
+];
+</script>
+<script>
+/* =====================================================================
+   PARTE 2 — Complemento (questões inéditas), Unidades 1 e 2
+   Saídas de código conferidas executando os trechos em Python 3.
+   ===================================================================== */
+const part2 = [
+/* ---------------- U1 · Aula 1: variáveis, tipos, entrada/saída ---------------- */
+{
+  unit: 1, aula: "Aula 1", src: "Tipos de dados",
+  statement: `<p>Considere o código:</p>${py(`
+x = 8.0
+y = "8"
+z = 8 > 3
+print(type(x), type(y), type(z))`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("<class 'int'> <class 'int'> <class 'int'>")}`, `${c("8.0")} tem ponto decimal, então é ${c("float")}. ${c('"8"')} está entre aspas, então é texto. E ${c("8 > 3")} é uma comparação.`),
+    o(`${c("<class 'float'> <class 'str'> <class 'bool'>")}`, `Correta. O Python deduz o tipo pelo valor: ${c("8.0")} → float, ${c('"8"')} → str (aspas), e ${c("8 > 3")} vale ${c("True")} → bool.`),
+    o(`${c("<class 'float'> <class 'int'> <class 'bool'>")}`, `As aspas fazem ${c('"8"')} ser uma <b>string</b>, mesmo que o conteúdo pareça número.`),
+    o(`${c("<class 'int'> <class 'str'> <class 'str'>")}`, `${c("8.0")} é float e ${c("8 > 3")} é uma expressão lógica que vale ${c("True")}, do tipo ${c("bool")}.`),
+    o(`${c("<class 'float'> <class 'str'> <class 'int'>")}`, `${c("z")} guarda o <b>resultado da comparação</b> (${c("True")}), não o número 8. O tipo é ${c("bool")}.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Tipagem inferida:</b> em Python você não declara o tipo; o interpretador descobre pelo valor. Como "tudo é objeto", ${c("type()")} mostra ${c("<class '...'>")}.</p>`
+},
+{
+  unit: 1, aula: "Aula 1", src: "input() e conversão",
+  statement: `<p>O usuário digita <b>5</b> quando o programa abaixo é executado:</p>${py(`
+n = input("Digite um número: ")
+print(n * 2)`)}
+  <p><b>O que aparece na tela?</b></p>`,
+  options: [
+    o(`${c("10")}`, `Seria 10 se houvesse conversão: ${c("int(input())")}. Sem ela, ${c("n")} é o <b>texto</b> ${c('"5"')}.`),
+    o(`${c("5")}`, `A multiplicação é feita, só que com texto.`),
+    o(`Um erro, porque não se pode multiplicar texto.`, `Multiplicar ${c("str")} por ${c("int")} é permitido: repete o texto. O que dá erro é ${c('"5" + 2')}.`),
+    o(`${c("55")}`, `Correta. ${c("input()")} <b>sempre devolve string</b>, e ${c('"5" * 2')} repete o texto duas vezes → ${c('"55"')}.`),
+    o(`${c("5.0")}`, `Nenhuma conversão para float acontece aqui.`),
+  ],
+  correct: 3,
+  tip: `<p>Por isso o código da média na Aula 1 usa ${c("int(input())")}: "sem ela, o Python entenderia que as notas seriam String".</p>`
+},
+{
+  unit: 1, aula: "Aula 1", src: "f-string e formatação",
+  statement: `<p>Observe:</p>${py(`
+nome = "Ana"
+media = 7.456
+print(f"{nome} ficou com média {media:.2f}")`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("{nome} ficou com média {media:.2f}")}`, `Isso só aconteceria <b>sem o ${c("f")}</b> antes das aspas. Com o ${c("f")}, o conteúdo entre chaves é substituído pelo valor.`),
+    o(`${c("Ana ficou com média 7.456")}`, `O ${c(":.2f")} formata com 2 casas decimais, então o valor não aparece completo.`),
+    o(`${c("Ana ficou com média 7.46")}`, `Correta. A f-string (PEP 498) coloca o valor de ${c("nome")} e formata ${c("media")} com 2 casas, <b>arredondando</b> 7.456 para 7.46.`),
+    o(`${c("Ana ficou com média 7.45")}`, `O ${c(".2f")} arredonda, não corta. O terceiro dígito é 6, então 7.456 vira 7.46.`),
+    o(`${c("Ana ficou com média 7")}`, `${c(".2f")} mantém 2 casas decimais. Não converte para inteiro.`),
+  ],
+  correct: 2,
+  tip: `<p>Duas formas de formatar vistas na Aula 1: ${c('"Olá, %s" % (nome)')} (estilo C) e ${c('f"Olá, {nome}"')}. Pelo <b>PEP 498</b>, a f-string é a forma recomendada.</p>`
+},
+{
+  unit: 1, aula: "Aula 1", src: "PEP 8 e ferramentas",
+  statement: `<p><b>Sobre o ecossistema Python apresentado na Aula 1, assinale a alternativa correta.</b></p>`,
+  options: [
+    o(`O PEP 8 é o interpretador oficial que executa o código Python.`, `O PEP 8 é um <b>guia de estilo</b>: formatação, indentação, nomes. Quem executa o código é o interpretador.`),
+    o(`O Google Colab exige instalar o Python localmente antes de ser usado.`, `O Colab roda <b>no navegador</b>. É um servidor de Jupyter Notebook hospedado que não precisa de configuração.`),
+    o(`Um código "pythonic" é aquele escrito seguindo as diretrizes do PEP 8.`, `Correta. Seguir o PEP 8 deixa o código "pythonic", ou seja, legível. A ideia do Guido van Rossum é que código é lido mais vezes do que escrito.`),
+    o(`O Jupyter Notebook só aceita código, sem textos ou gráficos.`, `O notebook mistura código ativo, gráficos e textos narrativos. Esse é o diferencial dele.`),
+    o(`Python foi criado por James Gosling e lançado em 2005.`, `Python foi criado por <b>Guido van Rossum</b> e lançado em <b>1991</b>. (James Gosling criou o Java.)`),
+  ],
+  correct: 2,
+  tip: `<p>Guia oficial: <a href="https://peps.python.org/pep-0008/" target="_blank" rel="noopener">PEP 8 — Style Guide for Python Code</a>.</p>`
+},
+
+/* ---------------- U1 · Aula 2: operadores e condicionais ---------------- */
+{
+  unit: 1, aula: "Aula 2", src: "and / or / not",
+  statement: `${py(`
+a = 5
+b = 10
+print(a > 3 and b < 5, a > 3 or b < 5, not a == 5)`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("True True False")}`, `O ${c("and")} exige que <b>as duas</b> condições sejam verdadeiras, e ${c("b < 5")} é falso (b = 10).`),
+    o(`${c("False True True")}`, `${c("a == 5")} é ${c("True")}, e o ${c("not")} inverte para ${c("False")}.`),
+    o(`${c("False False False")}`, `No ${c("or")}, basta <b>uma</b> condição verdadeira, e ${c("a > 3")} é verdadeiro.`),
+    o(`${c("True False True")}`, `Todos os três valores estão trocados. Faça a conta de cada expressão separadamente.`),
+    o(`${c("False True False")}`, `Correta. ${c("True and False")} → False; ${c("True or False")} → True; ${c("not True")} → False.`),
+  ],
+  correct: 4,
+  tip: `<p><b>Tabela mental:</b> ${c("and")} → verdadeiro só se os dois forem; ${c("or")} → falso só se os dois forem; ${c("not")} → inverte.</p>`
+},
+{
+  unit: 1, aula: "Aula 2", src: "Ordem do if/elif",
+  statement: `${py(`
+nota = 85
+if nota >= 60:
+    print("C")
+elif nota >= 80:
+    print("B")
+elif nota >= 90:
+    print("A")
+else:
+    print("Reprovado")`)}
+  <p><b>O que é impresso?</b></p>`,
+  options: [
+    o(`${c("B")}`, `85 ≥ 80 é verdade, mas esse ${c("elif")} nem chega a ser testado, porque uma condição anterior já foi verdadeira.`),
+    o(`${c("C")}`, `Correta. O Python testa de cima para baixo e executa <b>só o primeiro</b> bloco verdadeiro. Como ${c("85 >= 60")} já é verdade, imprime "C" e ignora o resto.`),
+    o(`${c("C")} e ${c("B")}`, `Em uma cadeia ${c("if/elif/else")}, <b>no máximo um</b> bloco é executado.`),
+    o(`${c("A")}`, `85 não é ≥ 90, e mesmo que fosse, o primeiro ${c("if")} já teria sido escolhido.`),
+    o(`${c("Reprovado")}`, `O ${c("else")} só roda se <b>todas</b> as condições forem falsas.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Erro clássico de lógica:</b> em faixas com ${c(">=")}, comece pela condição <b>mais restritiva</b> (${c(">= 90")}, depois ${c(">= 80")}, depois ${c(">= 60")}). Do jeito do código acima, "A" e "B" nunca seriam impressos.</p>`
+},
+{
+  unit: 1, aula: "Aula 2", src: "Operadores relacionais",
+  statement: `<p>No cinema da Aula 2, a recomendação usa ${c("elif 12 <= idade < 18:")}.</p>
+  <p><b>Se o cliente digitar exatamente 18, qual filme é recomendado?</b></p>${py(`
+if idade < 12:
+    print("FILME 1")
+elif 12 <= idade < 18:
+    print("FILME 2")
+else:
+    print("FILME 3")`)}`,
+  options: [
+    o(`FILME 1`, `18 não é menor que 12.`),
+    o(`FILME 2`, `${c("< 18")} é <b>estritamente</b> menor. 18 < 18 é falso, então esse bloco não roda.`),
+    o(`FILME 2 e FILME 3`, `Numa cadeia if/elif/else, só um bloco é executado.`),
+    o(`FILME 3`, `Correta. 18 falha em ${c("idade < 12")} e em ${c("idade < 18")}, então cai no ${c("else")}.`),
+    o(`Nenhum, porque a comparação encadeada ${c("12 <= idade < 18")} é inválida em Python.`, `Python aceita comparações encadeadas: ${c("12 <= idade < 18")} equivale a ${c("12 <= idade and idade < 18")}.`),
+  ],
+  correct: 3,
+  tip: `<p>${c("<")} e ${c(">")} são <b>estritos</b> (não incluem o limite). ${c("<=")} e ${c(">=")} <b>incluem</b> o limite. Esse detalhe é muito cobrado em prova.</p>`
+},
+{
+  unit: 1, aula: "Aula 2", src: "Quadro de operadores",
+  statement: `<p>No Quadro 1 da Aula 2 (operadores relacionais), qual operador verifica a <b>identidade do objeto</b>, ou seja, se duas variáveis apontam para o mesmo objeto na memória?</p>`,
+  options: [
+    o(`${c("==")}`, `${c("==")} compara <b>valores</b> (se o conteúdo é igual), não se é o mesmo objeto.`),
+    o(`${c("=")}`, `${c("=")} é <b>atribuição</b> (guarda um valor numa variável). Não compara nada.`),
+    o(`${c("is")}`, `Correta. ${c("is")} verifica identidade de objeto, e ${c("is not")} é a negação dele.`),
+    o(`${c("!=")}`, `${c("!=")} significa "diferente de" e compara valores.`),
+    o(`${c("in")}`, `${c("in")} verifica se um elemento <b>pertence</b> a uma sequência.`),
+  ],
+  correct: 2,
+  tip: `${py(`
+a = [1, 2]
+b = [1, 2]
+print(a == b)   # True  -> mesmo conteúdo
+print(a is b)   # False -> são dois objetos diferentes na memória`)}`
+},
+
+/* ---------------- U1 · Aula 3: repetição ---------------- */
+{
+  unit: 1, aula: "Aula 3", src: "range() com passo",
+  statement: `${py(`
+for z in range(2, 11, 3):
+    print(z, end=" ")`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("2 5 8 11")}`, `O limite superior (11) <b>não entra</b> no range.`),
+    o(`${c("2 5 8")}`, `Correta. Começa em 2, soma 3 a cada passo (2, 5, 8) e para antes de 11.`),
+    o(`${c("3 6 9")}`, `O primeiro argumento (2) é o <b>início</b>. O 3 é o passo.`),
+    o(`${c("2 3 4 5 6 7 8 9 10")}`, `Isso seria ${c("range(2, 11)")}, sem o terceiro argumento de passo.`),
+    o(`${c("2 5 8 10")}`, `O range só gera números da forma início + k·passo. 10 não é 2 + 3k.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Três formas:</b> ${c("range(fim)")} → 0 até fim-1; ${c("range(início, fim)")}; ${c("range(início, fim, passo)")}. O <b>fim nunca entra</b>.</p>`
+},
+{
+  unit: 1, aula: "Aula 3", src: "break e continue",
+  statement: `${py(`
+for i in range(1, 8):
+    if i == 3:
+        continue
+    if i == 6:
+        break
+    print(i, end=" ")`)}
+  <p><b>O que é impresso?</b></p>`,
+  options: [
+    o(`${c("1 2 4 5")}`, `Correta. Em 3, o ${c("continue")} pula o ${c("print")} dessa volta. Em 6, o ${c("break")} encerra o laço antes de imprimir.`),
+    o(`${c("1 2 4 5 6 7")}`, `O ${c("break")} em 6 <b>encerra</b> o laço, então 6 e 7 não são impressos.`),
+    o(`${c("1 2")}`, `${c("continue")} não encerra o laço: só pula a iteração atual e segue para a próxima.`),
+    o(`${c("1 2 3 4 5")}`, `O 3 é pulado pelo ${c("continue")}.`),
+    o(`${c("1 2 4 5 7")}`, `Depois do ${c("break")} não há "próxima volta": o laço termina de vez.`),
+  ],
+  correct: 0,
+  tip: `<p><b>continue</b> = "pula esta volta". <b>break</b> = "sai do laço". Os dois costumam aparecer dentro de um ${c("if")}.</p>`
+},
+{
+  unit: 1, aula: "Aula 3", src: "while",
+  statement: `<p>Um estudante escreveu este código para imprimir de 0 a 4:</p>${py(`
+i = 0
+while i < 5:
+    print(i)`)}
+  <p><b>O que acontece ao executá-lo?</b></p>`,
+  options: [
+    o(`Imprime 0, 1, 2, 3, 4 e termina.`, `Para isso, o valor de ${c("i")} teria que mudar dentro do laço, e nada no corpo o altera.`),
+    o(`Não imprime nada, porque a condição começa falsa.`, `${c("0 < 5")} é verdadeiro, então o laço começa.`),
+    o(`Dá erro de sintaxe, porque o ${c("while")} exige ${c("range()")}.`, `${c("while")} recebe qualquer condição. Quem costuma usar ${c("range")} é o ${c("for")}.`),
+    o(`Imprime 0 para sempre (loop infinito), porque ${c("i")} nunca é incrementado.`, `Correta. ${c("i")} vale 0 o tempo todo, a condição ${c("i < 5")} nunca fica falsa, e o laço não termina. A correção é colocar ${c("i += 1")} dentro do laço.`),
+    o(`Imprime apenas 0 e termina.`, `O ${c("while")} volta a testar a condição depois de cada iteração. Como ela continua verdadeira, repete.`),
+  ],
+  correct: 3,
+  tip: `<p>Todo ${c("while")} precisa de algo no corpo que, em algum momento, torne a condição falsa (ou de um ${c("break")}, como no ${c("while True:")} da Aula 3).</p>`
+},
+{
+  unit: 1, aula: "Aula 3", src: "for vs while",
+  statement: `<p>Um programa deve pedir números ao usuário e parar <b>somente quando ele digitar 0</b>. Não dá para saber de antemão quantos números serão digitados.</p>
+  <p><b>Qual estrutura é a mais indicada, segundo a Aula 3?</b></p>`,
+  options: [
+    o(`${c("for numero in range(10):")}`, `Limitaria o programa a 10 números, mas o usuário pode digitar 3 ou 300.`),
+    o(`${c("if numero != 0:")}`, `${c("if")} decide uma vez só, sem repetir.`),
+    o(`${c("while numero != 0:")}`, `Correta. O ${c("while")} é indicado "quando o número de repetições não é conhecido antecipadamente". É o exemplo par/ímpar da Aula 3.`),
+    o(`${c("lambda numero: numero != 0")}`, `Lambda cria uma função pequena. Não repete nada.`),
+    o(`${c("def ler(numero):")}`, `Definir uma função não cria repetição.`),
+  ],
+  correct: 2,
+  tip: `<p><b>for</b> → número de repetições conhecido (ou uma coleção para percorrer). <b>while</b> → repetir enquanto uma condição for verdadeira.</p>`
+},
+
+/* ---------------- U1 · Aula 4: funções ---------------- */
+{
+  unit: 1, aula: "Aula 4", src: "Lambda",
+  statement: `${py(`
+dobro = lambda x: x * 2
+print(dobro(dobro(3)))`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("6")}`, `Esse seria o resultado de ${c("dobro(3)")} sozinho. Aqui a função é aplicada <b>duas</b> vezes.`),
+    o(`${c("9")}`, `Isso seria 3 × 3. A função multiplica por 2.`),
+    o(`${c("33")}`, `Não há string aqui: 3 é inteiro, então ${c("*")} é multiplicação numérica.`),
+    o(`Erro, porque funções lambda não podem ser chamadas duas vezes.`, `Lambda guardada em variável se chama quantas vezes quiser.`),
+    o(`${c("12")}`, `Correta. Primeiro resolve o de dentro: ${c("dobro(3)")} = 6. Depois ${c("dobro(6)")} = 12.`),
+  ],
+  correct: 4,
+  tip: `<p>Chamadas aninhadas são resolvidas <b>de dentro para fora</b>, igual a ${c("print(type(x))")} na Aula 1.</p>`
+},
+{
+  unit: 1, aula: "Aula 4", src: "Operador %",
+  statement: `<p>A função ${c("e_par")} da Aula 4 usa o operador ${c("%")}.</p>${py(`
+print(17 % 5)`)}
+  <p><b>Qual valor é impresso?</b></p>`,
+  options: [
+    o(`${c("3.4")}`, `3.4 é o resultado de ${c("17 / 5")} (divisão comum).`),
+    o(`${c("3")}`, `3 é o <b>quociente</b> inteiro (${c("17 // 5")}). O ${c("%")} devolve o que <b>sobra</b>.`),
+    o(`${c("2")}`, `Correta. 17 = 5 × 3 + <b>2</b>. O ${c("%")} (módulo) devolve o resto da divisão.`),
+    o(`${c("85")}`, `85 seria 17 × 5.`),
+    o(`${c("0")}`, `Resto 0 só acontece quando a divisão é exata, e 17 não é múltiplo de 5.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Uso clássico:</b> ${c("n % 2 == 0")} → n é par. Esse teste aparece na função ${c("e_par")}, no ${c("filter")} da Unidade 2 e no exercício do arquivo de números.</p>`
+},
+{
+  unit: 1, aula: "Aula 4", src: "Built-ins sum/len/round",
+  statement: `<p>No "upgrade" da média (Aula 4), temos:</p>${py(`
+notas = [7.5, 8.0, 6.5]
+media = sum(notas) / len(notas)
+print(round(media, 2))`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("22.0")}`, `22.0 é só a soma (${c("sum")}). Ainda falta dividir por ${c("len")}, que é 3.`),
+    o(`${c("7.33")}`, `Correta. 22.0 / 3 = 7.3333..., e ${c("round(..., 2)")} arredonda para 2 casas.`),
+    o(`${c("7.3333333333")}`, `O ${c("round(media, 2)")} limita o resultado a 2 casas decimais.`),
+    o(`${c("7")}`, `Com ${c("round(media)")}, sem o segundo argumento, sairia 7. Com ${c("2")}, ficam 2 casas.`),
+    o(`${c("3")}`, `3 é o ${c("len(notas)")}, a quantidade de notas.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Built-ins que mais caem:</b> ${c("print")}, ${c("input")}, ${c("int")}, ${c("float")}, ${c("type")}, ${c("len")}, ${c("sum")}, ${c("max")}, ${c("min")}, ${c("round")}, ${c("range")}.</p>`
+},
+{
+  unit: 1, aula: "Aula 4", src: "def, parâmetros e return",
+  statement: `<p>Complete a lacuna para que a função devolva a média de uma lista de notas:</p>${py(`
+def calcular_media(notas):
+    total = sum(notas)
+    media = total / len(notas)
+    ________ media`)}`,
+  options: [
+    o(`${c("print")}`, `${c("print")} só <b>mostra</b> o valor na tela. Quem chamar a função não recebe nada para guardar numa variável.`),
+    o(`${c("def")}`, `${c("def")} serve para <b>definir</b> funções, e já foi usado na primeira linha.`),
+    o(`${c("lambda")}`, `${c("lambda")} cria uma nova função anônima. Não devolve valores.`),
+    o(`${c("return")}`, `Correta. ${c("return")} devolve o valor para quem chamou, permitindo ${c("m = calcular_media([7, 8])")}.`),
+    o(`${c("break")}`, `${c("break")} só funciona dentro de laços, para interromper a repetição.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Diferença importante:</b> ${c("return")} entrega o valor ao programa; ${c("print")} só exibe na tela. Uma função com ${c("return")} pode ser usada dentro de contas e de outros ${c("if")}.</p>`
+},
+
+/* ---------------- U1 · Aula 5: estudo de caso ---------------- */
+{
+  unit: 1, aula: "Aula 5", src: "Calculadora de desconto",
+  statement: `<p>Na calculadora de desconto da Aula 5, o programa deve rejeitar percentuais <b>menores que 0 ou maiores que 100</b>.</p>${py(`
+if ______________________________:
+    print("Percentual de desconto inválido.")
+else:
+    desconto = valor_produto * (percentual_desconto / 100)
+    valor_final = valor_produto - desconto`)}
+  <p><b>Qual condição completa corretamente a lacuna?</b></p>`,
+  options: [
+    o(`${c("percentual_desconto < 0 and percentual_desconto > 100")}`, `Nenhum número é ao mesmo tempo menor que 0 <b>e</b> maior que 100. Essa condição é sempre falsa, e nenhum desconto seria rejeitado.`),
+    o(`${c("percentual_desconto >= 0 or percentual_desconto <= 100")}`, `Essa condição é verdadeira para <b>todo</b> número, então todos os descontos seriam rejeitados, inclusive os válidos.`),
+    o(`${c("percentual_desconto < 0 or percentual_desconto > 100")}`, `Correta. Basta <b>um</b> dos limites ser violado para o valor ser inválido, e por isso o operador é ${c("or")}.`),
+    o(`${c("percentual_desconto == 0 or percentual_desconto == 100")}`, `0% e 100% são descontos <b>válidos</b>. O que se quer barrar é o que está fora do intervalo.`),
+    o(`${c("not percentual_desconto")}`, `${c("not")} de um número só é ${c("True")} quando o número é 0, e 0% é um desconto válido.`),
+  ],
+  correct: 2,
+  tip: `<p>Com valor 150 e desconto 12.5: desconto = 150 × 0.125 = 18.75, e o valor final é <b>131.25</b>, a saída mostrada na aula.</p>`
+},
+
+/* ---------------- U2 · Aula 1: sequências, listas, tuplas ---------------- */
+{
+  unit: 2, aula: "Aula 1", src: "Fatiamento (slicing)",
+  statement: `${py(`
+s = "Python"
+print(s[1:4], s[::2], len(s))`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("Pyt Pto 6")}`, `A contagem começa no índice <b>0</b>, então ${c("s[1:4]")} começa no ${c("y")}.`),
+    o(`${c("yth Pto 6")}`, `Correta. ${c("s[1:4]")} pega os índices 1, 2 e 3 → "yth". ${c("s[::2]")} pega um caractere sim, outro não → "Pto". São 6 caracteres.`),
+    o(`${c("ytho Pto 6")}`, `O índice final (4) <b>não entra</b> no fatiamento.`),
+    o(`${c("yth yhn 6")}`, `${c("[::2]")} começa no índice 0 (P) e anda de 2 em 2: P, t, o.`),
+    o(`${c("yth Pto 5")}`, `${c("len")} conta os caracteres (P-y-t-h-o-n = 6). O último índice é que é 5.`),
+  ],
+  correct: 1,
+  tip: `<p><b>${c("s[i:j:k]")}</b>: começa em i, vai até j (sem incluir) e anda de k em k. Os índices vão de 0 a n-1.</p>`
+},
+{
+  unit: 2, aula: "Aula 1", src: "Mutabilidade",
+  statement: `${py(`
+texto = "casa"
+texto[0] = "m"`)}
+  <p><b>O que acontece?</b></p>`,
+  options: [
+    o(`${c("texto")} passa a valer ${c('"masa"')}.`, `Isso funcionaria numa <b>lista</b>. Strings não permitem trocar uma posição.`),
+    o(`${c("texto")} passa a valer ${c('"m"')}.`, `A atribuição por índice nem chega a acontecer.`),
+    o(`O Python cria automaticamente uma lista ${c("['m', 'a', 's', 'a']")}.`, `O Python não faz conversões automáticas desse tipo.`),
+    o(`Nada acontece, e ${c("texto")} continua ${c('"casa"')} sem erro.`, `Há um erro: o Python avisa que a operação não é permitida.`),
+    o(`Ocorre ${c("TypeError")}, porque strings são imutáveis.`, `Correta. A Aula 1 diz que strings são sequências imutáveis: não dá para mudar uma posição, só criar uma string nova (ex.: ${c('"m" + texto[1:]')}).`),
+  ],
+  correct: 4,
+  tip: `<p><b>Mutáveis:</b> ${c("list")}, ${c("dict")}, ${c("set")}. <b>Imutáveis:</b> ${c("str")}, ${c("tuple")}, ${c("int")}, ${c("float")}.</p>`
+},
+{
+  unit: 2, aula: "Aula 1", src: "List comprehension",
+  statement: `${py(`
+quadrados = [n * n for n in range(5) if n % 2 == 0]
+print(quadrados)`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("[0, 1, 4, 9, 16]")}`, `Esse seria o resultado sem o filtro ${c("if n % 2 == 0")}.`),
+    o(`${c("[1, 9]")}`, `Esses são os quadrados dos <b>ímpares</b>. O filtro mantém os pares.`),
+    o(`${c("[0, 4, 16]")}`, `Correta. ${c("range(5)")} gera 0 a 4. Os pares são 0, 2 e 4, e os quadrados deles são 0, 4 e 16.`),
+    o(`${c("[4, 16]")}`, `0 também é par (0 % 2 == 0), então 0² = 0 entra na lista.`),
+    o(`${c("[0, 2, 4]")}`, `Esses são os números pares, mas a expressão ${c("n * n")} os eleva ao quadrado.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Estrutura:</b> ${c("[expressão for item in iterável if condição]")}. É a mesma ideia do ${c("nao_confirmados")} da aula (convidados que não estão em confirmados).</p>`
+},
+{
+  unit: 2, aula: "Aula 1", src: "map e filter",
+  statement: `<p>Você tem ${c("precos = [100, 50, 75]")} em dólares e quer <b>converter cada preço</b> para reais (× 5.25), gerando uma nova lista.</p>
+  <p><b>Qual linha faz isso?</b></p>`,
+  options: [
+    o(`${c("list(map(lambda x: x * 5.25, precos))")}`, `Correta. ${c("map")} aplica a função a <b>cada</b> elemento, e ${c("list()")} transforma o resultado em lista → ${c("[525.0, 262.5, 393.75]")}.`),
+    o(`${c("list(filter(lambda x: x * 5.25, precos))")}`, `${c("filter")} só <b>seleciona</b> elementos (mantém quem dá verdadeiro). Não transforma os valores.`),
+    o(`${c("precos * 5.25")}`, `Lista vezes float dá ${c("TypeError")}. Multiplicar uma lista inteira só funciona com array NumPy.`),
+    o(`${c("map(precos, lambda x: x * 5.25)")}`, `A ordem dos argumentos está invertida: primeiro a <b>função</b>, depois o iterável.`),
+    o(`${c("list(lambda x: x * 5.25)")}`, `Isso tenta transformar a própria função em lista, e dá erro.`),
+  ],
+  correct: 0,
+  tip: `<p><b>map</b> = transformar cada item. <b>filter</b> = manter só alguns itens. Exemplo de filter: ${c("list(filter(lambda x: x % 2 == 0, numeros))")} → só os pares.</p>`
+},
+{
+  unit: 2, aula: "Aula 1", src: "Tuplas e enumerate",
+  statement: `${py(`
+vogais = ('a', 'e')
+for p, x in enumerate(vogais):
+    print(p, x)`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("1 a")} / ${c("2 e")}`, `${c("enumerate")} começa a contar em <b>0</b>, igual aos índices.`),
+    o(`${c("a 0")} / ${c("e 1")}`, `A ordem é ${c("(posição, valor)")}: primeiro vem o índice.`),
+    o(`${c("('a', 'e')")}`, `O laço percorre a tupla item a item, não imprime a tupla inteira.`),
+    o(`${c("0 a")} / ${c("1 e")}`, `Correta. ${c("enumerate")} devolve pares ${c("(índice, valor)")}, que são desempacotados em ${c("p")} e ${c("x")}.`),
+    o(`Erro, porque tuplas não podem ser percorridas com ${c("for")}.`, `Tuplas são sequências e podem ser percorridas normalmente. Só não podem ser <b>alteradas</b>.`),
+  ],
+  correct: 3,
+  tip: `<p>Três formas de criar tupla: ${c("()")}, ${c("('a', 'b', 'c')")} e ${c("tuple(...)")}. Use tupla quando a ordem e os valores não devem mudar.</p>`
+},
+{
+  unit: 2, aula: "Aula 1", src: "Operações de sequência",
+  statement: `<p>Segundo o Quadro 1 da Aula 1 (operações comuns de sequências):</p>${py(`
+s = [1, 2]
+t = [3]
+print(s + t, 2 * s)`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("[4, 5] [2, 4]")}`, `Com listas, ${c("+")} e ${c("*")} não fazem conta elemento a elemento (isso é comportamento do NumPy).`),
+    o(`${c("[1, 2, 3] [1, 2, 1, 2]")}`, `Correta. ${c("s + t")} <b>concatena</b> as listas, e ${c("n * s")} <b>repete</b> s n vezes.`),
+    o(`${c("[1, 2, 3] [2, 4]")}`, `${c("2 * s")} repete a lista, não dobra os valores.`),
+    o(`${c("[[1, 2], [3]] [1, 2, 1, 2]")}`, `${c("+")} junta os elementos numa lista só. Não cria listas aninhadas.`),
+    o(`Erro, porque listas não suportam ${c("+")}.`, `Listas suportam ${c("+")} (concatenação) e ${c("*")} com inteiro (repetição).`),
+  ],
+  correct: 1,
+  tip: `<p>Outras operações do quadro: ${c("x in s")}, ${c("s[i]")}, ${c("s[i:j]")}, ${c("len(s)")}, ${c("min(s)")}, ${c("max(s)")}, ${c("s.count(x)")}.</p>`
+},
+
+/* ---------------- U2 · Aula 2: set, dict, NumPy ---------------- */
+{
+  unit: 2, aula: "Aula 2", src: "Set",
+  statement: `${py(`
+visitantes = set(["Ana", "Bia", "Ana", "Caio", "Bia", "Ana"])
+print(len(visitantes))`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("6")}`, `6 é o tamanho da <b>lista</b> original. O set elimina as repetições.`),
+    o(`${c("1")}`, `O set guarda um exemplar de <b>cada</b> valor diferente, não só um valor.`),
+    o(`${c("2")}`, `Há três nomes diferentes: Ana, Bia e Caio.`),
+    o(`${c("3")}`, `Correta. O set representa uma coleção de elementos <b>únicos</b>: {"Ana", "Bia", "Caio"}.`),
+    o(`Erro, porque ${c("set()")} não aceita listas.`, `${c("set(iterável)")} aceita lista, tupla ou string.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Usos do set:</b> eliminar duplicados e testar pertencimento (${c("x in s")}). Métodos: ${c("add(valor)")} e ${c("remove(valor)")}. No evento científico da aula, ele identifica as <b>regiões distintas</b> dos participantes.</p>`
+},
+{
+  unit: 2, aula: "Aula 2", src: "Criação de dicionários",
+  statement: `<p>Analise as formas de criar um dicionário:</p>
+  <ul class="affirm">
+    <li><b>I.</b> ${c("d = {'nome': 'Ana', 'idade': 20}")}</li>
+    <li><b>II.</b> ${c("d = dict([('nome', 'Ana'), ('idade', 20)])")}</li>
+    <li><b>III.</b> ${c("d = dict(zip(['nome', 'idade'], ['Ana', 20]))")}</li>
+  </ul>
+  <p><b>Quais produzem o dicionário ${c("{'nome': 'Ana', 'idade': 20}")}?</b></p>`,
+  options: [
+    o(`Apenas I.`, `II e III também funcionam. São duas das quatro formas mostradas na Aula 2.`),
+    o(`Apenas I e II.`, `III também funciona: ${c("zip")} junta a lista de chaves com a lista de valores em pares.`),
+    o(`Apenas II e III.`, `I é a forma mais direta: pares ${c("chave: valor")} entre chaves.`),
+    o(`Nenhuma, porque dicionário só pode ser criado vazio e preenchido depois.`, `Criar vazio e atribuir depois é <b>uma</b> das formas, não a única.`),
+    o(`I, II e III.`, `Correta. A aula mostra que ${c("dici_1 == dici_2 == dici_3 == dici_4")} dá ${c("True")}: pares literais, lista de tuplas e ${c("zip")} geram o mesmo dicionário.`),
+  ],
+  correct: 4,
+  tip: `<p>A quarta forma: ${c("d = {}")} e depois ${c("d['nome'] = 'Ana'")}. Para ler um valor, use ${c("d[chave]")}.</p>`
+},
+{
+  unit: 2, aula: "Aula 2", src: "Dicionário é mutável",
+  statement: `${py(`
+d = {'a': 1}
+d['a'] = 5
+d['b'] = 2
+print(d)`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("{'a': 5, 'b': 2}")}`, `Correta. Atribuir a uma chave que <b>já existe</b> substitui o valor (1 → 5). Atribuir a uma chave <b>nova</b> cria o par ${c("'b': 2")}.`),
+    o(`${c("{'a': 1, 'a': 5, 'b': 2}")}`, `As chaves de um dicionário são <b>únicas</b>, então não pode haver dois ${c("'a'")}.`),
+    o(`${c("{'a': 1, 'b': 2}")}`, `${c("d['a'] = 5")} sobrescreve o valor antigo.`),
+    o(`Erro, porque dicionários são imutáveis.`, `Dicionários são <b>mutáveis</b>. Imutáveis são tuplas e strings.`),
+    o(`${c("{'a': 6, 'b': 2}")}`, `A atribuição troca o valor. Não soma com o anterior.`),
+  ],
+  correct: 0,
+  tip: `<p>Dicionário = objeto do tipo <b>mapping</b>: associa chave → valor. Aparece de novo na Unidade 3 como origem de Series e DataFrames.</p>`
+},
+{
+  unit: 2, aula: "Aula 2", src: "Array NumPy vs lista",
+  statement: `${py(`
+import numpy as np
+lista = [1, 2, 3]
+arr = np.array([1, 2, 3])
+print(lista * 2)
+print(arr * 2)`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("[2, 4, 6]")} e ${c("[2 4 6]")}`, `A lista comum não multiplica elemento a elemento: ${c("* 2")} a <b>repete</b>.`),
+    o(`${c("[1, 2, 3, 1, 2, 3]")} e ${c("[1 2 3 1 2 3]")}`, `O array NumPy faz a operação em cada elemento (operação vetorizada). Ele não repete.`),
+    o(`${c("[1, 2, 3, 1, 2, 3]")} e ${c("[2 4 6]")}`, `Correta. Lista × 2 = repetição. Array × 2 = cada elemento multiplicado, como o ${c("my_array ** 2")} da aula.`),
+    o(`Erro nas duas linhas.`, `As duas operações são válidas. Só fazem coisas diferentes.`),
+    o(`${c("[2, 4, 6]")} e erro.`, `Os dois resultados estão errados. Veja a diferença entre lista e array na explicação.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Por que NumPy importa:</b> faz operações matemáticas em massa de forma eficiente (${c("np.sum")}, ${c("arr ** 2")}, acesso por índice ${c("arr[2]")}). É instalado com ${c("pip install numpy")} e já vem no Colab e no Anaconda.</p>`
+},
+
+/* ---------------- U2 · Aula 3: POO ---------------- */
+{
+  unit: 2, aula: "Aula 3", src: "Classe vs objeto",
+  statement: `<p>A Aula 3 compara a classe ao <b>projeto de uma casa</b> feito por um arquiteto.</p>
+  <p><b>Nessa analogia, o que representa o objeto?</b></p>`,
+  options: [
+    o(`O arquiteto.`, `O arquiteto seria o <b>programador</b>, que escreve a classe.`),
+    o(`A casa construída a partir do projeto.`, `Correta. A classe é o molde, e o objeto (instância) é a coisa concreta criada a partir dele. Um projeto gera várias casas, assim como uma classe gera vários objetos.`),
+    o(`A planta (o próprio projeto).`, `A planta é a <b>classe</b>.`),
+    o(`O material de construção.`, `Não há equivalente direto na analogia. Os dados de cada objeto são os <b>atributos</b>.`),
+    o(`A prefeitura que aprova o projeto.`, `Não faz parte da analogia usada na aula.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Classe</b> = molde (${c("class Pessoa:")}). <b>Objeto</b> = instância (${c("pessoa1 = Pessoa('João', 30, 'Masculino')")}). <b>Atributos</b> = dados (nome, idade). <b>Métodos</b> = comportamentos (cumprimentar, aniversário).</p>`
+},
+{
+  unit: 2, aula: "Aula 3", src: "__init__ e self",
+  statement: `${py(`
+class Pessoa:
+    def __init__(self, nome, idade):
+        self.nome = nome
+        self.idade = idade
+
+    def aniversario(self):
+        self.idade += 1
+
+p = Pessoa("Ana", 20)
+p.aniversario()
+p.aniversario()
+print(p.idade)`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("20")}`, `${c("aniversario()")} altera o atributo do próprio objeto por meio do ${c("self")}, então a mudança fica guardada.`),
+    o(`${c("21")}`, `O método foi chamado <b>duas</b> vezes.`),
+    o(`Erro, porque ${c("aniversario()")} foi chamado sem passar ${c("self")}.`, `O Python passa o ${c("self")} automaticamente quando você chama ${c("p.aniversario()")}.`),
+    o(`${c("None")}`, `${c("p.idade")} é um atributo com valor numérico.`),
+    o(`${c("22")}`, `Correta. ${c("__init__")} define idade = 20, e cada chamada de ${c("aniversario()")} soma 1: 21, depois 22.`),
+  ],
+  correct: 4,
+  tip: `<p><b>${c("__init__")}</b> é o <b>construtor</b>: roda sozinho quando o objeto é criado. <b>${c("self")}</b> é a própria instância, e por isso ${c("self.idade")} é "a idade <i>deste</i> objeto".</p>`
+},
+{
+  unit: 2, aula: "Aula 3", src: "Herança e super()",
+  statement: `<p>Com base nas classes do exercício da Aula 3:</p>${py(`
+class Veiculo:
+    def __init__(self, marca, modelo, ano):
+        self.marca = marca
+        self.modelo = modelo
+        self.ano = ano
+        self.velocidade = 0
+
+    def acelerar(self, incremento):
+        self.velocidade += incremento
+
+class Carro(Veiculo):
+    def __init__(self, marca, modelo, ano, potencia):
+        super().__init__(marca, modelo, ano)
+        self.potencia = potencia
+
+    def acelerar(self, incremento):
+        self.velocidade += incremento + self.potencia
+
+carro1 = Carro("Toyota", "Corolla", 2022, 150)
+carro1.acelerar(50)
+carro1.acelerar(10)
+print(carro1.velocidade)`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("60")}`, `Seria 60 se o método usado fosse o de ${c("Veiculo")}. Mas ${c("Carro")} <b>sobrescreve</b> ${c("acelerar")} e soma a potência a cada chamada.`),
+    o(`${c("210")}`, `A potência (150) é somada nas <b>duas</b> chamadas, não só na primeira.`),
+    o(`${c("360")}`, `Correta. 1ª chamada: 0 + 50 + 150 = 200. 2ª: 200 + 10 + 150 = 360.`),
+    o(`${c("0")}`, `A velocidade começa em 0 (definida no ${c("__init__")} da classe-pai), mas é alterada pelas chamadas.`),
+    o(`Erro, porque ${c("Carro")} não define ${c("self.velocidade")}.`, `${c("super().__init__(...)")} chama o construtor de ${c("Veiculo")}, que cria ${c("self.velocidade = 0")}. É assim que a filha herda o atributo.`),
+  ],
+  correct: 2,
+  tip: `<p><b>${c("super().__init__(...)")}</b> reaproveita a inicialização da classe-pai. Depois disso, a filha acrescenta o que é só dela (${c("self.potencia")}).</p>`
+},
+{
+  unit: 2, aula: "Aula 3", src: "Pilares da POO",
+  statement: `<p><b>Qual pilar da orientação a objetos combina atributos e métodos em uma entidade, permitindo controlar o acesso aos atributos por meio de métodos?</b></p>`,
+  options: [
+    o(`Encapsulamento.`, `Correta. É a definição da Aula 3: juntar dados e comportamentos numa entidade e controlar como os dados são acessados.`),
+    o(`Herança.`, `Herança é uma classe <b>receber</b> atributos e métodos de outra (reuso de código e hierarquia).`),
+    o(`Polimorfismo.`, `Polimorfismo é classes diferentes responderem de forma diferente à mesma mensagem.`),
+    o(`Instanciação.`, `Instanciar é criar um objeto a partir da classe. Não é um dos pilares.`),
+    o(`Iteração.`, `Iteração é repetir (for/while). Não é pilar da orientação a objetos.`),
+  ],
+  correct: 0,
+  tip: `<p><b>Os quatro pilares citados:</b> abstração, <b>encapsulamento</b> (proteger e organizar), <b>herança</b> (reaproveitar), <b>polimorfismo</b> (mesma mensagem, respostas diferentes).</p>`
+},
+{
+  unit: 2, aula: "Aula 3", src: "Sintaxe de herança",
+  statement: `<p><b>Qual declaração cria corretamente uma classe ${c("Anfibio")} que herda de <u>duas</u> classes-pai, ${c("Terrestre")} e ${c("Aquatico")}?</b></p>`,
+  options: [
+    o(`${c("class Anfibio extends Terrestre, Aquatico:")}`, `${c("extends")} é a sintaxe do Java. Em Python, as classes-pai vão entre parênteses.`),
+    o(`${c("class Anfibio: Terrestre + Aquatico")}`, `Não é sintaxe válida em Python.`),
+    o(`${c("class Anfibio[Terrestre, Aquatico]:")}`, `Colchetes não indicam herança.`),
+    o(`${c("class Anfibio(Terrestre, Aquatico):")}`, `Correta. As classes-pai ficam entre parênteses, separadas por vírgula. Isso é a <b>herança múltipla</b>, suportada pelo Python.`),
+    o(`${c("def Anfibio(Terrestre, Aquatico):")}`, `${c("def")} define uma <b>função</b> que recebe parâmetros, não uma classe.`),
+  ],
+  correct: 3,
+  tip: `<p>Forma básica: ${c("class ClasseFilha(ClassePai):")}. Benefícios: <b>reutilização</b>, <b>extensibilidade</b> e <b>hierarquia</b> de classes.</p>`
+},
+
+/* ---------------- U2 · Aula 4: módulos e Matplotlib ---------------- */
+{
+  unit: 2, aula: "Aula 4", src: "Formas de importar",
+  statement: `<p>Um arquivo começa com:</p>${py(`
+from math import sqrt`)}
+  <p><b>Qual chamada funciona sem erro logo em seguida?</b></p>`,
+  options: [
+    o(`${c("math.sqrt(25)")}`, `Com ${c("from ... import")}, o nome ${c("math")} <b>não</b> é criado. Dá ${c("NameError: name 'math' is not defined")}.`),
+    o(`${c("m.sqrt(25)")}`, `O apelido ${c("m")} só existiria com ${c("import math as m")}.`),
+    o(`${c("sqrt(25)")}`, `Correta. O terceiro modo da aula traz a função <b>direto</b> para o seu código, então você a chama pelo nome.`),
+    o(`${c("math.log2(1024)")}`, `Além de ${c("math")} não existir como nome, ${c("log2")} não foi importada.`),
+    o(`${c("import.sqrt(25)")}`, `${c("import")} é palavra reservada. Não pode ser usada como objeto.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Os três modos:</b> ${c("import math")} → ${c("math.sqrt()")}; ${c("import math as m")} → ${c("m.sqrt()")}; ${c("from math import sqrt")} → ${c("sqrt()")}.</p>`
+},
+{
+  unit: 2, aula: "Aula 4", src: "Classificação de módulos",
+  statement: `<p><b>Qual alternativa classifica corretamente os módulos citados na Aula 4?</b></p>`,
+  options: [
+    o(`${c("math")} e ${c("os")} são de terceiros; NumPy e pandas são built-in.`, `Está invertido: ${c("math")} e ${c("os")} vêm com o Python; NumPy e pandas são instalados via pip.`),
+    o(`Todos os módulos Python precisam ser instalados com ${c("pip")}.`, `Os built-in já vêm no interpretador e não precisam de instalação.`),
+    o(`Módulos próprios são os distribuídos oficialmente no PyPI.`, `Os do PyPI são <b>de terceiros</b>. Próprios são os que <b>você</b> escreve para o seu projeto.`),
+    o(`${c("datetime")} e ${c("math")} são built-in; Matplotlib e NumPy são de terceiros, instalados via PyPI/pip.`, `Correta. Built-in: ${c("math")}, ${c("os")}, ${c("random")}, ${c("datetime")}, ${c("re")}, ${c("collections")}. Terceiros: NumPy, pandas, Matplotlib.`),
+    o(`Matplotlib faz parte do núcleo do Python desde a versão 1.0.`, `Matplotlib é biblioteca de terceiros (${c("pip install matplotlib")}).`),
+  ],
+  correct: 3,
+  tip: `<p><b>Boas práticas com módulos de terceiros:</b> ${c("requirements.txt")} para listar as dependências, <b>ambientes virtuais</b> para isolar projetos e atenção às <b>licenças</b>.</p>`
+},
+{
+  unit: 2, aula: "Aula 4", src: "Ambientes virtuais",
+  statement: `<p>Segundo a Aula 4, <b>qual é a função dos ambientes virtuais</b> ao trabalhar com módulos de terceiros?</p>`,
+  options: [
+    o(`Deixar o código mais rápido na execução.`, `Ambientes virtuais não aceleram o código. Eles organizam as dependências.`),
+    o(`Isolar projetos Python para evitar conflitos entre versões diferentes de módulos de terceiros.`, `Correta. Cada projeto tem as próprias versões instaladas: o projeto A pode usar pandas 1.x e o B pandas 2.x sem conflito.`),
+    o(`Substituir o arquivo ${c("requirements.txt")}.`, `Os dois se complementam: o ${c("requirements.txt")} lista o que instalar, e o ambiente virtual é onde fica instalado.`),
+    o(`Executar Python no navegador, como o Colab.`, `O Colab é um serviço de notebooks na nuvem, outra coisa.`),
+    o(`Converter módulos de terceiros em built-in.`, `Isso não existe. Módulos de terceiros continuam fora da biblioteca padrão.`),
+  ],
+  correct: 1,
+  tip: `<p>O ${c("requirements.txt")} permite instalar todas as dependências com um único comando ${c("pip")}.</p>`
+},
+{
+  unit: 2, aula: "Aula 4", src: "Matplotlib",
+  statement: `<p>Complete o código para gerar um <b>gráfico de barras</b> com título:</p>${py(`
+import matplotlib.pyplot as plt
+
+meses = ['Jan', 'Fev', 'Mar']
+vendas = [120, 90, 150]
+
+plt.______(meses, vendas)
+plt.______('Vendas Mensais')
+plt.show()`)}`,
+  options: [
+    o(`${c("plot")} e ${c("xlabel")}`, `${c("plot")} desenha <b>linha</b>, e ${c("xlabel")} é o rótulo do eixo X, não o título.`),
+    o(`${c("bar")} e ${c("ylabel")}`, `${c("bar")} está certo, mas ${c("ylabel")} é o rótulo do eixo Y.`),
+    o(`${c("barh")} e ${c("show")}`, `${c("show")} só exibe o gráfico e já aparece na última linha. O título é definido com outra função.`),
+    o(`${c("pie")} e ${c("title")}`, `${c("pie")} desenha pizza.`),
+    o(`${c("bar")} e ${c("title")}`, `Correta. ${c("plt.bar(x, y)")} cria as barras e ${c("plt.title()")} adiciona o título, como no exercício de vendas mensais da aula.`),
+  ],
+  correct: 4,
+  tip: `<p><b>Receita Matplotlib:</b> ${c("plt.plot()")}/${c("plt.bar()")} → ${c("plt.xlabel()")} → ${c("plt.ylabel()")} → ${c("plt.title()")} → ${c("plt.show()")}. Tudo pelo módulo <b>pyplot</b>.</p>`
+},
+
+/* ---------------- U2 · Aula 5: estudo de caso ---------------- */
+{
+  unit: 2, aula: "Aula 5", src: "Catalogação de livros",
+  statement: `<p>No estudo de caso da biblioteca:</p>${py(`
+class Livro:
+    def __init__(self, titulo, autor, ano_publicacao):
+        self.titulo = titulo
+        self.autor = autor
+        self.ano_publicacao = ano_publicacao
+
+biblioteca = []
+
+def adicionar_livro(titulo, autor, ano_publicacao):
+    novo_livro = Livro(titulo, autor, ano_publicacao)
+    biblioteca.append(novo_livro)`)}
+  <p><b>O que é ${c("biblioteca")} depois de três chamadas a ${c("adicionar_livro(...)")}?</b></p>`,
+  options: [
+    o(`Uma lista com 3 objetos da classe ${c("Livro")}.`, `Correta. ${c("biblioteca")} começa como lista vazia, e cada chamada cria um objeto ${c("Livro")} e o coloca no fim com ${c("append")}.`),
+    o(`Uma tupla com 3 títulos.`, `${c("[]")} cria uma <b>lista</b>, e o que é adicionado é o objeto inteiro, não só o título. Além disso, tuplas não têm ${c("append")}.`),
+    o(`Um dicionário com os títulos como chave.`, `Nenhum dicionário é criado. ${c("[]")} é lista; dicionário seria ${c("{}")}.`),
+    o(`Continua vazia, porque a lista foi criada fora da função.`, `A função <b>modifica</b> a lista (${c("append")}), não a substitui. Listas são mutáveis, então a mudança fica visível fora da função.`),
+    o(`Um set com 3 livros, sem repetição.`, `Não há ${c("set()")}. É uma lista comum, que aceita repetição.`),
+  ],
+  correct: 0,
+  tip: `<p>O estudo de caso junta tudo da unidade: <b>classe</b> (Livro), <b>lista</b> (biblioteca), <b>funções</b> que a gerenciam e <b>Matplotlib</b> para o gráfico de livros por ano.</p>`
+},
+];
+</script>
+<script>
+/* =====================================================================
+   PARTE 2 — Complemento (questões inéditas), Unidades 3 e 4
+   ===================================================================== */
+part2.push(
+/* ---------------- U3 · Aula 1: SQL, sqlite3, CRUD ---------------- */
+{
+  unit: 3, aula: "Aula 1", src: "DDL / DML / DCL",
+  statement: `<p><b>Qual associação entre comando SQL e categoria está correta?</b></p>`,
+  options: [
+    o(`${c("SELECT")} → DDL; ${c("CREATE")} → DML; ${c("GRANT")} → DCL`, `${c("SELECT")} manipula/consulta dados (DML), e ${c("CREATE")} define estrutura (DDL). Os dois estão trocados.`),
+    o(`${c("INSERT")} → DCL; ${c("DROP")} → DML; ${c("REVOKE")} → DDL`, `${c("INSERT")} é DML, ${c("DROP")} é DDL e ${c("REVOKE")} é DCL. Todos estão trocados.`),
+    o(`${c("UPDATE")} → DDL; ${c("ALTER")} → DDL; ${c("DELETE")} → DCL`, `${c("UPDATE")} e ${c("DELETE")} mexem nos <b>dados</b>, então são DML.`),
+    o(`${c("CREATE")} → DDL; ${c("INSERT")} → DML; ${c("GRANT")} → DCL`, `Correta. DDL <b>define</b> estrutura (CREATE, ALTER, DROP). DML <b>manipula</b> dados (SELECT, INSERT, UPDATE, DELETE). DCL <b>controla</b> acesso (GRANT, REVOKE).`),
+    o(`Todos os comandos SQL pertencem à mesma categoria.`, `A Aula 1 separa o SQL em três categorias principais.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Macete:</b> D<b>D</b>L = <b>D</b>efinição (estrutura), D<b>M</b>L = <b>M</b>anipulação (dados), D<b>C</b>L = <b>C</b>ontrole (permissões).</p>`
+},
+{
+  unit: 3, aula: "Aula 1", src: "Passos do CRUD",
+  statement: `<p>Um estudante executou um ${c("INSERT")} com ${c("cursor.execute(...)")} e fechou a conexão logo em seguida com ${c("conn.close()")}, <b>sem chamar ${c("conn.commit()")}</b>.</p>
+  <p><b>Qual é a consequência mais provável?</b></p>`,
+  options: [
+    o(`O registro é gravado normalmente, porque ${c("execute")} já salva no disco.`, `${c("execute")} envia o comando, mas a gravação só é <b>confirmada</b> com ${c("commit()")}.`),
+    o(`O Python gera erro de sintaxe no ${c("close()")}.`, `Não há erro de sintaxe. O problema é silencioso, e por isso é perigoso.`),
+    o(`O registro não fica gravado, porque a alteração não foi confirmada.`, `Correta. Os passos do CRUD são: (i) conectar; (ii) criar o cursor e executar; (iii) <b>gravar com commit</b>; (iv) fechar. Pulando o (iii), a inserção se perde.`),
+    o(`A tabela inteira é apagada.`, `Faltar o commit não apaga nada. Só a alteração pendente não é salva.`),
+    o(`O SQLite pede confirmação ao usuário pelo terminal.`, `O SQLite não faz perguntas interativas.`),
+  ],
+  correct: 2,
+  tip: `${py(`
+conn = sqlite3.connect('exemplo.db')   # 1. conectar
+cursor = conn.cursor()                  # 2. cursor
+cursor.execute(sql, valores)            #    executar
+conn.commit()                           # 3. gravar
+conn.close()                            # 4. fechar`)}`
+},
+{
+  unit: 3, aula: "Aula 1", src: "Parâmetros com tupla",
+  statement: `<p>No DELETE da Aula 1:</p>${py(`
+cursor.execute('DELETE FROM Produtos WHERE id = ?', (produto_id,))`)}
+  <p><b>Por que existe uma vírgula em ${c("(produto_id,)")}?</b></p>`,
+  options: [
+    o(`É um erro de digitação que o Python ignora.`, `Não é erro: a vírgula muda o tipo do valor.`),
+    o(`Indica que o ID será convertido para texto.`, `A vírgula não converte tipos.`),
+    o(`Serve para apagar todos os produtos com ID maior que ${c("produto_id")}.`, `Quem decide quais linhas são apagadas é o ${c("WHERE id = ?")}, que apaga só a linha com aquele id.`),
+    o(`É obrigatória em qualquer comando SQL.`, `No UPDATE da aula, ${c("(novo_preco, produto_id)")} já tem dois elementos, então a vírgula final não é necessária.`),
+    o(`Sem a vírgula, ${c("(produto_id)")} seria apenas um número entre parênteses; com ela, vira uma tupla de um elemento, que é o formato esperado para os parâmetros ${c("?")}.`, `Correta. ${c("type((2))")} é ${c("int")}, e ${c("type((2,))")} é ${c("tuple")}. O ${c("execute")} espera uma sequência de valores para preencher cada ${c("?")}.`),
+  ],
+  correct: 4,
+  tip: `<p>Os ${c("?")} (placeholders) são preenchidos em ordem pelos valores da tupla. Isso é mais seguro do que montar o SQL juntando strings.</p>`
+},
+{
+  unit: 3, aula: "Aula 1", src: "Leitura (READ)",
+  statement: `<p>Depois de ${c("cursor.execute('SELECT * FROM Contatos')")}, <b>qual método traz todos os registros resultantes</b> para o Python?</p>`,
+  options: [
+    o(`${c("cursor.fetchall()")}`, `Correta. Devolve uma <b>lista</b> com todos os registros, e cada registro vem como uma <b>tupla</b>, ex.: ${c("(1, 'João', 'joao@email.com', '123-456-7890')")}.`),
+    o(`${c("conn.commit()")}`, `${c("commit")} confirma alterações (INSERT/UPDATE/DELETE). Não busca dados.`),
+    o(`${c("cursor.executemany()")}`, `${c("executemany")} executa o mesmo comando para vários conjuntos de valores. A aula usa ele para inserir três contatos de uma vez.`),
+    o(`${c("sqlite3.connect()")}`, `${c("connect")} abre (ou cria) o banco de dados.`),
+    o(`${c("conn.close()")}`, `${c("close")} encerra a conexão.`),
+  ],
+  correct: 0,
+  tip: `${py(`
+for contato in cursor.fetchall():
+    print(contato)`)}`
+},
+{
+  unit: 3, aula: "Aula 1", src: "PEP 249 / conexão",
+  statement: `<p>Sobre a conexão de Python com bancos de dados relacionais (Aula 1), <b>assinale a correta</b>.</p>`,
+  options: [
+    o(`ODBC e JDBC são bancos de dados concorrentes do SQLite.`, `ODBC e JDBC são <b>padrões de conectividade</b> (APIs + drivers), não bancos de dados.`),
+    o(`O PEP 249 define que os módulos de acesso a bancos implementem ${c("connect(...)")}; assim, para trocar de banco, basta ajustar os parâmetros de conexão.`, `Correta. O PEP 249 (Python Database API Specification v2.0) padroniza os módulos. Por isso o resto do código muda pouco quando se troca o banco.`),
+    o(`O Python só consegue se conectar ao SQLite.`, `Existem bibliotecas para vários SGBDs. O SQLite é usado na aula por ser simples e vir embutido.`),
+    o(`O driver é o arquivo onde o SQLite guarda as tabelas.`, `O driver é o software que <b>traduz</b> as chamadas para a linguagem do SGBD. O arquivo do banco é outra coisa (ex.: ${c("exemplo.db")}).`),
+    o(`O SQL foi criado pela Microsoft em 2010.`, `O SQL foi padronizado pelo <b>ANSI em 1986</b>. Oracle e Microsoft criaram extensões próprias depois disso.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Em uma frase:</b> Python → módulo (segue o PEP 249) → driver → SGBD. No caso do SQLite, o módulo é o ${c("sqlite3")}, que já vem na instalação.</p>`
+},
+
+/* ---------------- U3 · Aula 2: pandas, Series, read_html ---------------- */
+{
+  unit: 3, aula: "Aula 2", src: "Series a partir de dict",
+  statement: `${py(`
+import pandas as pd
+s = pd.Series({'A': 100, 'B': 200, 'C': 300})
+print(s['B'])`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("100")}`, `${c("'B'")} é o rótulo do segundo elemento. 100 pertence ao rótulo ${c("'A'")}.`),
+    o(`${c("B")}`, `${c("s['B']")} devolve o <b>valor</b> associado ao rótulo B, não o rótulo.`),
+    o(`Erro, porque Series só aceita índices numéricos.`, `Quando a Series é criada a partir de um dicionário, as chaves viram o índice, e dá para acessar pelo rótulo.`),
+    o(`${c("200")}`, `Correta. Na Series criada a partir de um dicionário, as <b>chaves viram o índice</b> e os valores viram os dados. O rótulo B guarda 200.`),
+    o(`${c("300")}`, `300 pertence ao rótulo ${c("'C'")}.`),
+  ],
+  correct: 3,
+  tip: `<p>Series a partir de <b>lista</b> → índice automático 0, 1, 2... Series a partir de <b>dicionário</b> → índice = chaves. Também dá para passar ${c("index=")} diretamente, como no exercício das idades.</p>`
+},
+{
+  unit: 3, aula: "Aula 2", src: "Series e mean()",
+  statement: `${py(`
+import pandas as pd
+idades = pd.Series([20, 30, 25, 25], index=['Ana', 'Bia', 'Caio', 'Duda'])
+print(idades.mean())`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("25.0")}`, `Correta. (20 + 30 + 25 + 25) / 4 = 100 / 4 = 25.0. O ${c("mean()")} calcula a média dos valores.`),
+    o(`${c("100")}`, `100 é a <b>soma</b> (${c("sum()")}). A média divide pela quantidade.`),
+    o(`${c("4")}`, `4 é a quantidade de elementos.`),
+    o(`${c("25")} (o valor mais frequente)`, `O valor mais frequente é a <b>moda</b>. Aqui, por coincidência, a média também é 25, mas o ${c("mean()")} devolve float: ${c("25.0")}.`),
+    o(`Erro, porque o índice é formado por textos.`, `O índice pode ter rótulos de texto. A média é calculada sobre os <b>valores</b>.`),
+  ],
+  correct: 0,
+  tip: `<p>É o mesmo raciocínio do desafio da Aula 2 (idade média dos clientes da loja), que dá ${c("28.0")} com os dados de lá.</p>`
+},
+{
+  unit: 3, aula: "Aula 2", src: "read_html",
+  statement: `${py(`
+import pandas as pd
+dfs = pd.read_html(url)   # página com uma tabela de bancos falidos
+print(type(dfs))`)}
+  <p><b>O que é impresso, e como se obtém o DataFrame da tabela?</b></p>`,
+  options: [
+    o(`${c("<class 'DataFrame'>")}; ${c("dfs")} já é a tabela.`, `${c("read_html")} devolve uma <b>lista</b> de DataFrames, porque a página pode ter várias tabelas.`),
+    o(`${c("<class 'str'>")}; é preciso converter com ${c("pd.DataFrame(dfs)")}.`, `O retorno não é o HTML em texto. O pandas já faz a leitura das tabelas.`),
+    o(`${c("<class 'list'>")}; a tabela é obtida com ${c("dfs[0]")}.`, `Correta. O método procura as tags ${c("<table>")} da página e devolve uma lista com um DataFrame por tabela. Na aula, ${c("len(dfs)")} deu 1 e ${c("df_bancos = dfs[0]")}.`),
+    o(`${c("<class 'dict'>")}; a tabela é obtida com ${c("dfs['tabela']")}.`, `O retorno é uma lista, não um dicionário.`),
+    o(`${c("<class 'list'>")}; a tabela é obtida com ${c("dfs[1]")}.`, `Listas começam no índice 0. Com só uma tabela, ${c("dfs[1]")} daria ${c("IndexError")}.`),
+  ],
+  correct: 2,
+  tip: `<p>Depois de pegar o DataFrame: ${c(".shape")} (linhas, colunas), ${c(".dtypes")} (tipos das colunas) e ${c(".head()")} (5 primeiras linhas).</p>`
+},
+{
+  unit: 3, aula: "Aula 2", src: "DataFrame vs Series",
+  statement: `<p><b>Qual afirmação sobre as estruturas do pandas está correta?</b></p>`,
+  options: [
+    o(`Series é bidimensional e DataFrame é unidimensional.`, `Está invertido.`),
+    o(`O pandas foi construído sobre o Matplotlib.`, `O pandas é construído sobre o <b>NumPy</b>. Ele <i>se integra</i> ao Matplotlib para gráficos.`),
+    o(`DataFrame é uma estrutura bidimensional, semelhante a uma tabela; Series é unidimensional, semelhante a uma lista.`, `Correta. DataFrame tem linhas e colunas. Series é uma única coluna de valores com índice.`),
+    o(`O pandas é uma biblioteca paga e de código fechado.`, `O pandas é de <b>código aberto</b>, com comunidade ativa.`),
+    o(`O pandas não lida com dados ausentes.`, `O tratamento de dados ausentes (preencher ou remover) é uma das características citadas na aula.`),
+  ],
+  correct: 2,
+  tip: `<p>Uma coluna de um DataFrame é uma Series: ${c("type(df['valor'])")} → ${c("Series")}.</p>`
+},
+
+/* ---------------- U3 · Aula 3: leitura, transformação, extração ---------------- */
+{
+  unit: 3, aula: "Aula 3", src: "drop_duplicates",
+  statement: `${py(`
+df_selic.drop_duplicates(keep='last', inplace=True)`)}
+  <p><b>O que os parâmetros ${c("keep='last'")} e ${c("inplace=True")} fazem?</b></p>`,
+  options: [
+    o(`${c("keep='last'")} mantém só a última linha do DataFrame; ${c("inplace=True")} mostra o resultado na tela.`, `${c("keep")} age só sobre as linhas <b>duplicadas</b>, e ${c("inplace")} não tem relação com exibir.`),
+    o(`Entre linhas repetidas, mantém a <b>última</b> ocorrência; ${c("inplace=True")} aplica a mudança no próprio DataFrame (sobrescreve na memória).`, `Correta. Sem ${c("inplace=True")}, o método devolveria um DataFrame novo e ${c("df_selic")} continuaria igual.`),
+    o(`Remove a última coluna; ${c("inplace=True")} cria uma cópia.`, `O método trata <b>linhas</b> duplicadas, e ${c("inplace=True")} evita justamente a cópia.`),
+    o(`Duplica as linhas e mantém a original no final.`, `O método <b>remove</b> duplicatas, não duplica.`),
+    o(`Ordena o DataFrame do último para o primeiro registro.`, `Ordenar é outra operação. Aqui a tarefa é tirar repetições.`),
+  ],
+  correct: 1,
+  tip: `<p>No desafio da Aula 3, a loja tinha "Produto A" duplicado. Depois do ${c("drop_duplicates")}, sobram 4 itens.</p>`
+},
+{
+  unit: 3, aula: "Aula 3", src: "Filtro booleano",
+  statement: `${py(`
+import pandas as pd
+df = pd.DataFrame({
+    'nome':  ['A', 'B', 'C', 'D'],
+    'preco': [30, 80, 55, 50]
+})
+print(df[df['preco'] > 50]['nome'].tolist())`)}
+  <p><b>Qual é a saída?</b></p>`,
+  options: [
+    o(`${c("['B', 'C', 'D']")}`, `50 <b>não</b> é maior que 50. O ${c(">")} é estrito, então D fica de fora.`),
+    o(`${c("['A', 'D']")}`, `Esses são os itens com preço ≤ 50, o contrário do filtro.`),
+    o(`${c("[False, True, True, False]")}`, `Esse é o resultado de ${c("df['preco'] > 50")} sozinho (a máscara). Usada dentro de ${c("df[...]")}, ela seleciona as linhas.`),
+    o(`${c("['B', 'C']")}`, `Correta. A máscara ${c("df['preco'] > 50")} dá ${c("[False, True, True, False]")}, e ${c("df[máscara]")} mantém só as linhas ${c("True")}: B (80) e C (55).`),
+    o(`${c("['B']")}`, `C tem preço 55, que também é maior que 50.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Filtro em 2 passos:</b> (1) o teste booleano gera uma Series de True/False; (2) ${c("df[teste]")} mantém as linhas True. Na aula, ${c("type(df_selic['valor'] < 0.01)")} mostra que o teste é uma ${c("Series")}.</p>`
+},
+{
+  unit: 3, aula: "Aula 3", src: "Nova coluna",
+  statement: `<p>Um DataFrame ${c("df")} tem 9.379 linhas. Executa-se:</p>${py(`
+df['responsavel'] = 'Autor'`)}
+  <p><b>O que acontece?</b></p>`,
+  options: [
+    o(`É criada a coluna ${c("responsavel")} com o valor ${c("'Autor'")} em <b>todas</b> as 9.379 linhas.`, `Correta. Quando você atribui um valor único a uma coluna nova, o pandas "entende" que ele vale para todas as linhas.`),
+    o(`É criada uma nova linha com o texto ${c("'Autor'")}.`, `${c("df['nome'] = ...")} cria ou substitui uma <b>coluna</b>, não uma linha.`),
+    o(`Só a primeira linha recebe ${c("'Autor'")}, e as outras ficam vazias.`, `O valor é aplicado a todas as linhas.`),
+    o(`Erro, porque a coluna ${c("responsavel")} não existe.`, `Atribuir a uma coluna inexistente <b>cria</b> essa coluna.`),
+    o(`O DataFrame é renomeado para ${c("'Autor'")}.`, `O comando cria uma coluna. Não renomeia o DataFrame.`),
+  ],
+  correct: 0,
+  tip: `<p>Também dá para criar coluna calculada, como no desafio: ${c("df['preço do item'] = df['receita total'] / df['quantidade de itens comprados']")}.</p>`
+},
+{
+  unit: 3, aula: "Aula 3", src: "loc com lista",
+  statement: `<p>Com o ${c("df_selic")} da aula (índice numérico de 0 a 9.378):</p>${py(`
+df_selic.loc[[0, 20, 70]]`)}
+  <p><b>O que é retornado?</b></p>`,
+  options: [
+    o(`Um único valor, o da linha 0.`, `Uma <b>lista</b> de rótulos dentro do ${c("loc")} traz várias linhas.`),
+    o(`As linhas de 0 até 70, inclusive.`, `Isso seria um intervalo, ${c("loc[0:70]")}. A lista escolhe só os rótulos indicados.`),
+    o(`As colunas 0, 20 e 70.`, `O primeiro argumento do ${c("loc")} escolhe <b>linhas</b>.`),
+    o(`Erro, porque ${c("loc")} só aceita um número por vez.`, `${c("loc")} aceita lista de rótulos, e a aula mostra exatamente esse exemplo.`),
+    o(`Um DataFrame só com as linhas de rótulo 0, 20 e 70, com todas as colunas.`, `Correta. É a saída mostrada na aula: as datas 04/06/1986, 02/07/1986 e 10/09/1986 com as respectivas colunas.`),
+  ],
+  correct: 4,
+  tip: `<p>${c("df.loc[0]")} → uma linha (Series). ${c("df.loc[[0, 20]]")} → várias linhas (DataFrame). ${c("df.loc[0, 'valor']")} → uma célula.</p>`
+},
+{
+  unit: 3, aula: "Aula 3", src: "Métodos de leitura/escrita",
+  statement: `<p>De acordo com o Quadro 1 da Aula 3, <b>qual par leitura/escrita está correto</b>?</p>`,
+  options: [
+    o(`Excel: ${c("read_xls")} / ${c("save_xls")}`, `Os nomes corretos são ${c("read_excel")} / ${c("to_excel")}. A escrita sempre usa o prefixo ${c("to_")}.`),
+    o(`CSV: ${c("read_csv")} / ${c("to_csv")}`, `Correta. Ler é ${c("read_<formato>")} e escrever é ${c("to_<formato>")}.`),
+    o(`JSON: ${c("load_json")} / ${c("dump_json")}`, `Esses nomes não são do pandas. O correto é ${c("read_json")} / ${c("to_json")}.`),
+    o(`SQL: ${c("read_sql")} / ${c("write_sql")}`, `A escrita em SQL é ${c("to_sql")}.`),
+    o(`Texto de largura fixa: ${c("read_fwf")} / ${c("to_fwf")}`, `O quadro mostra que ${c("read_fwf")} <b>não tem</b> método de escrita correspondente.`),
+  ],
+  correct: 1,
+  tip: `<p>Outros do quadro: ${c("read_html/to_html")}, ${c("read_xml/to_xml")}, ${c("read_parquet/to_parquet")}, ${c("read_pickle/to_pickle")}, ${c("read_clipboard/to_clipboard")}.</p>`
+},
+
+/* ---------------- U3 · Aula 4: visualização ---------------- */
+{
+  unit: 3, aula: "Aula 4", src: "Seaborn estimator",
+  statement: `${py(`
+sns.barplot(data=df_tips, x='sex', y='total_bill', ax=ax[0])
+sns.barplot(data=df_tips, x='sex', y='total_bill', ax=ax[1], estimator=sum)
+sns.barplot(data=df_tips, x='sex', y='total_bill', ax=ax[2], estimator=len)`)}
+  <p><b>O que cada gráfico mostra, respectivamente?</b></p>`,
+  options: [
+    o(`Soma, média e contagem.`, `O primeiro não informa ${c("estimator")}, então usa o <b>padrão</b>, que não é a soma.`),
+    o(`Contagem, soma e média.`, `${c("len")} conta elementos, então a contagem é o terceiro gráfico.`),
+    o(`Média, soma e quantidade de registros.`, `Correta. Sem ${c("estimator")}, o padrão é a <b>média</b>. ${c("sum")} soma as contas. ${c("len")} conta quantos registros há em cada grupo.`),
+    o(`Os três mostram a média, porque ${c("estimator")} só muda a cor.`, `${c("estimator")} muda a <b>estatística</b> calculada em cada barra.`),
+    o(`Mediana, soma e máximo.`, `${c("len")} não é máximo, e o padrão não é a mediana.`),
+  ],
+  correct: 2,
+  tip: `<p><b>Lição da aula:</b> a soma das contas dos homens é bem maior, mas o gráfico com ${c("len")} mostra que há mais homens na base. Por isso é preciso olhar o contexto antes de concluir que "homens gastam mais".</p>`
+},
+{
+  unit: 3, aula: "Aula 4", src: "Matplotlib / Seaborn",
+  statement: `<p><b>Sobre as bibliotecas de visualização da Aula 4, assinale a correta.</b></p>`,
+  options: [
+    o(`O Seaborn substitui o Matplotlib e não depende dele.`, `O Seaborn é construído <b>sobre</b> o Matplotlib e o estende. No exemplo, os dois são importados juntos.`),
+    o(`O ${c("plot()")} do pandas só funciona com o Seaborn instalado.`, `O ${c("plot()")} do pandas é construído sobre o <b>Matplotlib</b>.`),
+    o(`O Matplotlib foi criado por Guido van Rossum.`, `Guido criou o Python. O Matplotlib foi criado por <b>John Hunter</b>.`),
+    o(`O Seaborn é construído sobre o Matplotlib, tem datasets prontos (como ${c("tips")}) e ${c("sns.set(style='whitegrid')")} define o estilo visual.`, `Correta. ${c("sns.load_dataset('tips')")} carrega os dados de gorjetas. Estilos disponíveis: darkgrid, whitegrid, dark, white, ticks.`),
+    o(`${c("plt.subplots(1, 3)")} cria três figuras separadas, uma em cada janela.`, `Cria <b>uma</b> figura com 1 linha e 3 eixos (${c("ax[0]")}, ${c("ax[1]")}, ${c("ax[2]")}) lado a lado.`),
+  ],
+  correct: 3,
+  tip: `<p>Duas formas de usar o Matplotlib: (1) o ${c("pyplot")} gerencia figura e eixos sozinho; (2) estilo orientado a objetos, criando figura e eixos explicitamente (${c("fig, ax = plt.subplots(...)")}).</p>`
+},
+
+/* ---------------- U3 · Aula 5: estudo de caso ---------------- */
+{
+  unit: 3, aula: "Aula 5", src: "CRUD de funcionários",
+  statement: `<p>No estudo de caso de funcionários:</p>${py(`
+atualizacao = ("João Silva", 5500.00, 1)
+cursor.execute("UPDATE funcionarios SET nome = ?, salario = ? WHERE id = ?", atualizacao)
+conn.commit()`)}
+  <p><b>O que esse código faz?</b></p>`,
+  options: [
+    o(`Insere um novo funcionário chamado João Silva.`, `Inserir seria ${c("INSERT")}. Aqui é ${c("UPDATE")}, que altera um registro que já existe.`),
+    o(`Muda o nome para "João Silva" e o salário para 5500.00 de <b>todos</b> os funcionários.`, `O ${c("WHERE id = ?")} limita a alteração a um registro. Sem ele, aí sim todos seriam alterados.`),
+    o(`Apaga o funcionário de id 1.`, `Apagar seria ${c("DELETE FROM ... WHERE id = ?")}.`),
+    o(`Muda o nome para "João Silva" e o salário para 5500.00 apenas do funcionário com ${c("id = 1")}.`, `Correta. Os ${c("?")} são preenchidos <b>em ordem</b> pela tupla: nome ← "João Silva", salario ← 5500.00, id ← 1. É o "U" do CRUD.`),
+    o(`Consulta o funcionário de id 1 e exibe na tela.`, `Consultar é ${c("SELECT")} + ${c("fetchall()")}.`),
+  ],
+  correct: 3,
+  tip: `<p><b>CRUD ↔ SQL:</b> Create = INSERT; Read = SELECT; Update = UPDATE ... SET ... WHERE; Delete = DELETE ... WHERE.</p>`
+},
+
+/* ---------------- U4 · Aula 1: web ---------------- */
+{
+  unit: 4, aula: "Aula 1", src: "Front-end vs back-end",
+  statement: `<p><b>Qual tarefa é responsabilidade do back-end de uma aplicação web?</b></p>`,
+  options: [
+    o(`Definir a cor e a fonte dos botões da página.`, `Aparência visual é <b>front-end</b> (HTML/CSS).`),
+    o(`Exibir um alerta quando o usuário clica no botão.`, `A interação no navegador (como ${c("onclick=\"alert(...)\"")}) é front-end.`),
+    o(`Centralizar os elementos na tela com Flexbox.`, `Layout com CSS é front-end.`),
+    o(`Estruturar o conteúdo da página com tags HTML.`, `HTML é a "espinha dorsal do conteúdo" <b>visível</b>, ou seja, front-end.`),
+    o(`Processar a lógica de negócio e interagir com o banco de dados.`, `Correta. O back-end cuida de lógica, processamento e armazenamento de dados, com Python + Django/Flask, por exemplo.`),
+  ],
+  correct: 4,
+  tip: `<p><b>Front-end</b> = o que o usuário vê (HTML, CSS, JavaScript, React/Angular/Vue). <b>Back-end</b> = o que roda no servidor (Python, Java, Node.js; Django, Flask). As <b>APIs</b> ligam os dois.</p>`
+},
+{
+  unit: 4, aula: "Aula 1", src: "Frameworks web",
+  statement: `<p><b>Sobre os frameworks web Python citados na Aula 1, assinale a correta.</b></p>`,
+  options: [
+    o(`Django é um framework full-stack robusto, com convenções claras; Flask é mais leve e flexível.`, `Correta. Os dois são excelentes escolhas para o back-end, e a diferença está no "tamanho": Django traz muita coisa pronta, Flask é minimalista.`),
+    o(`Flask é usado só para front-end, e Django só para bancos de dados.`, `Os dois são frameworks de <b>back-end</b> (servidor).`),
+    o(`React e Angular são frameworks Python de back-end.`, `React, Angular e Vue.js são bibliotecas/frameworks JavaScript de <b>front-end</b>. Eles podem se integrar a um back-end Python.`),
+    o(`FastAPI serve para desenhar interfaces gráficas mobile.`, `FastAPI e Django Rest Framework servem para criar <b>APIs</b>.`),
+    o(`Python não pode ser usado no desenvolvimento web.`, `A aula inteira mostra o contrário.`),
+  ],
+  correct: 0,
+  tip: `${py(`
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')          # rota principal
+def index():
+    return 'Olá, esta é a rota principal do back-end!'`)}`
+},
+{
+  unit: 4, aula: "Aula 1", src: "HTML pelo Python",
+  statement: `<p>No Colab, a Aula 1 monta uma página guardando o HTML numa string ${c("html_code")}.</p>
+  <p><b>Qual instrução faz a página aparecer renderizada no notebook?</b></p>`,
+  options: [
+    o(`${c("print(html_code)")}`, `${c("print")} mostra o <b>texto</b> com as tags. Não renderiza a página.`),
+    o(`${c("from IPython.display import HTML")} e depois ${c("HTML(html_code)")}`, `Correta. A classe ${c("HTML")} do IPython faz o notebook interpretar a string como página, e aparece o título "Olá, mundo!" formatado.`),
+    o(`${c("import html_code")}`, `${c("import")} carrega módulos. Não se importa uma variável.`),
+    o(`${c("plt.show(html_code)")}`, `${c("plt.show")} exibe gráficos do Matplotlib.`),
+    o(`${c("pd.read_html(html_code)")}`, `${c("read_html")} <b>extrai tabelas</b> de um HTML para DataFrames. Não exibe a página.`),
+  ],
+  correct: 1,
+  tip: `<p>Nesse papel, o Python age como "mediador": gera o HTML, e o notebook o exibe.</p>`
+},
+
+/* ---------------- U4 · Aula 2: mobile ---------------- */
+{
+  unit: 4, aula: "Aula 2", src: "Kivy / KivyMD",
+  statement: `<p><b>Qual afirmação sobre desenvolvimento mobile com Python está correta?</b></p>`,
+  options: [
+    o(`O KivyMD só gera aplicativos para Android.`, `O KivyMD é multiplataforma: Android, iOS, Windows, Linux e macOS.`),
+    o(`O Kivy é uma extensão do KivyMD.`, `É o contrário: o <b>KivyMD</b> estende o <b>Kivy</b>.`),
+    o(`O KivyMD estende o Kivy aplicando os princípios do Material Design do Google, com componentes prontos como botões, diálogos e cartões.`, `Correta. Essas são as três características citadas: Material Design, componentes prontos e suporte a múltiplas plataformas.`),
+    o(`Apps em Python têm sempre desempenho superior aos nativos em Swift/Kotlin.`, `A aula cita o <b>desempenho</b> em comparação com linguagens nativas como um dos <b>desafios</b> do Python no mobile.`),
+    o(`O Google Colab é o ambiente indicado para rodar os apps Kivy da aula.`, `A aula avisa: "O Google Colab não consegue gerar o aplicativo!". Os exemplos foram rodados no Jupyter Notebook.`),
+  ],
+  correct: 2,
+  tip: `<p>Frameworks Python para mobile citados: <b>Kivy</b>, <b>BeeWare</b> e <b>Flutter</b> (com suporte a Python). Linguagens nativas: Swift (iOS), Kotlin/Java (Android).</p>`
+},
+
+/* ---------------- U4 · Aula 3: testes ---------------- */
+{
+  unit: 4, aula: "Aula 3", src: "assert",
+  statement: `${py(`
+x = -1
+assert x > 0, "valor deve ser positivo"
+print("ok")`)}
+  <p><b>O que acontece?</b></p>`,
+  options: [
+    o(`Imprime ${c("ok")}.`, `A condição ${c("x > 0")} é <b>falsa</b> (x = -1), então a execução é interrompida antes do ${c("print")}.`),
+    o(`Imprime ${c("valor deve ser positivo")} e depois ${c("ok")}.`, `O ${c("assert")} não só imprime um aviso: ele <b>lança uma exceção</b>, e a linha seguinte não roda.`),
+    o(`Muda o valor de ${c("x")} para positivo e imprime ${c("ok")}.`, `${c("assert")} só verifica. Nunca altera variáveis.`),
+    o(`Ocorre ${c("AssertionError: valor deve ser positivo")} e ${c("ok")} não é impresso.`, `Correta. Com condição falsa, o Python lança ${c("AssertionError")} com a mensagem informada.`),
+    o(`Ocorre ${c("SyntaxError")}, porque ${c("assert")} não aceita mensagem.`, `A forma ${c("assert condição, mensagem")} é válida.`),
+  ],
+  correct: 3,
+  tip: `<p>Se a condição fosse verdadeira (ex.: x = 3), o ${c("assert")} passaria sem fazer nada e ${c("ok")} seria impresso.</p>`
+},
+{
+  unit: 4, aula: "Aula 3", src: "doctest",
+  statement: `${py(`
+def square(x):
+    """Retorna o quadrado de um número.
+
+    >>> square(3)
+    9
+    >>> square(-2)
+    4
+    """
+    return x * x
+
+import doctest
+doctest.testmod()`)}
+  <p><b>Como o doctest decide se um teste passou?</b></p>`,
+  options: [
+    o(`Verifica se a função tem uma docstring, qualquer que seja o conteúdo.`, `Ter docstring não basta. O doctest <b>executa</b> os exemplos que estão nela.`),
+    o(`Executa as linhas que começam com ${c(">>>")} e compara a saída real com o valor escrito na linha de baixo.`, `Correta. ${c("square(3)")} tem que produzir exatamente ${c("9")}. Com 2 exemplos que passam, o resultado é ${c("TestResults(failed=0, attempted=2)")}.`),
+    o(`Compara o nome da função com o nome do arquivo.`, `O nome do arquivo não tem relação com o teste.`),
+    o(`Exige uma classe que herde de ${c("unittest.TestCase")}.`, `Isso é do <b>unittest</b>. O doctest usa só a docstring.`),
+    o(`Testa a função com valores aleatórios.`, `Os valores testados são exatamente os escritos nos exemplos.`),
+  ],
+  correct: 1,
+  tip: `<p><b>Vantagem do doctest:</b> a documentação vira teste, então os exemplos da docs ficam sempre em sincronia com o código.</p>`
+},
+{
+  unit: 4, aula: "Aula 3", src: "unittest",
+  statement: `${py(`
+import unittest
+
+class TestSoma(unittest.TestCase):
+    def test_positivos(self):
+        self.assertEqual(sum([1, 2]), 3)
+
+    def verifica_vazia(self):
+        self.assertEqual(sum([]), 0)
+
+    def test_negativos(self):
+        self.assertEqual(sum([-1, -2]), -3)`)}
+  <p><b>Ao rodar ${c("unittest.main()")}, quantos testes são executados?</b></p>`,
+  options: [
+    o(`3`, `Um dos métodos não segue a convenção de nome exigida pelo unittest.`),
+    o(`1`, `Dois métodos seguem a convenção de nome.`),
+    o(`0, porque falta o ${c("if __name__ == '__main__':")}.`, `Esse ${c("if")} controla <b>quando</b> os testes rodam, não quais métodos contam como teste.`),
+    o(`Erro, porque ${c("assertEqual")} só compara strings.`, `${c("assertEqual")} compara qualquer valor.`),
+    o(`2`, `Correta. Só métodos cujo nome <b>começa com ${c("test")}</b> são executados. ${c("verifica_vazia")} é ignorado.`),
+  ],
+  correct: 4,
+  tip: `<p><b>Regras do unittest:</b> a classe herda de ${c("unittest.TestCase")}; os métodos de teste começam com ${c("test")}; a verificação é feita com ${c("self.assertEqual(...)")} e parecidos. É a opção mais formal, indicada para <b>projetos maiores</b>.</p>`
+},
+
+/* ---------------- U4 · Aula 4: ML e TensorFlow ---------------- */
+{
+  unit: 4, aula: "Aula 4", src: "Tipos de treinamento",
+  statement: `<p>Uma loja quer <b>agrupar seus clientes</b> em perfis com base nos padrões de compra, <b>sem ter nenhuma classificação prévia</b> desses clientes.</p>
+  <p><b>Qual tipo de treinamento e qual algoritmo combinam com esse cenário?</b></p>`,
+  options: [
+    o(`Supervisionado, com árvore de decisão.`, `Supervisionado exige dados <b>rotulados</b>, e aqui não há rótulo algum.`),
+    o(`Por reforço, com um agente no ambiente CartPole.`, `Não há agente, ações ou recompensas.`),
+    o(`Supervisionado, com SVM.`, `SVM (na aula: "classificação e regressão") precisa de exemplos rotulados.`),
+    o(`Não supervisionado, com K-Means.`, `Correta. Sem rótulos, o modelo procura padrões por conta própria. A aula cita o K-Means como "algoritmo de agrupamento utilizado no aprendizado não supervisionado", e "agrupar clientes por padrão de compra" é o próprio exemplo dela.`),
+    o(`Por reforço, com redes neurais.`, `Não há interação com ambiente nem recompensas.`),
+  ],
+  correct: 3,
+  tip: `<p><b>Exemplos da aula:</b> supervisionado → spam/não spam; não supervisionado → agrupar clientes; reforço → agente que aprende a jogar.</p>`
+},
+{
+  unit: 4, aula: "Aula 4", src: "Autoencoder",
+  statement: `<p>No exemplo de treinamento <b>não supervisionado</b> da Aula 4:</p>${py(`
+autoencoder.fit(X_unsupervised, X_unsupervised, epochs=1000, verbose=0)`)}
+  <p><b>Por que o mesmo ${c("X_unsupervised")} aparece duas vezes (como entrada e como alvo)?</b></p>`,
+  options: [
+    o(`É um erro. O correto seria passar os rótulos ${c("y")} no segundo argumento.`, `Não é erro. No não supervisionado <b>não existem</b> rótulos ${c("y")}.`),
+    o(`Para treinar o modelo duas vezes seguidas.`, `A quantidade de treino é definida por ${c("epochs=1000")}.`),
+    o(`Porque não há rótulos: o autoencoder aprende a reconstruir a própria entrada, descobrindo uma representação compacta dos dados.`, `Correta. A entrada (2 valores) passa por uma camada de 1 neurônio (${c("encoded")}) e volta a 2 (${c("decoded")}). O modelo aprende padrões dos dados sem nenhum rótulo.`),
+    o(`Porque o TensorFlow exige dois argumentos iguais em qualquer ${c("fit")}.`, `No supervisionado, o ${c("fit")} recebe ${c("X_train")} e ${c("y_train")}, que são diferentes.`),
+    o(`Para transformar o treino em aprendizado por reforço.`, `Reforço envolve ambiente, ações e recompensas.`),
+  ],
+  correct: 2,
+  tip: `<p>Compare: supervisionado → ${c("model.fit(X_train, y_train)")}, com y = 2x no exemplo. Não supervisionado → ${c("autoencoder.fit(X, X)")}.</p>`
+},
+{
+  unit: 4, aula: "Aula 4", src: "Regressão com TensorFlow",
+  statement: `${py(`
+X_train = tf.constant([[1.0], [2.0], [3.0], [4.0]])
+y_train = tf.constant([[2.0], [4.0], [6.0], [8.0]])
+
+model = Sequential()
+model.add(Dense(units=1, input_shape=(1,)))
+model.compile(optimizer='sgd', loss='mean_squared_error')
+model.fit(X_train, y_train, epochs=1000, verbose=0)
+
+prediction = model.predict(tf.constant([[5.0]]))`)}
+  <p><b>Qual valor se espera, aproximadamente, em ${c("prediction")}, e que tipo de treinamento é esse?</b></p>`,
+  options: [
+    o(`Cerca de 10; treinamento supervisionado (regressão linear).`, `Correta. Os pares (1→2, 2→4, 3→6, 4→8) mostram a regra y = 2x, e o modelo aprende isso com os <b>dados rotulados</b>. Para x = 5, a previsão fica perto de 10 (não exatamente, porque é uma aproximação).`),
+    o(`Cerca de 5; treinamento não supervisionado.`, `Há rótulos (${c("y_train")}), então é supervisionado, e a relação aprendida dobra o valor.`),
+    o(`Exatamente 8; treinamento por reforço.`, `8 é a saída para x = 4. Além disso, não há ambiente nem recompensa.`),
+    o(`Cerca de 25; treinamento supervisionado.`, `25 seria x². Os dados mostram uma relação linear, y = 2x.`),
+    o(`Erro, porque ${c("Dense(units=1)")} não consegue prever números.`, `Uma camada ${c("Dense")} de 1 unidade é justamente uma regressão linear: y = w·x + b.`),
+  ],
+  correct: 0,
+  tip: `<p><b>Ciclo do Keras/TensorFlow:</b> montar o modelo (${c("Sequential")} + camadas) → ${c("compile")} (otimizador + perda) → ${c("fit")} (treinar) → ${c("predict")} (prever).</p>`
+},
+{
+  unit: 4, aula: "Aula 4", src: "Conceito de ML",
+  statement: `<p><b>Qual alternativa descreve corretamente machine learning, segundo a Aula 4?</b></p>`,
+  options: [
+    o(`Programar explicitamente cada regra que o computador deve seguir para cada caso.`, `É o oposto: em ML, o sistema aprende padrões a partir dos dados <b>sem</b> ser explicitamente programado para cada caso.`),
+    o(`Um campo da IA em que modelos aprendem padrões a partir de dados e ajustam seus parâmetros para fazer previsões ou tomar decisões sobre dados novos.`, `Correta. A capacidade de <b>generalizar</b> para dados novos é o que se busca.`),
+    o(`Uma biblioteca da Google para desenhar gráficos.`, `A biblioteca da Google citada é o <b>TensorFlow</b>, que serve para ML e deep learning, não para gráficos.`),
+    o(`Um tipo de banco de dados que aprende a organizar tabelas.`, `ML não é banco de dados.`),
+    o(`Uma técnica que só funciona com dados rotulados.`, `Só o treinamento <b>supervisionado</b> exige rótulos. O não supervisionado e o por reforço não exigem.`),
+  ],
+  correct: 1,
+  tip: `<p>Modelos citados: <b>árvores de decisão</b>, <b>redes neurais</b>, <b>SVM</b> e <b>K-Means</b>.</p>`
+},
+
+/* ---------------- U4 · Aula 5: MNIST ---------------- */
+{
+  unit: 4, aula: "Aula 5", src: "MNIST: normalização",
+  statement: `${py(`
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0`)}
+  <p><b>Qual é o objetivo da divisão por 255.0?</b></p>`,
+  options: [
+    o(`Reduzir o número de imagens do conjunto de treino.`, `A quantidade de imagens não muda. Só os <b>valores dos pixels</b> mudam.`),
+    o(`Transformar as imagens coloridas em preto e branco.`, `As imagens do MNIST já são em tons de cinza.`),
+    o(`Separar os dados de treino dos dados de teste.`, `A separação já vem pronta do ${c("load_data()")}.`),
+    o(`Converter os rótulos de 0–9 para 0–1.`, `Os <b>rótulos</b> (${c("y_train")}) não são divididos. Só as imagens (${c("x")}).`),
+    o(`Normalizar os pixels (que vão de 0 a 255) para o intervalo [0, 1], o que facilita o treinamento.`, `Correta. É a explicação da Aula 5: valores em escala pequena deixam o treinamento mais estável.`),
+  ],
+  correct: 4,
+  tip: `<p><b>MNIST</b> = imagens de dígitos escritos à mão (0 a 9), de 28×28 pixels. É o conjunto clássico para começar em ML.</p>`
+},
+{
+  unit: 4, aula: "Aula 5", src: "MNIST: camadas",
+  statement: `${py(`
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Flatten(input_shape=(28, 28)),
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dense(10, activation='softmax')
+])`)}
+  <p><b>Qual alternativa descreve corretamente as camadas?</b></p>`,
+  options: [
+    o(`${c("Flatten")} aumenta a resolução da imagem; ${c("Dropout(0.2)")} apaga 20% das imagens do treino.`, `${c("Flatten")} não muda a resolução, só achata. ${c("Dropout")} desativa <b>neurônios</b>, não imagens.`),
+    o(`${c("Dense(10)")} tem 10 neurônios porque o modelo é treinado por 10 épocas.`, `As épocas são definidas no ${c("fit")} (${c("epochs=5")}). Os 10 neurônios correspondem às <b>10 classes</b> (dígitos 0–9).`),
+    o(`${c("Flatten")} transforma a matriz 28×28 em um vetor de 784 valores; ${c("Dropout(0.2)")} desativa aleatoriamente 20% dos neurônios no treino para evitar overfitting; ${c("Dense(10, softmax)")} dá a probabilidade de cada dígito.`, `Correta. É exatamente a arquitetura explicada na Aula 5.`),
+    o(`${c("softmax")} escolhe um dígito aleatório como resposta.`, `${c("softmax")} gera uma <b>distribuição de probabilidade</b> entre as 10 classes, e a previsão é a classe de maior probabilidade.`),
+    o(`${c("Dense(128, relu)")} é a camada de saída do modelo.`, `Ela é uma camada <b>oculta</b> (intermediária). A saída é o ${c("Dense(10, softmax)")}.`),
+  ],
+  correct: 2,
+  tip: `<p>Compilação: otimizador ${c("adam")}, perda ${c("sparse_categorical_crossentropy")} (classificação multiclasse) e métrica ${c("accuracy")} (proporção de acertos). Depois: ${c("fit")} por 5 épocas e ${c("evaluate")} no conjunto de teste.</p>`
+}
+);
+</script>
+<script>
+const parts = [
+  {
+    id: "p1", label: "Parte 1",
+    title: "Parte 1 — Questões dos exercícios das unidades",
+    desc: "As 20 questões de EXERCICIOS DAS UNIDADES/, com os enunciados e o gabarito originais. Onde o gabarito oficial simplifica ou erra algum conceito, há um aviso na explicação.",
+    qs: part1,
+  },
+  {
+    id: "p2", label: "Parte 2",
+    title: "Parte 2 — Complemento: questões novas",
+    desc: "Questões inéditas no estilo da prova, cobrindo os tópicos das 20 aulas, principalmente os que os exercícios não cobraram: saída de código, completar lacunas, SQL, pandas, testes e machine learning.",
+    qs: part2,
+  },
+];
+
+const STORE_KEY = "lp-python-simulado-01";
+const letters = ["A", "B", "C", "D", "E"];
+let answers = {};
+try { answers = JSON.parse(localStorage.getItem(STORE_KEY) || "{}") || {}; } catch (e) { answers = {}; }
+function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(answers)); } catch (e) {} }
+
+const all = [];   // lista plana de {part, idx, q, key}
+const quiz = document.getElementById("quiz");
+
+parts.forEach(part => {
+  const head = document.createElement("div");
+  head.className = "part-title";
+  head.id = "part-" + part.id;
+  head.innerHTML = `<h2>${part.title}</h2><p>${part.desc}</p>`;
+  quiz.appendChild(head);
+
+  let lastUnit = null;
+  part.qs.forEach((q, idx) => {
+    if (q.unit !== lastUnit) {
+      lastUnit = q.unit;
+      const count = part.qs.filter(x => x.unit === q.unit).length;
+      const ut = document.createElement("div");
+      ut.className = "unit-title";
+      ut.innerHTML = `<span class="dot" style="background:${unitInfo[q.unit].color}"></span>
+        <h3>${unitInfo[q.unit].name}</h3><span>${count} questão(ões)</span>`;
+      quiz.appendChild(ut);
+    }
+
+    const key = `${part.id}-${idx}`;
+    all.push({ part, idx, q, key });
+
+    const optsHtml = q.options.map((op, j) => `
+      <div class="opt" id="opt-${key}-${j}">
+        <label>
+          <input type="radio" name="q-${key}" value="${j}">
+          <span><span class="letter">${letters[j]})</span> ${op.t}</span>
+        </label>
+        <div class="why">${j === q.correct ? "<b class=\"verdict\">Correta.</b>" : "<b class=\"verdict\">Errada.</b>"} ${op.why}</div>
+      </div>`).join("");
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.id = "card-" + key;
+    card.innerHTML = `
+      <div class="qhead">
+        <span class="qnum">Questão ${idx + 1}</span>
+        <span class="tags">
+          <span class="qtag" style="background:${unitInfo[q.unit].color}">U${q.unit} · ${q.aula}</span>
+          <span class="qtag src">${q.src}</span>
+        </span>
+      </div>
+      <div class="statement">${q.statement}</div>
+      <div class="options">${optsHtml}</div>
+      <div class="explain">${q.tip}${q.note ? `<div class="note"><b>Atenção:</b> ${q.note}</div>` : ""}</div>`;
+    quiz.appendChild(card);
+
+    card.querySelectorAll(`input[name="q-${key}"]`).forEach(inp => {
+      inp.addEventListener("change", () => {
+        answers[key] = parseInt(inp.value, 10);
+        save();
+        applyAnswer(key, q, answers[key]);
+        updateStats();
+      });
+    });
+  });
+});
+
+function applyAnswer(key, q, sel) {
+  const card = document.getElementById("card-" + key);
+  card.classList.add("done");
+  card.classList.add(sel === q.correct ? "correct-card" : "incorrect-card");
+  q.options.forEach((_, j) => {
+    const optEl = document.getElementById(`opt-${key}-${j}`);
+    const input = optEl.querySelector("input");
+    input.disabled = true;
+    if (j === sel) input.checked = true;
+    if (j === q.correct) optEl.classList.add("correct");
+    else if (j === sel) optEl.classList.add("incorrect");
+  });
+}
+
+function updateStats() {
+  const total = all.length;
+  let answered = 0, right = 0;
+  const byUnit = { 1: { c: 0, t: 0, a: 0 }, 2: { c: 0, t: 0, a: 0 }, 3: { c: 0, t: 0, a: 0 }, 4: { c: 0, t: 0, a: 0 } };
+  const byPart = {};
+  const wrong = [];
+  all.forEach(({ part, idx, q, key }) => {
+    byPart[part.id] = byPart[part.id] || { c: 0, t: 0, a: 0, label: part.label };
+    byPart[part.id].t++; byUnit[q.unit].t++;
+    if (answers[key] === undefined) return;
+    answered++; byPart[part.id].a++; byUnit[q.unit].a++;
+    if (answers[key] === q.correct) { right++; byPart[part.id].c++; byUnit[q.unit].c++; }
+    else wrong.push({ part, idx, q, key });
+  });
+
+  document.getElementById("progressFill").style.width = (answered / total * 100) + "%";
+  document.getElementById("progressText").textContent =
+    `${answered} / ${total} respondidas · ${right} acerto(s)`;
+
+  document.getElementById("scoreBig").textContent = answered ? Math.round(right / answered * 100) + "%" : "—";
+  document.getElementById("scoreSub").textContent = answered
+    ? `${right} de ${answered} respondidas estão corretas (${total - answered} ainda sem resposta)`
+    : "Responda algumas questões para ver seu desempenho.";
+
+  const rows = [
+    ...parts.map(p => ({ name: byPart[p.id].label, s: byPart[p.id], color: "var(--accent)" })),
+    ...Object.keys(unitInfo).map(u => ({ name: unitInfo[u].name.split("—")[0].trim(), s: byUnit[u], color: unitInfo[u].color })),
+  ];
+  document.getElementById("bars").innerHTML = rows.map(r => {
+    const p = r.s.a ? Math.round(r.s.c / r.s.a * 100) : 0;
+    return `<div class="bar-row">
+      <div>${r.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${r.color}"></div></div>
+      <div>${r.s.c}/${r.s.a}</div></div>`;
+  }).join("");
+
+  document.getElementById("reviewList").innerHTML = wrong.length
+    ? `<p style="font-size:13.5px;margin:6px 0"><b>Revise estas questões:</b></p>` + wrong.map(w =>
+        `<a href="#card-${w.key}">${w.part.label} · Questão ${w.idx + 1} — U${w.q.unit} ${w.q.aula} · ${w.q.src}</a>`).join("")
+    : "";
+}
+
+document.getElementById("metaP1").textContent = part1.length;
+document.getElementById("metaP2").textContent = part2.length;
+
+all.forEach(({ q, key }) => {
+  if (answers[key] !== undefined && answers[key] >= 0 && answers[key] < q.options.length) applyAnswer(key, q, answers[key]);
+});
+updateStats();
+
+document.getElementById("retryBtn").addEventListener("click", () => {
+  if (!confirm("Apagar todas as respostas e recomeçar?")) return;
+  answers = {};
+  try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+  location.reload();
+});
+</script>
+</body>
+</html>
