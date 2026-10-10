@@ -60,6 +60,13 @@ A interseção é o conjunto de elementos que estão presentes em todos os três
 
 Nenhum dos múltiplos de 3 primos são pares, exceto o número 2, que não está na lista de múltiplos de 3 de A. Assim, a interseção considerando todos eles é: **{vazio}**.
 
+> **Nota de revisão:** a resposta (**∅, conjunto vazio**) está correta, mas o comentário tem dois erros:
+>
+> 1. **5 e 7 não são múltiplos de 3.** Os primos que também são múltiplos de 3 são apenas **{3}** (ou {−3, 3}, se aceitarmos negativos — ver item 2).
+> 2. **Números primos são, por definição, naturais maiores que 1.** O conjunto C correto é {2, 3, 5, 7, 11, 13, 17, 19} — sem os negativos.
+>
+> **Raciocínio correto:** A ∩ B = {−6, 0, 6} (pares múltiplos de 3 entre −10 e 10). Nenhum desses números é primo (−6 e 0 não são naturais > 1, e 6 = 2 · 3). Logo, **A ∩ B ∩ C = ∅**.
+
 ## Questão 3 ✅
 
 O conjunto dos números naturais, denotado por "ℕ", é um conjunto numérico fundamental na matemática. Em notação matemática, o conjunto dos números naturais pode ser representado da seguinte forma:
@@ -73,6 +80,13 @@ O conjunto dos números naturais, denotado por "ℕ", é um conjunto numérico f
 **Comentário:**
 
 Alternativa correta: {1, 2, 3, 4, 5, ...}. Explicação: números negativos não são considerados números naturais. Os números naturais são definidos como números inteiros positivos. Eles são usados para contar objetos e representar quantidades inteiras não negativas.
+
+> **Nota de revisão:** existem duas convenções para ℕ, e esta questão usa uma diferente da que a disciplina ensina:
+>
+> - **Esta questão:** ℕ = {1, 2, 3, ...} (começa no 1).
+> - **Conteúdo da Unidade 2 (Aula 2, Tabela 1)** e de Fundamentos de Cálculo: **ℕ = {0, 1, 2, 3, ...}** (começa no 0); o conjunto sem o zero é escrito **ℕ\* = {1, 2, 3, ...}**.
+>
+> O próprio comentário se contradiz: diz que naturais são "inteiros **positivos**" e logo depois "quantidades inteiras **não negativas**" (que inclui o 0). Na prova, se as duas opções aparecerem, prefira a convenção do material da disciplina (com o 0), a menos que o enunciado defina ℕ como nesta questão.
 
 ## Questão 4 ✅
 
@@ -116,6 +130,17 @@ A interseção é:
 **União de A com a interseção calculada**
 
 {1, 2, 3, 4, 5, 6}
+
+> **Nota de revisão:** a **resposta assinalada como correta está errada** — e o próprio comentário chega a outro resultado. O cálculo do comentário é o certo:
+>
+> | Passo | Operação | Resultado |
+> |:---:|---|---|
+> | 1 | B ∩ C | {5, 6, 7} |
+> | 2 | D Δ B (o 7 está nos dois, então sai) | {3, 4, 5, 6, 8, 9, 10, 11} |
+> | 3 | (B ∩ C) ∩ (D Δ B) | {5, 6} |
+> | 4 | A ∪ {5, 6} | **{1, 2, 3, 4, 5, 6}** |
+>
+> **Solução correta: A ∪ ((B ∩ C) ∩ (D Δ B)) = {1, 2, 3, 4, 5, 6}.** A resposta {3, 4, 5, 6, 7, 8, 9, 10, 11} não corresponde a essa expressão (ela nem contém o 1 e o 2, que estão em A e portanto têm que estar em qualquer união com A).
 
 ## Questão 5 ✅
 
