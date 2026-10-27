@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado — Lógica e Matemática Computacional</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --ink:#1e2433; --muted:#5b6478; --line:#e2e6f0; --soft:#f1f3f9;
+    --accent:#3454d1; --accent-ink:#233a9e; --accent-soft:#eaf0ff;
+    --brand:#233a9e; --brand2:#3454d1;
+    --good:#1a8f5e; --good-soft:#e7f7ef; --good-ink:#145c3d;
+    --bad:#c93838; --bad-soft:#fdecec; --bad-ink:#7a1f1f; --bad-line:#f2c9c9;
+    --hint:#b8860b; --hint-soft:#fff8e6; --hint-ink:#5a4410; --hint-line:#f0d98c;
+    --explain-bg:#f7f9ff; --explain-ink:#2a3150;
+    --pre-bg:#1e2433; --pre-ink:#e8ecf8;
+    --u1:#3454d1; --u2:#1a8f5e; --u3:#b8860b; --u4:#8a3ffc;
+    --radius:14px;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10131a; --card:#181d28; --ink:#e6e9f2; --muted:#9aa3b8; --line:#2b3243; --soft:#222a39;
+      --accent:#5b78f0; --accent-ink:#aab8ff; --accent-soft:#1f2848;
+      --good:#3cc489; --good-soft:#12301f; --good-ink:#9be3c0;
+      --bad:#ff6b6b; --bad-soft:#3a1717; --bad-ink:#ffb3b3; --bad-line:#6b2a2a;
+      --hint:#e0b341; --hint-soft:#2e2510; --hint-ink:#f1d999; --hint-line:#5c4a17;
+      --explain-bg:#1c2233; --explain-ink:#d5dbec;
+      --pre-bg:#0b0d13; --pre-ink:#e8ecf8;
+      --u1:#7b93ff; --u2:#3cc489; --u3:#e0b341; --u4:#b48cff;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10131a; --card:#181d28; --ink:#e6e9f2; --muted:#9aa3b8; --line:#2b3243; --soft:#222a39;
+    --accent:#5b78f0; --accent-ink:#aab8ff; --accent-soft:#1f2848;
+    --good:#3cc489; --good-soft:#12301f; --good-ink:#9be3c0;
+    --bad:#ff6b6b; --bad-soft:#3a1717; --bad-ink:#ffb3b3; --bad-line:#6b2a2a;
+    --hint:#e0b341; --hint-soft:#2e2510; --hint-ink:#f1d999; --hint-line:#5c4a17;
+    --explain-bg:#1c2233; --explain-ink:#d5dbec;
+    --pre-bg:#0b0d13; --pre-ink:#e8ecf8;
+    --u1:#7b93ff; --u2:#3cc489; --u3:#e0b341; --u4:#b48cff;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;}
+  a{color:var(--accent-ink);}
+  code{background:var(--soft);padding:1px 5px;border-radius:5px;font-size:.93em;}
+  pre{background:var(--pre-bg);color:var(--pre-ink);padding:12px 14px;border-radius:10px;font-size:13px;overflow-x:auto;line-height:1.45;}
+  pre code{background:none;padding:0;color:inherit;}
+  table{border-collapse:collapse;}
+  input, select, button, textarea{font:inherit;color:inherit;}
+
+  header.exam{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;padding:26px 16px 20px;}
+  header.exam .wrap{max-width:920px;margin:0 auto;}
+  header.exam .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-bottom:6px;}
+  header.exam h1{margin:0 0 10px;font-size:26px;}
+  header.exam .meta{display:flex;flex-wrap:wrap;gap:12px 26px;font-size:13.5px;opacity:.95;}
+  header.exam .meta b{display:block;font-weight:600;}
+
+  nav.tabs{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);}
+  nav.tabs .wrap{max-width:920px;margin:0 auto;display:flex;gap:4px;padding:0 10px;overflow-x:auto;align-items:center;}
+  nav.tabs button{background:none;border:none;border-bottom:3px solid transparent;padding:13px 12px 10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--muted);white-space:nowrap;}
+  nav.tabs button.active{color:var(--accent-ink);border-bottom-color:var(--accent);}
+  nav.tabs .saved{margin-left:auto;font-size:11.5px;color:var(--muted);white-space:nowrap;padding-left:10px;}
+  nav.tabs .theme-btn{font-size:16px;padding:8px;border-bottom:none;}
+
+  .container{max-width:920px;margin:0 auto;padding:20px 16px 80px;}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+  .notice{background:var(--hint-soft);border:1px solid var(--hint-line);color:var(--hint-ink);border-radius:var(--radius);padding:14px 16px;font-size:13.8px;margin-bottom:20px;}
+  .notice ul{margin:6px 0 0;padding-left:20px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;}
+
+  /* ---------- Tutoriais ---------- */
+  .cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:10px 0 4px;}
+  .cheat > div{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:13.4px;}
+  .cheat h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .cheat ul{margin:0;padding-left:18px;}
+  details.tut{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--uc,var(--accent));border-radius:var(--radius);margin-bottom:16px;}
+  details.tut > summary{cursor:pointer;padding:16px 18px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  details.tut > summary::-webkit-details-marker{display:none;}
+  details.tut > summary::before{content:"▸";color:var(--muted);transition:transform .15s;}
+  details.tut[open] > summary::before{transform:rotate(90deg);}
+  details.tut > summary h2{margin:0;font-size:17px;flex:1;min-width:200px;}
+  details.tut > summary .done-chip{font-size:11.5px;padding:2px 10px;border-radius:99px;background:var(--soft);color:var(--muted);}
+  details.tut > summary .done-chip.yes{background:var(--good-soft);color:var(--good-ink);}
+  .tut-body{padding:0 20px 18px;font-size:14.4px;}
+  .tut-body h3{font-size:15.5px;margin:22px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line);}
+  .tut-body table{margin:8px 0 12px;font-size:13.6px;display:block;overflow-x:auto;}
+  .tut-body th,.tut-body td{border:1px solid var(--line);padding:5px 10px;text-align:left;vertical-align:top;}
+  .tut-body th{background:var(--soft);}
+  .tut-body td.c,.tut-body th.c{text-align:center;}
+  .key{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;}
+  .trap{background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;color:var(--bad-ink);}
+  .trap b{color:inherit;}
+  .tool{border:1px dashed var(--accent);border-radius:12px;padding:14px 16px;margin:16px 0 6px;background:var(--explain-bg);}
+  .tool h4{margin:0 0 10px;font-size:14px;color:var(--accent-ink);}
+  .tool .row{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:10px;font-size:13.8px;}
+  .tool input[type=number],.tool input[type=text],.tool select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 9px;}
+  .tool input[type=number]{width:80px;}
+  .tool input[type=text]{min-width:0;flex:1 1 220px;}
+  .tool .out{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.8px;overflow-x:auto;}
+  .tool .out table{font-size:13px;margin:6px 0;display:table;}
+  .tool .out td,.tool .out th{border:1px solid var(--line);padding:3px 9px;text-align:center;}
+  .tool .out th{background:var(--soft);}
+  .tool .out td.v{color:var(--good);font-weight:700;}
+  .tool .out td.f{color:var(--bad);font-weight:700;}
+  .chip{display:inline-block;font-size:12px;padding:2px 10px;border-radius:99px;font-weight:600;}
+  .chip.good{background:var(--good-soft);color:var(--good-ink);}
+  .chip.bad{background:var(--bad-soft);color:var(--bad-ink);}
+  .chip.mid{background:var(--hint-soft);color:var(--hint-ink);}
+  .btn{background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:99px;cursor:pointer;font-weight:600;font-size:13.5px;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn.ghost{background:none;color:var(--accent-ink);border:1px solid var(--accent);}
+  .btn.small{padding:4px 11px;font-size:12.5px;}
+  .presets{display:flex;flex-wrap:wrap;gap:6px;}
+  .tut-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px;padding-top:12px;border-top:1px solid var(--line);}
+  .tut-foot label{font-size:13.5px;display:flex;gap:6px;align-items:center;cursor:pointer;}
+
+  /* ---------- Simulado ---------- */
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:13.5px;}
+  .toolbar .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;}
+  .seg button{background:var(--card);border:none;padding:6px 12px;cursor:pointer;font-size:13px;color:var(--muted);}
+  .seg button.on{background:var(--accent);color:#fff;}
+  .toolbar select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%;}
+  .progress-wrap{position:sticky;top:47px;z-index:5;background:var(--bg);padding:10px 0 8px;}
+  .progress-bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
+  .progress-bar > div{height:100%;background:var(--accent);width:0%;transition:width .25s ease;}
+  .progress-label{font-size:12px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .part-title{margin:34px 0 4px;padding:16px 18px;border-radius:var(--radius);background:var(--brand);color:#fff;}
+  .part-title h2{margin:0;font-size:19px;}
+  .part-title p{margin:4px 0 0;font-size:13px;opacity:.92;}
+  .part-title.p2{background:#5b2bb5;}
+  .part-title.p3{background:#0f766e;}
+  .part-title.p4{background:#a3236f;}
+  .unit-title{margin:26px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:10px;}
+  .unit-title .dot{width:12px;height:12px;border-radius:50%;flex:none;}
+  .unit-title h3{font-size:16px;margin:0;}
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap;}
+  .qnum{font-weight:700;font-size:14.5px;color:var(--accent-ink);}
+  .qtag{font-size:11px;color:#fff;background:var(--muted);padding:2px 9px;border-radius:99px;white-space:nowrap;}
+  .qtag.done{background:var(--accent);}
+  .qtag.good{background:var(--good);}
+  .qtag.bad{background:var(--bad);}
+  .qref{font-size:11.5px;color:var(--muted);margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .badge{font-size:10.5px;padding:1px 8px;border-radius:99px;border:1px solid var(--line);background:var(--soft);color:var(--muted);text-decoration:none;}
+  .badge.rebuilt{border-color:var(--hint-line);background:var(--hint-soft);color:var(--hint-ink);}
+  .badge.diverge{border-color:var(--bad-line);background:var(--bad-soft);color:var(--bad-ink);}
+  .badge.real{border-color:#5fb3a9;background:rgba(15,118,110,.12);color:var(--good-ink);}
+  .badge.offsyl{border-color:var(--hint-line);background:var(--hint-soft);color:var(--hint-ink);}
+  .statement{font-size:14.8px;margin-bottom:12px;}
+  .statement table,.explain table{margin:8px 0;font-size:13.5px;display:block;overflow-x:auto;}
+  .statement th,.statement td,.explain th,.explain td{border:1px solid var(--line);padding:4px 12px;text-align:center;}
+  .statement th,.explain th{background:var(--soft);}
+  .explain td{background:var(--card);}
+  .statement blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--line);color:var(--muted);}
+  figure.qfig{margin:8px 0 14px;text-align:center;}
+  figure.qfig svg{max-width:100%;height:auto;background:#fbfcff;border:1px solid var(--line);border-radius:10px;}
+  figure.qfig figcaption{font-size:11.5px;color:var(--muted);margin-top:5px;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .opt{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:14.3px;transition:border-color .15s,background .15s;}
+  .opt:hover{border-color:var(--accent);background:var(--accent-soft);}
+  .opt input{margin-top:4px;flex:none;accent-color:var(--accent);}
+  .opt .letter{font-weight:700;color:var(--accent-ink);margin-right:2px;}
+  .opt.correct{border-color:var(--good);background:var(--good-soft);}
+  .opt.incorrect{border-color:var(--bad);background:var(--bad-soft);}
+  .opt.correct .letter::after{content:" ✓";}
+  .opt.incorrect .letter::after{content:" ✗";}
+  .opt.locked{cursor:default;}
+  .opt.locked:hover{background:inherit;}
+  .opt.correct.locked:hover{background:var(--good-soft);}
+  .opt.incorrect.locked:hover{background:var(--bad-soft);}
+  .hint-btn{margin-top:10px;background:none;border:1px dashed var(--hint);color:var(--hint);border-radius:99px;padding:4px 12px;font-size:12.5px;cursor:pointer;}
+  .hint-btn:hover{background:var(--hint-soft);}
+  .hint{display:none;margin-top:8px;padding:10px 14px;background:var(--hint-soft);border-left:4px solid var(--hint);border-radius:0 8px 8px 0;font-size:13.6px;color:var(--hint-ink);}
+  .hint.show{display:block;}
+  .explain{display:none;margin-top:12px;padding:12px 14px;background:var(--explain-bg);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;font-size:13.8px;color:var(--explain-ink);}
+  .explain.show{display:block;}
+  .explain b{color:var(--accent-ink);}
+  .explain .fix{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+  .explain .note{margin-top:8px;padding:8px 10px;background:var(--bad-soft);border-radius:8px;color:var(--bad-ink);}
+  .explain .note b{color:inherit;}
+  .card.correct-card{border-color:var(--good);}
+  .card.incorrect-card{border-color:var(--bad);}
+  .card.hidden,.part-title.hidden,.unit-title.hidden{display:none;}
+  .empty{text-align:center;color:var(--muted);padding:30px 10px;}
+  .actions{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,var(--bg) 35%);padding:18px 0 6px;text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .big-btn{background:var(--accent);color:#fff;border:none;padding:13px 30px;font-size:15px;border-radius:99px;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(52,84,209,.3);}
+  .big-btn:hover{filter:brightness(1.08);}
+  .big-btn.ghost{background:var(--card);color:var(--accent-ink);border:1px solid var(--accent);box-shadow:none;}
+  #results{display:none;margin-top:10px;}
+  #results.show{display:block;}
+  .score-hero{text-align:center;}
+  .score-hero .big{font-size:44px;font-weight:800;color:var(--accent-ink);}
+  .score-hero .sub{color:var(--muted);font-size:14px;margin-top:4px;}
+  .score-hero .proj{margin-top:10px;font-size:14px;}
+  .bars{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+  .bars h4{margin:8px 0 0;font-size:12.5px;color:var(--muted);text-align:left;text-transform:uppercase;letter-spacing:.08em;}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;font-size:13px;text-align:left;}
+  .bar-track{height:14px;background:var(--line);border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;}
+  .review-list a{display:block;padding:8px 12px;margin-bottom:6px;border-radius:8px;background:var(--bad-soft);color:var(--bad-ink);text-decoration:none;font-size:13.3px;border:1px solid var(--bad-line);}
+  .tips .tip{padding:10px 12px;margin-bottom:8px;border-radius:8px;background:var(--hint-soft);border:1px solid var(--hint-line);color:var(--hint-ink);font-size:13.6px;}
+  .tips .tip b{color:inherit;}
+  .history{font-size:13px;width:100%;}
+  .history td,.history th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;}
+
+  /* ---------- Nota ---------- */
+  .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px 16px;}
+  .calc-grid label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);}
+  .calc-grid input,.calc-grid select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:15px;color:var(--ink);}
+  .verdict{border-radius:var(--radius);padding:18px 20px;margin:16px 0;font-size:15px;}
+  .verdict.ok{background:var(--good-soft);color:var(--good-ink);border:1px solid var(--good);}
+  .verdict.need{background:var(--accent-soft);color:var(--ink);border:1px solid var(--accent);}
+  .verdict.no{background:var(--bad-soft);color:var(--bad-ink);border:1px solid var(--bad);}
+  .verdict .num{font-size:30px;font-weight:800;display:block;margin:4px 0;}
+  .gtable{width:100%;font-size:13.5px;}
+  .gtable th,.gtable td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:center;}
+  .gtable tr.pass td{color:var(--good-ink);}
+  .gtable tr.min td{background:var(--good-soft);font-weight:700;}
+  .gtable tr.me td{outline:2px solid var(--accent);outline-offset:-2px;}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:40px;}
+  @media (max-width:560px){
+    .bar-row{grid-template-columns:86px 1fr 44px;}
+    header.exam h1{font-size:21px;}
+    .card{padding:14px 14px;}
+    .tut-body{padding:0 14px 16px;}
+    .progress-wrap{top:45px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="exam">
+  <div class="wrap">
+    <div class="kicker">Simulado + revisão · Não vale nota</div>
+    <h1>Lógica e Matemática Computacional</h1>
+    <div class="meta">
+      <div><b>Aluno</b>Breno</div>
+      <div><b>Instituição</b>Anhanguera / Unopar</div>
+      <div><b>Questões</b><span id="metaTotal">—</span> · múltipla escolha</div>
+      <div><b>Provas reais</b><span id="metaReal">—</span> questões de provas anteriores</div>
+      <div><b>Unidades</b>1 a 4 (conteúdo completo)</div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap">
+    <button data-tab="tutoriais">📘 Tutoriais</button>
+    <button data-tab="simulado">📝 Simulado</button>
+    <button data-tab="nota">🎯 Minha nota</button>
+    <span class="saved" id="savedFlag">💾 salvo neste navegador</span>
+    <button class="theme-btn" id="themeBtn" title="Alternar tema claro/escuro">🌓</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ======================= TUTORIAIS ======================= -->
+<section class="tab-panel" id="tab-tutoriais">
+
+  <div class="card">
+    <b>📌 Cola de véspera: o que mais cai</b>
+    <div class="cheat">
+      <div><h4>Combinatória</h4><ul>
+        <li><b>A ordem importa?</b> Não → C(n,k) = n!/(k!(n−k)!)</li>
+        <li>Sim, sem repetir → A(n,k) = n!/(n−k)!</li>
+        <li>Sim, pode repetir → nᵏ</li>
+        <li>Usa todos (anagrama) → P(n) = n!</li>
+        <li>C(n,k) = A(n,k) ÷ k!</li></ul></div>
+      <div><h4>Conjuntos</h4><ul>
+        <li>∪ em pelo menos um · ∩ nos dois</li>
+        <li>A − B: em A e não em B</li>
+        <li>A Δ B: em exatamente um</li>
+        <li>|A ∪ B| = |A| + |B| − |A ∩ B|</li>
+        <li>nº de subconjuntos = 2ⁿ · |A×B| = |A|·|B|</li></ul></div>
+      <div><h4>Lógica</h4><ul>
+        <li>P → Q só é F quando <b>V → F</b></li>
+        <li>P ↔ Q é V quando os valores são iguais</li>
+        <li>P → Q ≡ ¬Q → ¬P ≡ ¬P ∨ Q</li>
+        <li>¬(P ∧ Q) ≡ ¬P ∨ ¬Q · ¬(P ∨ Q) ≡ ¬P ∧ ¬Q</li>
+        <li>✅ MP, MT, SH · ❌ afirmar consequente, negar antecedente</li></ul></div>
+      <div><h4>Tabela verdade</h4><ul>
+        <li>n proposições → 2ⁿ linhas</li>
+        <li>AND: V só se todas V · OR: F só se todas F</li>
+        <li>Tautologia = tudo V · Contradição = tudo F</li>
+        <li>Contingência = misto</li>
+        <li>Precedência: ( ) → ¬ → ∧/∨ → → → ↔</li></ul></div>
+    </div>
+    <p style="font-size:13.4px;color:var(--muted);margin:10px 0 0">Cada unidade abaixo tem explicação, armadilhas que a prova usa e uma <b>ferramenta interativa</b> para testar seus próprios exemplos. Marque "Revisei esta unidade" quando terminar: fica salvo.</p>
+  </div>
+
+  <!-- ---------- U1 ---------- -->
+  <details class="tut" data-unit="1" style="--uc:var(--u1)">
+    <summary><h2>Unidade 1 · Fundamentos da lógica e análise combinatória</h2><span class="done-chip" data-chip="1">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. O vocabulário da lógica (cai em asserções e V/F)</h3>
+      <table>
+        <tr><th>Termo</th><th>Definição que a prova usa</th></tr>
+        <tr><td><b>Proposição</b></td><td>Frase <b>declarativa</b> que pode ser valorada como V ou F, nunca as duas. Pergunta, ordem e exclamação <b>não</b> são proposições. Uma proposição falsa continua sendo proposição.</td></tr>
+        <tr><td><b>Premissa</b></td><td>Proposição usada como base de um raciocínio (as "hipóteses").</td></tr>
+        <tr><td><b>Argumento</b></td><td>Conjunto de premissas + uma conclusão que se pretende apoiada por elas.</td></tr>
+        <tr><td><b>Silogismo</b></td><td>Raciocínio <b>dedutivo</b>: de premissas, deduz-se a conclusão. Ex.: "Todo homem é mortal; Sócrates é homem; logo, Sócrates é mortal."</td></tr>
+        <tr><td><b>Inferência</b></td><td>Processo de chegar a conclusões a partir de premissas. Pode ser <b>dedutiva</b> ou <b>indutiva</b>.</td></tr>
+        <tr><td><b>Falácia</b></td><td>Argumento logicamente incorreto (inferência inválida).</td></tr>
+      </table>
+      <table>
+        <tr><th></th><th>Dedução</th><th>Indução</th></tr>
+        <tr><td>Direção</td><td>geral → particular</td><td>particular → geral</td></tr>
+        <tr><td>Conclusão</td><td><b>necessária</b> (se as premissas são V)</td><td><b>provável</b> (cai com um contraexemplo)</td></tr>
+        <tr><td>Exemplo</td><td>Todo dev sabe lógica; Ana é dev ⇒ Ana sabe lógica</td><td>O sol nasceu todos os dias ⇒ nascerá amanhã</td></tr>
+      </table>
+      <div class="key"><b>Validade ≠ verdade.</b> "Todo gato voa; Mimi é gato; logo Mimi voa" é um argumento <b>válido</b> (a forma está correta) com premissa falsa. A lógica avalia a <b>forma</b>.</div>
+      <p style="font-size:13.6px"><b>Também aparece em provas antigas:</b> a lógica clássica tem 3 princípios: <b>identidade</b> (P é P), <b>não contradição</b> (não pode ser V e F ao mesmo tempo) e <b>terceiro excluído</b> (ou é V ou é F). Os períodos da lógica são Aristotélico, Booleano e Atual. Na álgebra booleana, <code>+</code> é o "ou" e <code>×</code> é o "e", com 1 = V e 0 = F.</p>
+
+      <h3>2. Silogismos com "todo / algum / nenhum" (muito cobrado nas provas antigas)</h3>
+      <p>Desenhe as afirmações como <b>conjuntos</b> (diagrama de Venn) e só aceite a conclusão que vale em <b>todos</b> os desenhos possíveis.</p>
+      <table>
+        <tr><th>Afirmação</th><th>Desenho</th></tr>
+        <tr><td>Todo A é B</td><td>círculo A <b>dentro</b> de B (A ⊆ B)</td></tr>
+        <tr><td>Algum A é B</td><td>A e B têm <b>interseção não vazia</b></td></tr>
+        <tr><td>Nenhum A é B</td><td>A e B <b>separados</b> (A ∩ B = ∅)</td></tr>
+      </table>
+      <p>Exemplo de prova: "Alguns homens altos são bonitos e todos os homens altos são inteligentes." Os altos-bonitos estão dentro de "inteligentes", então <b>algum homem bonito é inteligente</b>. "Todo inteligente é alto" <b>não</b> decorre, porque "todo A é B" não permite inverter.</p>
+
+      <h3>3. Análise combinatória: escolher a fórmula certa</h3>
+<pre>A ordem importa?  (trocar a ordem gera outro resultado?)
+├── NÃO → Combinação         C(n,k) = n! / (k!·(n−k)!)
+└── SIM → Pode repetir elemento?
+          ├── SIM → Arranjo c/ repetição  nᵏ
+          └── NÃO → Arranjo simples       A(n,k) = n! / (n−k)!
+                    └── usa todos (k = n) → Permutação P(n) = n!</pre>
+      <table>
+        <tr><th>Situação</th><th>Ordem importa?</th><th>Conta</th></tr>
+        <tr><td>Pódio (1º, 2º, 3º) entre 8</td><td>Sim: ouro ≠ prata</td><td>A(8,3) = 8·7·6 = 336</td></tr>
+        <tr><td>Comissão de 3 entre 8</td><td>Não: {Ana, Bia, Caio} é o mesmo grupo em qualquer ordem</td><td>C(8,3) = 336 ÷ 3! = 56</td></tr>
+        <tr><td>Senha de 4 dígitos, pode repetir</td><td>Sim + repete</td><td>10⁴ = 10.000</td></tr>
+        <tr><td>Anagramas de BRASIL</td><td>Sim, usa todas</td><td>6! = 720</td></tr>
+      </table>
+      <div class="trap"><b>Armadilhas clássicas:</b> (1) As alternativas costumam trazer <b>o valor do arranjo e o da combinação</b> lado a lado. Antes da conta, escreva "ordem importa? S/N". (2) Dígitos de 0 a 9 são <b>10</b> opções: o zero conta. (3) "Tem cargo, posição ou sequência?" Então é arranjo. "É só um grupo, time ou pote?" Então é combinação.</div>
+      <div class="key"><b>Atalho de conta:</b> A(n,k) é o produto dos k primeiros fatores: A(10,3) = 10·9·8. Para a combinação, divida por k!: C(10,3) = 720 ÷ 6 = 120. Nunca precisa calcular 10! inteiro.</div>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: qual fórmula usar?</h4>
+        <div class="row">
+          <label>n (total) <input type="number" id="cbN" value="10" min="1" max="30"></label>
+          <label>k (escolhidos) <input type="number" id="cbK" value="3" min="0" max="30"></label>
+        </div>
+        <div class="row">
+          <span>A ordem importa?</span>
+          <label><input type="radio" name="cbOrd" value="1" checked> sim</label>
+          <label><input type="radio" name="cbOrd" value="0"> não</label>
+          <span style="margin-left:10px">Pode repetir?</span>
+          <label><input type="radio" name="cbRep" value="1"> sim</label>
+          <label><input type="radio" name="cbRep" value="0" checked> não</label>
+        </div>
+        <div class="out" id="cbOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="1"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u1">Praticar Unidade 1 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U2 ---------- -->
+  <details class="tut" data-unit="2" style="--uc:var(--u2)">
+    <summary><h2>Unidade 2 · Álgebra de conjuntos</h2><span class="done-chip" data-chip="2">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Notação básica</h3>
+      <table>
+        <tr><th>Conceito</th><th>Símbolo / exemplo</th><th>Em código</th></tr>
+        <tr><td>Descrever por lista</td><td>A = {verde, amarelo, azul, branco}</td><td><code>new Set([...])</code></td></tr>
+        <tr><td>Descrever por padrão</td><td>B = {2, 4, 6, ...}</td><td>—</td></tr>
+        <tr><td>Descrever por propriedade</td><td>C = {x | x ∈ ℤ e 4 &lt; x ≤ 9} = {5, 6, 7, 8, 9}</td><td><code>filter</code></td></tr>
+        <tr><td>Pertinência (<b>elemento</b>)</td><td>verde ∈ A · vermelho ∉ A</td><td><code>A.has(x)</code></td></tr>
+        <tr><td>Inclusão (<b>conjunto</b>)</td><td>{verde, azul} ⊆ A · ⊂ = subconjunto próprio</td><td>todo elemento de um está no outro</td></tr>
+        <tr><td>Cardinalidade</td><td>|A| = 4 · |∅| = 0</td><td><code>A.size</code></td></tr>
+        <tr><td>Quantificadores</td><td>∀ "para todo" · ∃ "existe"</td><td><code>every</code> · <code>some</code></td></tr>
+      </table>
+      <div class="trap"><b>∈ × ⊂:</b> ∈ liga <b>elemento</b> a conjunto (2 ∈ {2, 4}). ⊂/⊆ liga <b>conjunto</b> a conjunto ({2} ⊆ {2, 4}). "2 ⊂ A" está errado.</div>
+      <p><b>Conjuntos numéricos:</b> ℕ = {0, 1, 2, ...} no material da disciplina (ℕ* = sem o zero) · ℤ inteiros · ℚ racionais · ℝ reais. ⚠️ Uma questão da plataforma usou ℕ = {1, 2, 3, ...}. Siga o que o enunciado definir.</p>
+
+      <h3>2. Operações</h3>
+      <table>
+        <tr><th>Operação</th><th>Frase-chave</th><th>A = {1,2,3,4}, B = {3,4,5}</th><th>JS / Python</th></tr>
+        <tr><td>A ∪ B</td><td>em <b>pelo menos um</b></td><td>{1,2,3,4,5}</td><td><code>a | b</code></td></tr>
+        <tr><td>A ∩ B</td><td>nos <b>dois</b></td><td>{3,4}</td><td><code>a &amp; b</code></td></tr>
+        <tr><td>A − B</td><td>em A e <b>não</b> em B</td><td>{1,2}</td><td><code>a - b</code></td></tr>
+        <tr><td>A Δ B</td><td>em <b>exatamente um</b> (XOR)</td><td>{1,2,5}</td><td><code>a ^ b</code></td></tr>
+        <tr><td>Complemento de B em relação a A</td><td>A − B, <b>só existe se B ⊆ A</b></td><td>não existe aqui (5 ∉ A)</td><td>—</td></tr>
+        <tr><td>A × B</td><td>todos os <b>pares ordenados</b> (a, b)</td><td>12 pares (4·3)</td><td><code>for</code> dentro de <code>for</code></td></tr>
+      </table>
+      <div class="key">
+        <b>Fórmulas de contagem:</b> nº de subconjuntos de A = <b>2ⁿ</b> (inclui ∅ e o próprio A) · |A × B| = |A| · |B| · A × B ≠ B × A, porque (1, a) ≠ (a, 1) · A − B ≠ B − A.
+      </div>
+
+      <h3>3. Problemas com diagrama de Venn (cai sempre)</h3>
+      <p><b>Método:</b> comece pela <b>interseção</b> e vá para fora. Ou use a fórmula da união:</p>
+<pre>|A ∪ B| = |A| + |B| − |A ∩ B|
+total   = |A ∪ B| + nenhum</pre>
+      <table>
+        <tr><th>Exemplo de prova (jornais)</th><th>Conta</th></tr>
+        <tr><td>230 preferem A, 180 preferem B, 30 os dois, 50 nenhum. Quantos entrevistados?</td><td>230 + 180 − 30 + 50 = <b>430</b></td></tr>
+        <tr><td>60 comandos no total, 20 vão ao banco A, 11 aos dois. Quantos vão ao B?</td><td>60 = 20 + |B| − 11 ⇒ |B| = <b>51</b></td></tr>
+      </table>
+      <div class="trap"><b>Armadilha:</b> somar |A| + |B| sem tirar a interseção conta quem está nos dois <b>duas vezes</b>.</div>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: operações com conjuntos</h4>
+        <div class="row"><label style="flex:1 1 260px;display:flex;gap:6px;align-items:center">A = <input type="text" id="stA" value="1, 2, 3, 4, 5"></label></div>
+        <div class="row"><label style="flex:1 1 260px;display:flex;gap:6px;align-items:center">B = <input type="text" id="stB" value="3, 4, 5, 6, 7"></label></div>
+        <div class="out" id="stOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="2"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u2">Praticar Unidade 2 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U3 ---------- -->
+  <details class="tut" data-unit="3" style="--uc:var(--u3)">
+    <summary><h2>Unidade 3 · Lógica proposicional e inferência</h2><span class="done-chip" data-chip="3">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Proposições simples e compostas</h3>
+      <p>Uma proposição <b>composta</b> junta duas ou mais proposições simples com <b>conectivos</b>.</p>
+      <table>
+        <tr><th>Conectivo</th><th>Símbolo</th><th>Lê-se</th><th>Em código</th><th>Só é F quando… / só é V quando…</th></tr>
+        <tr><td>Negação</td><td class="c">¬ (ou ~)</td><td>não</td><td><code>!p</code></td><td>inverte o valor</td></tr>
+        <tr><td>Conjunção</td><td class="c">∧</td><td>e, mas, no entanto</td><td><code>p &amp;&amp; q</code></td><td><b>V só</b> se as duas forem V</td></tr>
+        <tr><td>Disjunção (inclusiva)</td><td class="c">∨</td><td>ou</td><td><code>p || q</code></td><td><b>F só</b> se as duas forem F</td></tr>
+        <tr><td>Condicional</td><td class="c">→</td><td>se… então</td><td><code>!p || q</code></td><td><b>F só</b> em V → F</td></tr>
+        <tr><td>Bicondicional</td><td class="c">↔</td><td>se e somente se</td><td><code>p === q</code></td><td><b>V</b> quando os dois são iguais</td></tr>
+      </table>
+      <div class="key"><b>"Ou" inclusivo × exclusivo</b> (caiu em AV2; o material das aulas só define o inclusivo): o <b>inclusivo</b> permite as duas coisas ao mesmo tempo ("Rodrigo é estudante ou trabalhador": pode ser os dois). O <b>exclusivo</b> é quando as duas não podem acontecer juntas ("Maria é paulista ou carioca", "Arthur é baixo ou alto"). Em código: <code>p !== q</code> (XOR).</div>
+      <p><b>Tradução (cai sempre):</b> p = "Fortaleza é linda", q = "Curitiba é fria". "Fortaleza é linda <b>e</b> Curitiba <b>não</b> é fria" = <code>p ∧ ¬q</code>. Repare que a negação fica <b>só</b> no q.</p>
+
+      <h3>2. A condicional, pensada como código</h3>
+<pre><code>// "Se detectar senha incorreta, então bloqueia o acesso"   (P → Q)
+if (senhaIncorreta) bloquearAcesso();
+
+// o sistema pode ter OUTROS motivos para bloquear:
+if (tentativas &gt; 5) bloquearAcesso();
+if (contaSuspensa)  bloquearAcesso();</code></pre>
+      <table>
+        <tr><th>O que você observa</th><th>O que dá para concluir</th><th>Nome</th><th></th></tr>
+        <tr><td>senha incorreta (P)</td><td>o acesso foi bloqueado (Q)</td><td>Modus Ponens</td><td class="c">✅</td></tr>
+        <tr><td>acesso <b>não</b> bloqueado (¬Q)</td><td>a senha <b>não</b> estava incorreta (¬P): se estivesse, o <code>if</code> teria bloqueado</td><td>Modus Tollens</td><td class="c">✅</td></tr>
+        <tr><td>acesso bloqueado (Q)</td><td>❌ nada sobre a senha: pode ter sido outro <code>if</code></td><td>falácia: afirmar o consequente</td><td class="c">❌</td></tr>
+        <tr><td>senha correta (¬P)</td><td>❌ nada sobre o bloqueio: outro <code>if</code> pode bloquear</td><td>falácia: negar o antecedente</td><td class="c">❌</td></tr>
+      </table>
+      <div class="key"><b>Variações de P → Q:</b> a <b>contrapositiva</b> ¬Q → ¬P é equivalente (mesma tabela). A <b>recíproca</b> Q → P e a <b>inversa</b> ¬P → ¬Q <b>não</b> são. A negação de P → Q é <b>P ∧ ¬Q</b>.<br>Exemplo de prova: "Se eu estivesse atento, teria solucionado o crime" ≡ "Se eu não solucionei o crime, então não estava atento".</div>
+      <div class="trap"><b>Atenção:</b> P é sempre o que vem depois do "se" e Q o que vem depois do "então", seja qual for a ordem das frases no enunciado. O gabarito da plataforma (exercício U3 · Q1) aceitou "se não tem penas, não é ave" como válido, mas isso é <b>negar o antecedente</b>, uma falácia.</div>
+
+      <h3>3. fbf e precedência</h3>
+      <p>Uma <b>fórmula bem-formulada (fbf)</b> segue a sintaxe: sempre há um conectivo entre duas proposições. O ¬ pode vir junto de outro conectivo. Exemplos: <code>(A → B) ∨ C</code> é fbf. <code>A ∧ ∨ B</code> e <code>A B →</code> não são.</p>
+      <p><b>Ordem de avaliação</b> (Unidade 3, Aula 2): <b>( )</b> mais internos → <b>¬</b> → <b>∧ e ∨</b> (mesmo nível, da esquerda para a direita) → <b>→</b> → <b>↔</b>. Assim, <code>A → B ∧ ¬C</code> é lido como <code>A → (B ∧ (¬C))</code>.</p>
+
+      <h3>4. Regras de dedução (Quadros 1 e 2 da Aula 4)</h3>
+      <table>
+        <tr><th>Equivalência (vale nos dois sentidos)</th><th>Nome</th></tr>
+        <tr><td>P ∨ Q ⇔ Q ∨ P · P ∧ Q ⇔ Q ∧ P</td><td>Comutatividade</td></tr>
+        <tr><td>(P ∨ Q) ∨ R ⇔ P ∨ (Q ∨ R)</td><td>Associatividade</td></tr>
+        <tr><td>¬(P ∨ Q) ⇔ ¬P ∧ ¬Q · ¬(P ∧ Q) ⇔ ¬P ∨ ¬Q</td><td>De Morgan</td></tr>
+        <tr><td>P → Q ⇔ ¬P ∨ Q</td><td>Condicional (cond)</td></tr>
+        <tr><td>P ⇔ ¬(¬P)</td><td>Dupla negação (dn)</td></tr>
+        <tr><td>P ↔ Q ⇔ (P → Q) ∧ (Q → P)</td><td>Bicondicional</td></tr>
+        <tr><td>P ∧ (Q ∨ R) ⇔ (P ∧ Q) ∨ (P ∧ R)</td><td>Distributividade</td></tr>
+      </table>
+      <table>
+        <tr><th>Inferência: de…</th><th>…deduz-se (só nesse sentido)</th><th>Nome</th></tr>
+        <tr><td>P → Q, P</td><td>Q</td><td>Modus Ponens (MP)</td></tr>
+        <tr><td>P → Q, ¬Q</td><td>¬P</td><td>Modus Tollens (MT)</td></tr>
+        <tr><td>P → Q, Q → R</td><td>P → R</td><td>Silogismo Hipotético (SH)</td></tr>
+        <tr><td>P, Q</td><td>P ∧ Q</td><td>Conjunção</td></tr>
+        <tr><td>P ∧ Q</td><td>P, Q</td><td>Simplificação</td></tr>
+        <tr><td>P</td><td>P ∨ Q</td><td>Adição</td></tr>
+      </table>
+      <p><b>Exemplo encadeado (caiu na prova presencial):</b> "Se Leandro estudar lógica, não irá ao jogo. Se não for ao jogo, o time ficará desfalcado. O time <b>não</b> ficou desfalcado." Por MT: Leandro foi ao jogo. Por MT de novo: <b>Leandro não estudou lógica</b>.</p>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: a conclusão é válida?</h4>
+        <div class="row"><label style="flex:1 1 260px;display:flex;gap:6px;align-items:center">Se <input type="text" id="ifP" value="a senha está incorreta"></label></div>
+        <div class="row"><label style="flex:1 1 260px;display:flex;gap:6px;align-items:center">então <input type="text" id="ifQ" value="o acesso é bloqueado"></label></div>
+        <div class="row"><span>Você observa:</span>
+          <select id="ifObs">
+            <option value="P">P aconteceu</option>
+            <option value="nQ">Q NÃO aconteceu</option>
+            <option value="Q">Q aconteceu</option>
+            <option value="nP">P NÃO aconteceu</option>
+          </select>
+        </div>
+        <div class="out" id="ifOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="3"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u3">Praticar Unidade 3 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U4 ---------- -->
+  <details class="tut" data-unit="4" style="--uc:var(--u4)">
+    <summary><h2>Unidade 4 · Tabela verdade</h2><span class="done-chip" data-chip="4">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Como montar</h3>
+      <table>
+        <tr><th>Passo</th><th>O que fazer</th></tr>
+        <tr><td>1</td><td>Conte as proposições distintas: <b>n → 2ⁿ linhas</b> (2 → 4, 3 → 8, 4 → 16).</td></tr>
+        <tr><td>2</td><td>Na 1ª coluna, metade V e metade F. Na 2ª, alterne de ¼ em ¼. Na última, alterne V, F, V, F…</td></tr>
+        <tr><td>3</td><td>Crie uma <b>coluna intermediária</b> para cada subexpressão, seguindo a precedência (¬ antes de ∧/∨, antes de → e ↔).</td></tr>
+        <tr><td>4</td><td>A última coluna é o resultado. Classifique.</td></tr>
+      </table>
+      <table>
+        <tr><th class="c">P</th><th class="c">Q</th><th class="c">¬P</th><th class="c">P ∧ Q</th><th class="c">P ∨ Q</th><th class="c">P → Q</th><th class="c">P ↔ Q</th></tr>
+        <tr><td class="c">V</td><td class="c">V</td><td class="c">F</td><td class="c">V</td><td class="c">V</td><td class="c">V</td><td class="c">V</td></tr>
+        <tr><td class="c">V</td><td class="c">F</td><td class="c">F</td><td class="c">F</td><td class="c">V</td><td class="c"><b>F</b></td><td class="c">F</td></tr>
+        <tr><td class="c">F</td><td class="c">V</td><td class="c">V</td><td class="c">F</td><td class="c">V</td><td class="c">V</td><td class="c">F</td></tr>
+        <tr><td class="c">F</td><td class="c">F</td><td class="c">V</td><td class="c">F</td><td class="c"><b>F</b></td><td class="c">V</td><td class="c">V</td></tr>
+      </table>
+      <h3>2. Classificação</h3>
+      <table>
+        <tr><th>Tipo</th><th>Última coluna</th><th>Exemplo</th></tr>
+        <tr><td><b>Tautologia</b></td><td>tudo V</td><td>P ∨ ¬P · (P → Q) ↔ (¬Q → ¬P)</td></tr>
+        <tr><td><b>Contradição</b></td><td>tudo F</td><td>P ∧ ¬P</td></tr>
+        <tr><td><b>Contingência</b></td><td>V e F misturados</td><td>P → Q · (P ∨ Q) ∧ (¬Q ∨ R)</td></tr>
+      </table>
+      <div class="key"><b>Equivalência:</b> duas fórmulas são equivalentes quando têm <b>a mesma coluna final</b> em todas as linhas (ou quando o ↔ entre elas é tautologia). Para provar que <b>não</b> são, basta uma linha diferente.</div>
+      <div class="key"><b>Atalhos de prova:</b> num AND, procure um F (ele derruba tudo). Num OR, procure um V (ele garante tudo). Numa →, só calcule se o antecedente for V.</div>
+      <div class="trap"><b>Pegadinhas:</b> "p → q tem a mesma tabela que q → p" é <b>falso</b>. "Tabela verdade só serve para proposições simples" é <b>falso</b>. Em <code>¬A ∧ B</code>, o ¬ atinge <b>só o A</b>. Em <code>¬(A ∧ B)</code>, atinge tudo.</div>
+      <p><b>Aplicação (Aula 4):</b> todo <code>if</code> com <code>and/or/not</code> é uma fbf. Filtros de busca ("apartamento E (1 OU 2 quartos)") e regras de negócio ("se não for Brasília e for gasolina, então a bandeira é Petrobras" = <code>(¬A ∧ B) → C</code>) são avaliados linha a linha.</p>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: gerador de tabela verdade</h4>
+        <div class="row"><input type="text" id="ttExpr" value="(P → Q) ↔ (¬Q → ¬P)" aria-label="Expressão lógica"><button class="btn small" id="ttGo">Gerar</button></div>
+        <div class="row presets" id="ttPresets"></div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Aceita letras (P, Q, R…) e os símbolos ¬ ∧ ∨ → ↔, ou em texto: <code>~ ! not</code> · <code>&amp; and</code> · <code>| or</code> · <code>-&gt;</code> · <code>&lt;-&gt;</code>. Precedência: ¬ → ∧/∨ (mesmo nível, da esquerda para a direita) → → → ↔.</div>
+        <div class="out" id="ttOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="4"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u4">Praticar Unidade 4 →</button>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ======================= SIMULADO ======================= -->
+<section class="tab-panel" id="tab-simulado">
+  <div class="notice">
+    Suas respostas são <b>salvas automaticamente</b> neste navegador. Pode fechar a aba e voltar depois.
+    <ul>
+      <li><b>Correção imediata:</b> cada questão é corrigida assim que você responde (bom para estudar). <b>Modo prova:</b> tudo é corrigido só no final (bom para medir sua nota).</li>
+      <li><b>Parte 3</b> traz questões de <b>provas anteriores reais</b> da disciplina (AV2, prova presencial e gabarito de 2023, coletadas no Studocu), com o link da fonte. Quando o gabarito original estava errado, vale a resposta logicamente correta (selo vermelho).</li>
+      <li><b>Parte 4</b> traz questões novas no formato da prova, cobrindo o que as anteriores não cobriram.</li>
+    </ul>
+  </div>
+
+  <div class="card toolbar">
+    <div class="grp"><span>Modo:</span>
+      <div class="seg" id="modeSeg"><button data-mode="instant">Correção imediata</button><button data-mode="exam">Modo prova</button></div>
+    </div>
+    <div class="grp"><label for="filterSel">Mostrar:</label>
+      <select id="filterSel">
+        <option value="all">Todas as questões</option>
+        <option value="u1">Unidade 1: lógica e combinatória</option>
+        <option value="u2">Unidade 2: conjuntos</option>
+        <option value="u3">Unidade 3: lógica proposicional</option>
+        <option value="u4">Unidade 4: tabela verdade</option>
+        <option value="p1">Parte 1: exercícios das unidades</option>
+        <option value="p2">Parte 2: fixação</option>
+        <option value="p3">Parte 3: provas anteriores (reais)</option>
+        <option value="p4">Parte 4: novas no estilo da prova</option>
+        <option value="todo">Só as não respondidas</option>
+        <option value="wrong">Só as que errei</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div id="progressFill"></div></div>
+    <div class="progress-label"><span id="liveScore"></span><span id="progressText">0 respondidas</span></div>
+  </div>
+
+  <div id="quiz"></div>
+  <div class="empty" id="emptyMsg" style="display:none">Nenhuma questão neste filtro. 🎉</div>
+
+  <div class="actions">
+    <button class="big-btn" id="submitBtn">Finalizar e ver resultado</button>
+  </div>
+
+  <div id="results">
+    <div class="card score-hero">
+      <div class="big" id="scoreBig">0%</div>
+      <div class="sub" id="scoreSub">0 corretas</div>
+      <div class="proj" id="scoreProj"></div>
+      <div class="bars" id="unitBars"></div>
+    </div>
+    <div class="card" id="tipsCard" style="display:none"><b>Sugestões de estudo (com base nos seus erros)</b><div class="tips" id="tipsList"></div></div>
+    <div class="card" id="reviewCard" style="display:none"><b>Questões para revisar</b><div class="review-list" id="reviewList" style="margin-top:8px"></div></div>
+    <div class="card" id="historyCard" style="display:none"><b>Suas tentativas</b><table class="history" id="historyTable" style="margin-top:8px"></table></div>
+    <div class="actions" style="position:static">
+      <button class="big-btn ghost" id="retryWrongBtn">Refazer só as que errei</button>
+      <button class="big-btn" id="retryBtn">Refazer tudo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= NOTA ======================= -->
+<section class="tab-panel" id="tab-nota">
+  <div class="card">
+    <b>🎯 Quanto preciso tirar na prova?</b>
+    <p style="font-size:13.6px;color:var(--muted);margin:6px 0 14px">Preencha com os seus números. A calculadora mostra quantos pontos e quantas questões você precisa acertar para passar. Os valores ficam salvos.</p>
+    <div class="calc-grid">
+      <label>Pontos que você já tem<input type="number" id="cAtual" step="0.1" min="0"></label>
+      <label>Quanto vale a prova<input type="number" id="cProva" step="0.1" min="0"></label>
+      <label>Nota mínima para aprovação<input type="number" id="cMin" step="0.1" min="0"></label>
+      <label>Critério
+        <select id="cCrit"><option value="gte">nota ≥ mínima</option><option value="gt">nota &gt; mínima (estritamente maior)</option></select>
+      </label>
+      <label>Nº de questões da prova<input type="number" id="cNq" step="1" min="1" max="100"></label>
+    </div>
+    <div id="calcVerdict"></div>
+    <div id="calcProj"></div>
+  </div>
+  <div class="card">
+    <b>Nota final por número de acertos</b>
+    <div style="overflow-x:auto;margin-top:8px"><table class="gtable" id="calcTable"></table></div>
+    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">A calculadora supõe que todas as questões valem o mesmo (valor da prova ÷ nº de questões). Confira no AVA as regras da sua disciplina: nota mínima, se é "≥" ou "&gt;", e se existe prova substitutiva ou recuperação.</p>
+  </div>
+</section>
+
+<footer>Gerado a partir das 20 aulas, dos exercícios das unidades e de provas anteriores da disciplina · bons estudos!</footer>
+</div>
+
+<script>
+/* ---------- Helper SVGs (inline strings) ---------- */
+const svg = {
+  vennNone: `<svg viewBox="0 0 320 190" width="320">
+    <rect x="8" y="8" width="304" height="174" rx="10" fill="none" stroke="#94a0bd" stroke-width="1.5"/>
+    <text x="18" y="28" font-size="12" fill="#5b6478">Turma (40)</text>
+    <circle cx="125" cy="100" r="62" fill="#3454d1" fill-opacity=".15" stroke="#3454d1" stroke-width="2"/>
+    <circle cx="200" cy="100" r="62" fill="#1a8f5e" fill-opacity=".15" stroke="#1a8f5e" stroke-width="2"/>
+    <text x="85" y="58" font-size="12" fill="#233a9e">Python (25)</text>
+    <text x="205" y="58" font-size="12" fill="#1a8f5e">C (20)</text>
+    <text x="155" y="105" font-size="14" fill="#1e2433">8</text>
+    <text x="280" y="170" font-size="14" fill="#c93838">?</text>
+  </svg>`,
+  vennX: `<svg viewBox="0 0 320 190" width="320">
+    <rect x="8" y="8" width="304" height="174" rx="10" fill="none" stroke="#94a0bd" stroke-width="1.5"/>
+    <text x="18" y="28" font-size="12" fill="#5b6478">Devs (60)</text>
+    <circle cx="125" cy="100" r="62" fill="#3454d1" fill-opacity=".15" stroke="#3454d1" stroke-width="2"/>
+    <circle cx="200" cy="100" r="62" fill="#8a3ffc" fill-opacity=".15" stroke="#8a3ffc" stroke-width="2"/>
+    <text x="70" y="58" font-size="12" fill="#233a9e">VS Code (35)</text>
+    <text x="210" y="58" font-size="12" fill="#5b2bb5">Vim (30)</text>
+    <text x="80" y="105" font-size="12" fill="#1e2433">35 − X</text>
+    <text x="155" y="105" font-size="14" font-weight="700" fill="#c93838">X</text>
+    <text x="205" y="105" font-size="12" fill="#1e2433">30 − X</text>
+    <text x="270" y="170" font-size="12" fill="#1e2433">10</text>
+  </svg>`
+};
+
+const truthCond = `<table><tr><th>P</th><th>Q</th><th>P → Q</th></tr>
+  <tr><td>V</td><td>V</td><td>V</td></tr><tr><td>V</td><td>F</td><td><b>F</b></td></tr>
+  <tr><td>F</td><td>V</td><td>V</td></tr><tr><td>F</td><td>F</td><td>V</td></tr></table>`;
+
+const assertOpts = [
+  "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+  "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+  "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+  "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+  "As asserções I e II são proposições falsas."
+];
+
+/* ---------- Question bank ----------
+   part: 1 = exercício real, 2 = fixação
+   correct: índice (ou array de índices aceitos)
+   rebuilt: alternativas recriadas (a plataforma só registrou a resposta marcada)
+   diverge: o gabarito da plataforma estava errado/incompleto */
+const questions = [
+// ================= PARTE 1 — EXERCÍCIOS REAIS =================
+// ----- Unidade 1 (exercicio1.md) -----
+{part:1, unit:1, ref:"Exercício U1 · Q1 — Arranjo simples", rebuilt:true,
+ statement:`Uma livraria tem 6 livros diferentes em uma prateleira. Uma pessoa deseja comprar 3 desses livros para levar em uma viagem. Quantos arranjos diferentes de 3 livros ela pode escolher?`,
+ options:["720","120","20","216","18"],
+ correct:1,
+ hint:`O enunciado fala em <b>arranjos</b>: a ordem importa e não há repetição (é o mesmo livro físico). Use A(n, k) = n! / (n − k)!.`,
+ explain:`A(6, 3) = 6! / 3! = 6 · 5 · 4 = <b>120</b>. Os distratores são os erros típicos: 720 = 6! (permutou os 6), 20 = C(6, 3) (ignorou a ordem), 216 = 6³ (arranjo <i>com</i> repetição), 18 = 6 · 3.`,
+ fix:`Atalho: A(n, k) é o produto dos k primeiros fatores de n! — 6 · 5 · 4, sem precisar calcular 6! inteiro.`},
+
+{part:1, unit:1, ref:"Exercício U1 · Q2 — Argumento e validade", rebuilt:true,
+ statement:`Considere o argumento:<blockquote>Premissa 1: Todos os seres humanos são mortais.<br>Premissa 2: Sócrates é um ser humano.<br>Conclusão: Sócrates é mortal.</blockquote>Qual das alternativas representa uma afirmação correta sobre o argumento?`,
+ options:["O argumento é válido, e as premissas são verdadeiras.","O argumento é inválido, pois a conclusão não decorre das premissas.","O argumento é válido, mas as premissas são falsas.","O argumento é inválido, embora as premissas sejam verdadeiras.","É uma falácia, pois parte de um caso particular para uma conclusão geral."],
+ correct:0,
+ hint:`Separe duas perguntas: (1) a conclusão <i>decorre</i> das premissas? (2) as premissas são verdadeiras no mundo real?`,
+ explain:`É o silogismo clássico de Aristóteles: a conclusão decorre necessariamente das premissas (<b>válido</b>) e as duas premissas são verdadeiras. A última alternativa descreve o raciocínio <b>indutivo</b> — aqui é o contrário: parte do geral ("todos") para o particular (Sócrates), raciocínio <b>dedutivo</b>.`,
+ fix:`Validade é sobre a <b>forma</b> do argumento, não sobre a verdade das premissas. "Todo gato voa; Mimi é gato; logo Mimi voa" também é <i>válido</i> — só tem premissa falsa.`},
+
+{part:1, unit:1, ref:"Exercício U1 · Q3 — Arranjo simples", rebuilt:true,
+ statement:`Uma pessoa deseja organizar 5 livros em uma prateleira. Ela tem 7 livros diferentes para escolher. Quantos arranjos diferentes dos 5 livros ela pode criar, se todos os livros na prateleira devem ser diferentes?`,
+ options:["21","5040","16807","2520","120"],
+ correct:3,
+ hint:`"Organizar na prateleira" → a posição de cada livro importa. n = 7, k = 5.`,
+ explain:`A(7, 5) = 7! / 2! = 7 · 6 · 5 · 4 · 3 = <b>2520</b>. Distratores: 21 = C(7, 5) (sem ordem), 5040 = 7! (usou os 7 livros), 16807 = 7⁵ (com repetição), 120 = 5!.`},
+
+{part:1, unit:1, ref:"Exercício U1 · Q4 — Combinação", rebuilt:true,
+ statement:`Quantas combinações diferentes de 3 cores podem ser escolhidas de um conjunto de 6 cores distintas?`,
+ options:["120","216","18","720","20"],
+ correct:4,
+ hint:`Escolher {azul, verde, preto} é diferente de escolher {preto, azul, verde}? Se não, a ordem não importa.`,
+ explain:`C(6, 3) = 6! / (3! · 3!) = (6 · 5 · 4) / (3 · 2 · 1) = <b>20</b>. Repare: 120 = A(6, 3); dividir por 3! = 6 "desconta" as ordens repetidas de cada trio.`,
+ fix:`C(n, k) = A(n, k) / k!. Se você já sabe o arranjo, a combinação é só dividir pelas k! formas de ordenar o grupo escolhido.`},
+
+{part:1, unit:1, ref:"Exercício U1 · Q5 — Premissas e conclusão", rebuilt:true,
+ statement:`Considere as premissas:<blockquote>1. Se está chovendo, então a rua estará molhada.<br>2. A rua está molhada.<br>3. Se o sol está brilhando, então a rua está seca.<br>4. A rua não está seca.</blockquote>Com base nessas premissas, selecione a alternativa que indica o que podemos concluir:`,
+ options:["Está chovendo.","O sol está brilhando.","Está chovendo e o sol não está brilhando.","Não podemos concluir nada sobre o clima.","Não está chovendo."],
+ correct:3,
+ hint:`Para cada par de premissas, pergunte: a premissa "confirma" o <i>antecedente</i> ou o <i>consequente</i> da condicional? Só uma dessas formas leva a uma conclusão segura.`,
+ explain:`Premissas 1 + 2: "chuva → molhada" e "molhada" — afirmar o <b>consequente</b> não prova a chuva (a rua pode estar molhada por outro motivo). Premissas 3 + 4: "sol → seca" e "não seca" — por Modus Tollens, conclui-se que o sol não está brilhando. Sobre chover ou não, nada se conclui. O gabarito da plataforma é <b>"Não podemos concluir nada sobre o clima"</b> (referindo-se à chuva).`,
+ note:`Rigorosamente, as premissas 3 e 4 permitem concluir "o sol não está brilhando" — se essa alternativa aparecer na prova, ela seria a mais correta. As alternativas desta questão foram recriadas sem ela para manter a resposta da plataforma.`},
+
+// ----- Unidade 2 (exercicio2.md) -----
+{part:1, unit:2, ref:"Exercício U2 · Q1 — União", rebuilt:true,
+ statement:`Considere: A = {2, 4, 6, 8, 10}, B = {3, 6, 9, 12, 15}, C = {5, 10, 15, 20, 25}, D = {4, 8, 12, 16, 20}, E = {1, 3, 5, 7, 9}. Qual conjunto representa A ∪ B ∪ C ∪ D ∪ E?`,
+ options:["{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 20, 25}","{2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 20, 25}","{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 20, 25}","{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 20}","{3, 5, 9, 10, 15, 20}"],
+ correct:2,
+ hint:`Vá de 1 até 25 perguntando "este número aparece em <i>algum</i> conjunto?". Cuidado com quem não aparece em nenhum (11, por exemplo).`,
+ explain:`União = tudo que aparece em pelo menos um conjunto, sem repetir: <b>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 20, 25}</b> (15 elementos). A primeira alternativa inclui o 11, que não está em nenhum; a segunda esquece 1 e 7 (de E); a quarta esquece o 25.`},
+
+{part:1, unit:2, ref:"Exercício U2 · Q2 — Interseção", rebuilt:true,
+ statement:`Seja U o conjunto dos inteiros entre −20 e 20, e:<br>A = {x | x é múltiplo de 3 entre −15 e 15}<br>B = {x | x é número par entre −10 e 10}<br>C = {x | x é número primo entre −20 e 20}<br>Qual é A ∩ B ∩ C?`,
+ options:["{−6, 0, 6}","{3}","{2, 3}","{−3, 3}","∅ (conjunto vazio)"],
+ correct:4,
+ hint:`Comece pela interseção mais fácil (A ∩ B: pares que são múltiplos de 3) e só depois pergunte: algum desses é primo?`,
+ explain:`A ∩ B = {−6, 0, 6}. Nenhum deles é primo (primos são naturais maiores que 1, e 6 = 2 · 3). Logo A ∩ B ∩ C = <b>∅</b>.`,
+ note:`O comentário original da plataforma tem erros (listou primos negativos e disse que 5 e 7 são múltiplos de 3) — a resposta ∅ está certa, mas pelo raciocínio acima.`},
+
+{part:1, unit:2, ref:"Exercício U2 · Q3 — Conjunto dos naturais", rebuilt:true,
+ statement:`O conjunto dos números naturais, denotado por ℕ, é um conjunto numérico fundamental na matemática. Qual das alternativas representa o conjunto dos números naturais (como definido nesta questão)?`,
+ options:["{..., −2, −1, 0, 1, 2, ...}","{1, 2, 3, 4, 5, ...}","{..., −3, −2, −1}","{1/2, 1, 3/2, 2, ...}","{1, 2, 3, 4, 5}"],
+ correct:1,
+ hint:`Naturais servem para contar. Tem negativo? Tem fração? Termina em algum número?`,
+ explain:`A questão usa ℕ = <b>{1, 2, 3, 4, 5, ...}</b>. A primeira alternativa é ℤ (inteiros); a quarta tem frações (ℚ); a última é finita — ℕ é infinito.`,
+ note:`Atenção: o material da Unidade 2 (Aula 2) usa ℕ = {0, 1, 2, 3, ...} e escreve ℕ* = {1, 2, 3, ...}. Se as duas opções aparecerem na prova, use a convenção que o enunciado definir; sem definição, prefira a do material (com o 0).`},
+
+{part:1, unit:2, ref:"Exercício U2 · Q4 — Operações combinadas", rebuilt:true, diverge:true,
+ statement:`Considere A = {1, 2, 3, 4, 5}, B = {3, 4, 5, 6, 7}, C = {5, 6, 7, 8, 9} e D = {7, 8, 9, 10, 11}. Calcule:<br><br><code>A ∪ ((B ∩ C) ∩ (D Δ B))</code>`,
+ options:["{3, 4, 5, 6, 7, 8, 9, 10, 11}","{5, 6}","{1, 2, 3, 4, 5, 6, 7}","{1, 2, 3, 4, 5, 6}","{1, 2, 3, 4, 8, 9, 10, 11}"],
+ correct:3,
+ hint:`Resolva de dentro para fora, como numa expressão com parênteses: (1) B ∩ C; (2) D Δ B; (3) interseção dos dois; (4) só no fim, a união com A. E lembre: qualquer coisa unida com A contém 1 e 2.`,
+ explain:`<table><tr><th>Passo</th><th>Operação</th><th>Resultado</th></tr>
+ <tr><td>1</td><td>B ∩ C</td><td>{5, 6, 7}</td></tr>
+ <tr><td>2</td><td>D Δ B (o 7 está nos dois → sai)</td><td>{3, 4, 5, 6, 8, 9, 10, 11}</td></tr>
+ <tr><td>3</td><td>{5, 6, 7} ∩ {3, 4, 5, 6, 8, ...}</td><td>{5, 6}</td></tr>
+ <tr><td>4</td><td>A ∪ {5, 6}</td><td><b>{1, 2, 3, 4, 5, 6}</b></td></tr></table>`,
+ note:`O gabarito da plataforma marcou {3, 4, 5, 6, 7, 8, 9, 10, 11} — está <b>errado</b> (nem contém o 1 e o 2 de A). O próprio comentário da plataforma chega em {1, 2, 3, 4, 5, 6}.`},
+
+{part:1, unit:2, ref:"Exercício U2 · Q5 — Interseção e união", rebuilt:true,
+ statement:`Considere A = {1, 2, 3, 4, 5}, B = {3, 4, 5, 6, 7} e C = {5, 6, 7, 8, 9}. Qual é o conjunto resultante da interseção de A e B, seguida pela união com C?`,
+ options:["{3, 4, 5}","{3, 4, 5, 6, 7, 8, 9}","{5}","{1, 2, 3, 4, 5, 6, 7, 8, 9}","{1, 2, 3, 4, 5, 6, 7}"],
+ correct:1,
+ hint:`Primeiro A ∩ B (só o que está nos dois), depois una o resultado com C.`,
+ explain:`A ∩ B = {3, 4, 5}. (A ∩ B) ∪ C = {3, 4, 5} ∪ {5, 6, 7, 8, 9} = <b>{3, 4, 5, 6, 7, 8, 9}</b>. A alternativa {5} seria A ∩ B ∩ C; {1, ..., 9} seria A ∪ B ∪ C.`},
+
+// ----- Unidade 3 (exercicio3.md) -----
+{part:1, unit:3, ref:"Exercício U3 · Q1 — Asserção-razão (condicional)", rebuilt:true, diverge:true,
+ statement:`Premissas: "Se um animal tem penas, então é uma ave." / "Se um objeto é um quadrado, então tem quatro lados."<br><br>Avalie as asserções e a relação proposta entre elas:<blockquote>I. Se um animal não tem penas, então não é uma ave.<br><b>PORQUE</b><br>II. A negação de uma proposição condicional é uma proposição válida em lógica matemática.</blockquote>`,
+ options:assertOpts,
+ correct:[4,3],
+ hint:`Chame P = "tem penas", Q = "é ave". A premissa é P → Q. A asserção I é ¬P → ¬Q. Existe algum animal que <i>não tem penas mas é ave</i> sem contradizer a premissa? Monte a tabela das duas fórmulas e compare.`,
+ explain:`A asserção I é a <b>inversa</b> (¬P → ¬Q), que <b>não</b> é equivalente a P → Q — é a falácia da <b>negação do antecedente</b>. Na linha P = F, Q = V, a premissa vale V e a asserção I vale F. Logo <b>I é falsa</b>. A asserção II chama ¬P → ¬Q de "negação" da condicional, mas a negação de P → Q é <b>P ∧ ¬Q</b>; lida dessa forma, II também é falsa. (Se você leu II literalmente — "a negação de uma condicional é uma fórmula válida" — ela pode ser vista como verdadeira; por isso as duas alternativas com <b>I falsa</b> foram aceitas.)`,
+ note:`A plataforma deu como correta "I e II verdadeiras, e II justifica I" — está <b>errado</b>. O que se conclui de P → Q é a <b>contrapositiva</b> ¬Q → ¬P: "se não é ave, então não tem penas".`,
+ fix:`Quatro formas de uma condicional: <b>P → Q</b> (original) ≡ <b>¬Q → ¬P</b> (contrapositiva). Já <b>Q → P</b> (recíproca) e <b>¬P → ¬Q</b> (inversa) são equivalentes entre si, mas <b>não</b> à original.`},
+
+{part:1, unit:3, ref:"Exercício U3 · Q2 — Conclusão válida (condicional)", rebuilt:true, diverge:true,
+ statement:`Dado: "Se chover, então o jogo de futebol será adiado." Qual das alternativas é uma conclusão válida baseada nessa afirmação?`,
+ options:["Está chovendo, portanto o jogo de futebol foi adiado.","Não está chovendo, portanto o jogo de futebol foi adiado.","O jogo de futebol foi adiado, portanto está chovendo.","O jogo de futebol não foi adiado, portanto não está chovendo.","Não está chovendo, portanto o jogo de futebol não foi adiado."],
+ correct:[3,0],
+ hint:`Só duas formas de usar P → Q são válidas: afirmar o antecedente (Modus Ponens) ou negar o consequente (Modus Tollens). Identifique qual alternativa faz qual coisa.`,
+ explain:`<table><tr><th>Alternativa</th><th>Regra</th><th>Válida?</th></tr>
+ <tr><td>A — chove → adiado</td><td>Modus Ponens</td><td>✅</td></tr>
+ <tr><td>B — não chove → adiado</td><td>nenhuma</td><td>❌</td></tr>
+ <tr><td>C — adiado → chove</td><td>afirmação do consequente</td><td>❌</td></tr>
+ <tr><td>D — não adiado → não chove</td><td>Modus Tollens</td><td>✅</td></tr>
+ <tr><td>E — não chove → não adiado</td><td>negação do antecedente</td><td>❌</td></tr></table>
+ O gabarito da plataforma é a <b>D</b> (Modus Tollens), mas a <b>A</b> (Modus Ponens) também é logicamente válida — por isso as duas foram aceitas aqui.`,
+ note:`O enunciado original chama isso de "silogismo hipotético", mas o nome está errado: silogismo hipotético encadeia duas condicionais (P → Q, Q → R ⊢ P → R). Uma das alternativas originais aparecia duplicada; foi trocada pela negação do antecedente (E).`},
+
+{part:1, unit:3, ref:"Exercício U3 · Q4 — Equivalência (distributividade)", rebuilt:true,
+ statement:`Usando as regras de equivalência de dedução, determine qual das alternativas é logicamente equivalente à expressão <code>(P ∧ Q) ∨ (P ∧ R)</code>.`,
+ options:["(P ∨ Q) ∧ (P ∨ R)","P ∧ (Q ∨ R)","P ∧ (Q ∧ R)","P ∨ (Q ∧ R)","(P ∧ Q) ∧ (P ∧ R)"],
+ correct:1,
+ hint:`O P aparece nos dois termos, ligado por ∧. Dá para "colocar o P em evidência", como em álgebra: ab + ac = a(b + c).`,
+ explain:`Pela distributividade, A ∧ (B ∨ C) ≡ (A ∧ B) ∨ (A ∧ C). Lendo da direita para a esquerda: (P ∧ Q) ∨ (P ∧ R) ≡ <b>P ∧ (Q ∨ R)</b>. Teste rápido para eliminar a alternativa D: com P = F, Q = V, R = V, a original vale F, mas P ∨ (Q ∧ R) vale V.`,
+ fix:`Para provar que duas fórmulas <b>não</b> são equivalentes basta <b>uma</b> linha da tabela em que elas diferem — não precisa montar a tabela inteira.`},
+
+{part:1, unit:3, ref:"Exercício U3 · Q5 — Modus Tollens", rebuilt:true,
+ statement:`Dada a afirmação: "Se João passar no exame, então ele receberá uma bolsa de estudos." Qual das alternativas é verdadeira com base no <b>Modus Tollens</b>?`,
+ options:["João passou no exame, portanto recebeu uma bolsa de estudos.","João recebeu uma bolsa de estudos, portanto passou no exame.","João não passou no exame, portanto não recebeu uma bolsa de estudos.","João passou no exame, portanto não recebeu uma bolsa de estudos.","João não recebeu uma bolsa de estudos, portanto não passou no exame."],
+ correct:4,
+ hint:`Modus Tollens: P → Q, ¬Q ⊢ ¬P. Procure a alternativa que <i>começa negando o consequente</i>.`,
+ explain:`P = passa no exame, Q = recebe bolsa. MT: de P → Q e ¬Q, conclui-se ¬P → "<b>João não recebeu a bolsa, portanto não passou</b>". A alternativa A é Modus Ponens (válida, mas não é MT); B afirma o consequente; C nega o antecedente (ambas falácias); D contradiz a premissa.`},
+
+// ----- Unidade 4 (exercicio4.md) -----
+{part:1, unit:4, ref:"Exercício U4 · Q1 — Conjunção (AND)",
+ statement:`Você decide se vai assistir a um filme no cinema com base em duas condições: a classificação etária permitir (<b>Classificação</b>) e seus amigos quererem ir (<b>Amigos</b>). A decisão é representada por <code>Classificação AND Amigos</code>. Construa a tabela verdade e determine em quais casos você assistirá ao filme.`,
+ options:["Você assistirá ao filme no cinema apenas se a classificação etária permitir, independentemente de seus amigos quererem ir.","Você assistirá ao filme no cinema apenas se seus amigos quiserem ir, independentemente da classificação etária permitir.","Você assistirá ao filme no cinema apenas se a classificação etária não permitir e seus amigos não quiserem ir.","Você não assistirá ao filme no cinema a menos que a classificação etária permitir e seus amigos queiram ir.","Você assistirá ao filme no cinema se a classificação etária permitir e seus amigos quiserem ir."],
+ correct:[4,3],
+ hint:`Monte as 4 linhas (VV, VF, FV, FF). Em quantas o AND dá V? Depois procure a alternativa que descreve exatamente isso.`,
+ explain:`<table><tr><th>Classificação</th><th>Amigos</th><th>AND</th></tr><tr><td>V</td><td>V</td><td><b>V</b></td></tr><tr><td>V</td><td>F</td><td>F</td></tr><tr><td>F</td><td>V</td><td>F</td></tr><tr><td>F</td><td>F</td><td>F</td></tr></table>
+ Só assiste quando as <b>duas</b> condições são verdadeiras → alternativa <b>E</b>. A alternativa D diz a mesma coisa pelo lado contrário ("não assiste, a menos que as duas sejam V") — também foi aceita. A e B ignoram uma das condições ("independentemente") — isso seria descartar uma variável.`,
+ note:`Esta questão ficou sem resposta na plataforma. A resposta esperada é a E (mesmo padrão das questões 3 e 4 desta unidade).`},
+
+{part:1, unit:4, ref:"Exercício U4 · Q2 — Avaliar expressão (NOT, AND, OR)",
+ statement:`Considere a expressão lógica <code>(NOT A) AND (B OR (NOT C))</code>. Qual combinação de valores resulta em <b>True</b>?`,
+ options:["A = True, B = False, C = False","A = False, B = False, C = True","A = True, B = True, C = True","A = False, B = True, C = True","A = True, B = False, C = True"],
+ correct:3,
+ hint:`O AND principal exige que NOT A seja True — isso já elimina toda alternativa com A = True. Sobram duas; teste B OR (NOT C) nelas.`,
+ explain:`NOT A precisa ser True → A = False. Isso elimina A, C e E. Sobram:<br>• B: B OR NOT C = False OR False = False → resultado False.<br>• D: B OR NOT C = True OR False = True → (True) AND (True) = <b>True</b>.`,
+ fix:`Num AND, procure primeiro o que <b>obriga</b> o resultado (um único False derruba tudo) — é o mesmo "curto-circuito" que o <code>and</code> do Python faz.`,
+ note:`Esta questão ficou sem resposta na plataforma.`},
+
+{part:1, unit:4, ref:"Exercício U4 · Q3 — Conjunção (AND)",
+ statement:`Você decide se faz uma viagem para a praia com duas condições: a previsão indicar sol (<b>Sol</b>) e você ter disponibilidade na agenda (<b>Agenda</b>). A decisão é <code>Sol AND Agenda</code>. Construa a tabela verdade e determine quando você fará a viagem.`,
+ options:["Você fará a viagem para a praia apenas se a previsão do tempo indicar que haverá chuva e você não tiver disponibilidade na agenda.","Você fará a viagem para a praia apenas se a previsão do tempo indicar que haverá sol, independentemente de ter disponibilidade na agenda.","Você não fará a viagem para a praia a menos que a previsão do tempo indique que haverá chuva e você não tenha disponibilidade na agenda.","Você fará a viagem para a praia apenas se tiver disponibilidade na agenda, independentemente da previsão do tempo indicar sol.","Você fará a viagem para a praia se a previsão do tempo indicar que haverá sol e tiver disponibilidade na agenda."],
+ correct:4,
+ hint:`Mesma estrutura da Questão 15 deste simulado. Qual linha da tabela do AND dá V?`,
+ explain:`Sol AND Agenda só é V quando <b>as duas</b> são V → <b>E</b>. A e C descrevem a linha F/F (que dá F no AND); B e D descartam uma das variáveis.`,
+ note:`Esta questão ficou sem resposta na plataforma.`},
+
+{part:1, unit:4, ref:"Exercício U4 · Q4 — Conjunção (AND)",
+ statement:`Você decide se compra um videogame com duas condições: economizar dinheiro suficiente (<b>Economia</b>) e haver um desconto especial (<b>Desconto</b>). A decisão é <code>Economia AND Desconto</code>. Construa a tabela verdade e determine quando você comprará o videogame.`,
+ options:["Você comprará o videogame apenas se economizar dinheiro suficiente, independentemente de haver um desconto especial.","Você comprará o videogame apenas se houver um desconto especial, independentemente de economizar dinheiro suficiente.","Você comprará o videogame se economizar dinheiro suficiente e houver um desconto especial.","Nenhuma das alternativas acima.","Você não comprará o videogame apenas se não economizar dinheiro suficiente e não houver um desconto especial, o que não é correto."],
+ correct:2,
+ hint:`Cuidado com a E: "não compra <i>apenas</i> se as duas forem F" descreve outro conectivo. Qual?`,
+ explain:`AND → compra só com as duas condições V → <b>C</b>. A alternativa E descreve o <b>OR</b>: "só não compra se as duas forem falsas" é exatamente a tabela da disjunção.`,
+ fix:`Frase-chave: AND é F se <b>qualquer uma</b> for F; OR é F só se <b>todas</b> forem F.`,
+ note:`Esta questão ficou sem resposta na plataforma.`},
+
+{part:1, unit:4, ref:"Exercício U4 · Q5 — Avaliar expressão em várias linhas",
+ statement:`Considere a expressão <code>(A AND B) OR (C OR D)</code>. Qual é o resultado para as combinações abaixo?
+ <table><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+ <tr><td>1</td><td>True</td><td>False</td><td>True</td><td>True</td></tr>
+ <tr><td>2</td><td>False</td><td>True</td><td>False</td><td>False</td></tr>
+ <tr><td>3</td><td>True</td><td>True</td><td>True</td><td>True</td></tr>
+ <tr><td>4</td><td>False</td><td>False</td><td>True</td><td>False</td></tr>
+ <tr><td>5</td><td>True</td><td>False</td><td>False</td><td>False</td></tr></table>`,
+ options:["False, False, True, True, False","True, False, True, True, False","False, True, True, True, False","True, True, True, False, False","True, False, True, False, True"],
+ correct:1,
+ hint:`Atalho: o OR externo dá True se C ou D for True. Olhe primeiro a coluna C/D; só calcule A AND B nas linhas em que C e D são ambos False.`,
+ explain:`Linhas 1, 3 e 4 têm C ou D True → <b>True</b>. Linhas 2 e 5 têm C = D = False, então depende de A AND B: linha 2 → False AND True = False; linha 5 → True AND False = False. Resultado: <b>True, False, True, True, False</b>.`,
+ note:`Esta questão ficou sem resposta na plataforma.`},
+
+// ================= PARTE 2 — FIXAÇÃO =================
+// ----- Unidade 1 -----
+{part:2, unit:1, ref:"U1 · Aula 2 — Arranjo com repetição",
+ statement:`Um sistema de controle de acesso gera PINs de 3 dígitos usando apenas os algarismos 1, 2, 3, 4 e 5, e os algarismos <b>podem se repetir</b> (ex.: 113 é válido). Quantos PINs diferentes existem?`,
+ options:["60","125","10","243","15"],
+ correct:1,
+ hint:`A ordem importa (123 ≠ 321)? Pode repetir? Se pode, cada uma das 3 posições tem sempre as mesmas 5 opções.`,
+ explain:`Arranjo com repetição: n^p = 5³ = <b>125</b>. Distratores: 60 = 5 · 4 · 3 (arranjo <i>simples</i>, sem repetir); 10 = C(5, 3); 243 = 3⁵ (inverteu base e expoente); 15 = 5 · 3.`,
+ fix:`É o mesmo raciocínio da senha de banco da Aula 2: 10⁴ = 10.000 senhas de 4 dígitos. Base = quantas opções por posição; expoente = quantas posições.`},
+
+{part:2, unit:1, ref:"U1 · Aula 3 — Permutação (anagramas)",
+ statement:`Quantos anagramas podem ser formados com as letras da palavra <b>LOGICA</b>?`,
+ options:["36","120","720","46.656","21"],
+ correct:2,
+ hint:`Anagrama = reordenar <i>todas</i> as letras. As 6 letras são distintas? Então é P(n) = n!.`,
+ explain:`6 letras distintas → P₆ = 6! = 6 · 5 · 4 · 3 · 2 · 1 = <b>720</b>. Distratores: 120 = 5!; 36 = 6²; 46.656 = 6⁶ (permitiria repetir letras); 21 = 1 + 2 + ... + 6.`,
+ fix:`Permutação é um arranjo em que você usa <b>todos</b> os elementos: P(n) = A(n, n) = n!. Mesmo exemplo da aula: BRASIL também tem 720 anagramas.`},
+
+{part:2, unit:1, ref:"U1 · Aula 4 — Arranjo × combinação",
+ statement:`Um grupo de estudos com 10 alunos vai eleger uma chapa com <b>presidente, vice-presidente e secretário</b> (uma pessoa por cargo, sem acumular). Quantas chapas diferentes são possíveis?`,
+ options:["120","1.000","30","720","3.628.800"],
+ correct:3,
+ hint:`Pergunta de ouro: "Ana presidente + Bia vice" é a mesma chapa que "Bia presidente + Ana vice"? Se trocar a ordem muda o resultado, a ordem importa.`,
+ explain:`Os cargos são diferentes, então a ordem importa → arranjo simples: A(10, 3) = 10 · 9 · 8 = <b>720</b>. Se fosse só "escolher 3 pessoas para uma comissão" (sem cargos), seria C(10, 3) = 120. 1.000 = 10³ permitiria a mesma pessoa em dois cargos; 3.628.800 = 10!.`,
+ fix:`Antes de qualquer fórmula, decida: <b>a ordem importa?</b> Sim → arranjo/permutação. Não → combinação. <b>Pode repetir?</b> Sim → nᵖ.`},
+
+{part:2, unit:1, ref:"U1 · Aula 4 — Combinação",
+ statement:`Em uma reunião com 8 pessoas, cada uma cumprimenta todas as outras com um aperto de mão, exatamente uma vez. Quantos apertos de mão acontecem?`,
+ options:["28","56","64","16","8"],
+ correct:0,
+ hint:`O aperto "Ana–Bia" é o mesmo que "Bia–Ana"? Cada aperto é um <i>par</i> de pessoas escolhido do grupo.`,
+ explain:`Cada aperto é um grupo de 2 sem ordem → C(8, 2) = (8 · 7) / 2 = <b>28</b>. 56 = A(8, 2) conta cada aperto duas vezes (Ana–Bia e Bia–Ana); 64 = 8² incluiria a pessoa apertando a própria mão.`,
+ fix:`Mesma conta do estudo de caso do torneio de xadrez (Aula 5): C(8, 2) = 28 possíveis confrontos entre 8 jogadores.`},
+
+{part:2, unit:1, ref:"U1 · Aula 1 — Raciocínio indutivo × dedutivo",
+ statement:`Uma equipe testou um novo app com 50 usuários, e todos aprovaram a nova tela de login. A equipe concluiu: "todos os usuários vão aprovar a nova tela". Esse raciocínio é:`,
+ options:["Dedutivo, pois a conclusão decorre necessariamente das premissas.","Um silogismo válido, pois tem premissas e uma conclusão.","Uma tautologia, pois é sempre verdadeiro.","Modus Ponens, pois afirma o antecedente.","Indutivo, pois parte de casos particulares para uma conclusão geral, que vale até surgir um contraexemplo."],
+ correct:4,
+ hint:`A conclusão fala de <i>mais</i> casos do que as premissas observaram? Ela é garantida, ou só provável?`,
+ explain:`50 casos observados → generalização para "todos" = raciocínio <b>indutivo</b>. A conclusão é provável, não garantida: basta o 51º usuário reprovar (contraexemplo). No dedutivo, se as premissas são verdadeiras, a conclusão é <i>necessariamente</i> verdadeira.`,
+ fix:`Indução = particular → geral (machine learning, estatística). Dedução = geral → particular (provas, verificação de algoritmos). É assim que a Aula 1 e a Aula 5 da Unidade 1 diferenciam os dois.`},
+
+// ----- Unidade 2 -----
+{part:2, unit:2, ref:"U2 · Aula 3 — Diferença",
+ statement:`Sejam A = {1, 2, 3, 4, 5, 6, 7, 8} e B = {2, 4, 6, 8, 10}. Qual é o conjunto <code>A − B</code>?`,
+ options:["{10}","{2, 4, 6, 8}","{1, 3, 5, 7, 10}","{1, 3, 5, 7}","{1, 2, 3, 4, 5, 6, 7, 8, 10}"],
+ correct:3,
+ hint:`A − B = "está em A <b>e não</b> está em B". Comece por A e risque o que também está em B.`,
+ explain:`Riscando de A os elementos de B (2, 4, 6, 8): A − B = <b>{1, 3, 5, 7}</b>. As outras alternativas são, na ordem: B − A, A ∩ B, A Δ B e A ∪ B — bom treino para reconhecer cada operação.`,
+ fix:`A diferença <b>não é comutativa</b>: A − B = {1, 3, 5, 7}, mas B − A = {10}.`},
+
+{part:2, unit:2, ref:"U2 · Aulas 1 e 3 — Diferença simétrica",
+ statement:`Sejam A = {2, 4, 6, 8, 10} e B = {1, 2, 3, 4, 5}. Qual é <code>A Δ B</code>?`,
+ options:["{2, 4}","{6, 8, 10}","{1, 2, 3, 4, 5, 6, 8, 10}","{1, 3, 5}","{1, 3, 5, 6, 8, 10}"],
+ correct:4,
+ hint:`Δ = "está em um <b>ou</b> no outro, mas <b>não nos dois</b>". Quem está nos dois?`,
+ explain:`Os comuns são 2 e 4 (A ∩ B). A Δ B = (A ∪ B) − (A ∩ B) = <b>{1, 3, 5, 6, 8, 10}</b>. Equivale também a (A − B) ∪ (B − A) = {6, 8, 10} ∪ {1, 3, 5}.`,
+ fix:`Pense em Δ como o <b>XOR</b> dos conjuntos: o elemento entra se estiver em exatamente um deles. Em Python: <code>a ^ b</code> faz exatamente isso com <code>set</code>.`},
+
+{part:2, unit:2, ref:"U2 · Aula 2 — Número de subconjuntos",
+ statement:`Um app tem 5 permissões opcionais (câmera, microfone, localização, contatos, notificações). Cada usuário pode conceder qualquer subconjunto delas — inclusive nenhuma ou todas. Quantas configurações de permissões diferentes existem?`,
+ options:["32","10","25","5","120"],
+ correct:0,
+ hint:`Para cada permissão, há 2 escolhas: concede ou não concede. Quantas escolhas independentes são?`,
+ explain:`O número de subconjuntos de um conjunto com cardinalidade n é 2ⁿ. Com |A| = 5: 2⁵ = <b>32</b> (inclui ∅ = nenhuma permissão e o próprio A = todas). 120 = 5!; 25 = 5².`,
+ fix:`Visão de programador: cada subconjunto é um número binário de 5 bits (00000 a 11111), um bit por permissão → 2⁵ = 32 valores. É a ideia de <i>bitmask</i>.`},
+
+{part:2, unit:2, ref:"U2 · Aula 4 — Produto cartesiano",
+ statement:`Sejam A = {1, 2} e B = {a, b, c}. Sobre o produto cartesiano <code>A × B</code>, assinale a alternativa correta:`,
+ options:["A × B tem 5 elementos, pois |A| + |B| = 5.","(a, 1) ∈ A × B.","A × B = B × A, pois o produto cartesiano é comutativo.","A × B tem 8 elementos, pois 2³ = 8.","A × B tem 6 pares ordenados, e (2, c) ∈ A × B."],
+ correct:4,
+ hint:`A × B = todos os pares (x, y) com x ∈ A e y ∈ B. O primeiro elemento do par vem de qual conjunto?`,
+ explain:`A × B = {(1, a), (1, b), (1, c), (2, a), (2, b), (2, c)} → |A × B| = |A| · |B| = 2 · 3 = <b>6</b>, e (2, c) está lá. (a, 1) pertence a B × A, não a A × B — por isso A × B ≠ B × A: o <b>par é ordenado</b>.`,
+ fix:`Em código, o produto cartesiano é um <code>for</code> dentro de outro <code>for</code>: o laço externo percorre A, o interno percorre B → |A| · |B| iterações.`},
+
+{part:2, unit:2, ref:"U2 · Aula 3 — Diagrama de Venn",
+ statement:`Em uma turma de 40 alunos, 25 gostam de Python, 20 gostam de C e 8 gostam das duas linguagens. Quantos alunos <b>não gostam de nenhuma</b> das duas?`,
+ svg:svg.vennNone, caption:"Sempre comece preenchendo a interseção",
+ options:["5","0","3","13","8"],
+ correct:2,
+ hint:`Comece pela interseção (8). Quantos gostam <i>só</i> de Python? E <i>só</i> de C? Some as três regiões e compare com 40.`,
+ explain:`Só Python = 25 − 8 = 17; só C = 20 − 8 = 12; ambas = 8. Gostam de pelo menos uma: 17 + 8 + 12 = 37. Nenhuma: 40 − 37 = <b>3</b>. Erro comum: 25 + 20 = 45 &gt; 40 → "0" ou "5" (contou a interseção duas vezes).`,
+ fix:`Fórmula equivalente: |A ∪ B| = |A| + |B| − |A ∩ B| = 25 + 20 − 8 = 37. O "− interseção" corrige a contagem dupla.`},
+
+{part:2, unit:2, ref:"U2 · Aula 3 — Diagrama de Venn (achar a interseção)",
+ statement:`Uma pesquisa com 60 desenvolvedores mostrou que 35 usam VS Code, 30 usam Vim e 10 não usam nenhum dos dois. Quantos usam <b>os dois</b> editores?`,
+ svg:svg.vennX, caption:"Chame a interseção de X e escreva as regiões em função dela",
+ options:["15","5","25","10","65"],
+ correct:0,
+ hint:`Mesmo método do exemplo dos esportes (Aula 3): (35 − X) + X + (30 − X) + 10 = total.`,
+ explain:`(35 − X) + X + (30 − X) + 10 = 60 → 75 − X = 60 → X = <b>15</b>. Conferindo: só VS Code 20, ambos 15, só Vim 15, nenhum 10 → 20 + 15 + 15 + 10 = 60 ✓.`},
+
+{part:2, unit:2, ref:"U2 · Aula 4 — Complemento",
+ statement:`Sejam A = {1, 2, 3, 4, 5, 6} e B = {2, 4}. Qual é o complemento de B em relação a A?`,
+ options:["{2, 4}","{1, 3, 5, 6}","{1, 2, 3, 4, 5, 6}","Não existe, pois B ≠ A.","{1, 3, 5}"],
+ correct:1,
+ hint:`Complemento de B em relação a A = A − B. Primeiro verifique a condição de existência: B ⊆ A?`,
+ explain:`B ⊆ A (2 e 4 estão em A), então o complemento existe e é A − B = <b>{1, 3, 5, 6}</b>. A última alternativa esqueceu o 6 (não é ímpar, mas também não está em B).`,
+ fix:`Condição de existência (Aula 4): o complemento de B em relação a A só existe se <b>B ⊆ A</b>. Com conjuntos disjuntos ou com só parte dos elementos em comum, não existe.`},
+
+// ----- Unidade 3 -----
+{part:2, unit:3, ref:"U3 · Aula 1 — O que é proposição",
+ statement:`Qual das sentenças abaixo é uma <b>proposição</b>?`,
+ options:["Que horas são?","Feche a janela, por favor!","Três mais um é igual a cinco.","Que dia lindo!","Está chovendo agora."],
+ correct:2,
+ hint:`Proposição = sentença <i>declarativa</i> que pode ser classificada como V ou F, sem dúvida. Uma proposição pode ser falsa?`,
+ explain:`"Três mais um é igual a cinco" é declarativa e tem valor lógico definido (F) → é <b>proposição</b>, mesmo sendo falsa. Pergunta, ordem e exclamação não têm valor V/F. "Está chovendo agora" é o exemplo da Aula 1: sem contexto (onde?), deixa dúvida — vira proposição só com contexto ("na minha rua").`,
+ fix:`Ser proposição não tem a ver com ser verdadeira — tem a ver com <b>poder ser valorada</b> como V ou F.`},
+
+{part:2, unit:3, ref:"U3 · Aula 1 — Princípios básicos",
+ statement:`"Toda proposição ou é verdadeira ou é falsa, não existindo um terceiro valor que ela possa assumir." Esse enunciado corresponde a qual princípio da lógica clássica?`,
+ options:["Princípio da identidade","Princípio da não contradição","Princípio do terceiro excluído","Modus Ponens","Comutatividade"],
+ correct:2,
+ hint:`O próprio enunciado diz que não existe um "terceiro" valor.`,
+ explain:`É o <b>terceiro excluído</b> (P ou não P). Identidade: "P é P". Não contradição: "não (P e não P)" — não pode ser V e F ao mesmo tempo. Modus Ponens é regra de inferência; comutatividade é regra de equivalência.`,
+ fix:`Os três princípios viram tautologias/contradições na Unidade 4: P ∨ ¬P é sempre V (terceiro excluído) e P ∧ ¬P é sempre F (o que a não contradição proíbe).`},
+
+{part:2, unit:3, ref:"U3 · Aula 2 — Conectivo condicional",
+ statement:`Um amigo promete: "Se eu passar na prova, então vou ao show." Em qual situação a promessa foi <b>quebrada</b> (a condicional é falsa)?`,
+ options:["Ele não passou na prova e foi ao show.","Ele não passou na prova e não foi ao show.","Ele passou na prova e foi ao show.","Ele passou na prova e não foi ao show.","Em nenhuma situação, pois a condicional é sempre verdadeira."],
+ correct:3,
+ hint:`A promessa só fala do que acontece <i>se ele passar</i>. Se ele não passou, ele tem alguma obrigação?`,
+ explain:`P → Q só é falsa quando o antecedente é V e o consequente é F: passou (V) e não foi (F). ${truthCond}Se ele não passou, a promessa não foi testada — a condicional é V qualquer que seja Q.`,
+ fix:`Decore a única linha falsa: <b>V → F = F</b>. Todas as outras dão V.`},
+
+{part:2, unit:3, ref:"U3 · Aula 4 — Contrapositiva",
+ statement:`Qual sentença é logicamente equivalente a: "Se o código compila, então não tem erro de sintaxe"?`,
+ options:["Se o código não compila, então tem erro de sintaxe.","Se o código não tem erro de sintaxe, então compila.","O código compila e tem erro de sintaxe.","Se o código tem erro de sintaxe, então não compila.","O código não compila ou tem erro de sintaxe."],
+ correct:3,
+ hint:`P = compila, Q = não tem erro. Equivalente a P → Q é ¬Q → ¬P: negue <b>e</b> inverta.`,
+ explain:`Contrapositiva: ¬Q → ¬P = "se <b>tem</b> erro de sintaxe, então <b>não</b> compila". A é a inversa (¬P → ¬Q) e B é a recíproca (Q → P) — nenhuma é equivalente. C é a <i>negação</i> (P ∧ ¬Q). E erra a forma ¬P ∨ Q: o correto seria "não compila <b>ou não</b> tem erro".`},
+
+{part:2, unit:3, ref:"U3 · Aula 4 — Leis de De Morgan",
+ statement:`Qual é a negação de "Breno estuda lógica <b>e</b> pratica exercícios"?`,
+ options:["Breno não estuda lógica e não pratica exercícios.","Breno não estuda lógica ou não pratica exercícios.","Breno estuda lógica ou pratica exercícios.","Se Breno estuda lógica, então não pratica exercícios.","Breno não estuda lógica e pratica exercícios."],
+ correct:1,
+ hint:`De Morgan: ¬(P ∧ Q) ≡ ¬P ∨ ¬Q. Nega cada parte <b>e troca o conectivo</b>.`,
+ explain:`¬(P ∧ Q) ≡ <b>¬P ∨ ¬Q</b>: basta ele deixar de fazer <i>uma</i> das duas coisas para a frase original ser falsa. A alternativa A (¬P ∧ ¬Q) é o erro mais comum: negou as partes mas esqueceu de trocar ∧ por ∨ — isso seria a negação de "estuda <b>ou</b> pratica".`,
+ fix:`Em código: <code>not (a and b)</code> == <code>(not a) or (not b)</code>. Útil para simplificar <code>if</code>s com negação.`},
+
+{part:2, unit:3, ref:"U3 · Aula 4 — Negação da condicional (cond + De Morgan + dn)",
+ statement:`Usando as regras de equivalência (condicional, De Morgan e dupla negação), qual fórmula é equivalente a <code>¬(P → Q)</code>?`,
+ options:["¬P → ¬Q","Q → P","P ∧ ¬Q","¬P ∨ Q","¬Q → ¬P"],
+ correct:2,
+ hint:`Passo 1: troque P → Q por ¬P ∨ Q (regra cond). Passo 2: aplique De Morgan na negação de um ∨. Passo 3: dupla negação.`,
+ explain:`¬(P → Q) ≡ ¬(¬P ∨ Q) [cond] ≡ ¬¬P ∧ ¬Q [De Morgan] ≡ <b>P ∧ ¬Q</b> [dn]. Faz sentido: a condicional só é falsa quando P é V e Q é F. As alternativas D e E são equivalentes a P → Q, não à negação dela.`,
+ fix:`Essa é a resposta certa para a asserção II da Questão 11: a "negação" de uma condicional é P ∧ ¬Q, não ¬P → ¬Q.`},
+
+{part:2, unit:3, ref:"U3 · Aula 4 — Silogismo hipotético",
+ statement:`Premissas: "Se estudo lógica, então entendo condicionais." / "Se entendo condicionais, então acerto as questões de Modus Tollens." Qual conclusão se obtém por <b>silogismo hipotético</b>?`,
+ options:["Se estudo lógica, então acerto as questões de Modus Tollens.","Se acerto as questões de Modus Tollens, então estudo lógica.","Estudo lógica.","Se não estudo lógica, então não acerto as questões de Modus Tollens.","Entendo condicionais."],
+ correct:0,
+ hint:`SH: P → Q, Q → R ⊢ P → R. Quem é o "elo do meio" (Q) que some na conclusão?`,
+ explain:`P = estudo lógica, Q = entendo condicionais, R = acerto MT. De P → Q e Q → R, deduz-se <b>P → R</b>. B é a recíproca (R → P); D é a inversa (¬P → ¬R) — nenhuma decorre. C e E afirmam fatos que as premissas não garantem.`},
+
+{part:2, unit:3, ref:"U3 · Aula 4 — Sequência de demonstração",
+ statement:`Complete a justificativa que falta na demonstração:
+ <table><tr><th>Passo</th><th>fbf</th><th>Justificativa</th></tr>
+ <tr><td>1</td><td>P → Q</td><td>hip</td></tr>
+ <tr><td>2</td><td>Q → R</td><td>hip</td></tr>
+ <tr><td>3</td><td>P</td><td>hip</td></tr>
+ <tr><td>4</td><td>P → R</td><td>1, 2, SH</td></tr>
+ <tr><td>5</td><td>R</td><td><b>?</b></td></tr></table>`,
+ options:["3, 4, MP","2, 3, MT","4, simp","1, 3, MT","3, ad"],
+ correct:0,
+ hint:`No passo 5 você tem uma condicional (passo 4) e o antecedente dela (passo 3). Qual regra "dispara" a condicional?`,
+ explain:`Passo 4 = P → R e passo 3 = P → por <b>Modus Ponens</b>, R. Justificativa: <b>3, 4, MP</b>. MT exigiria ¬R ou ¬Q; simp exige uma conjunção; ad produziria uma disjunção (P ∨ algo).`,
+ fix:`Na justificativa, cite as <b>linhas usadas</b> + a <b>regra</b>. Uma linha nunca pode citar a si mesma (erro que aparece no material original da Aula 4).`},
+
+// ----- Unidade 4 -----
+{part:2, unit:4, ref:"U4 · Aula 2 — Valoração de expressão",
+ statement:`Sabendo que A = V, B = F e C = V, qual é o valor lógico de <code>(A → B) ∨ ¬C</code>?`,
+ options:["V, porque A é verdadeiro.","F, porque A → B é F e ¬C é F.","V, porque C é verdadeiro.","F, porque B é falso.","Não é possível determinar sem a tabela completa."],
+ correct:1,
+ hint:`Resolva os parênteses primeiro: quanto vale V → F? Depois, quanto vale ¬C? Por fim, o ∨.`,
+ explain:`A → B = V → F = <b>F</b> (a única linha falsa da condicional). ¬C = ¬V = <b>F</b>. F ∨ F = <b>F</b>. A alternativa D chega no valor certo pelo motivo errado — na prova, a justificativa importa.`},
+
+{part:2, unit:4, ref:"U4 · Aula 5 — Precedência e parênteses",
+ statement:`Com A = V e B = F, compare as fórmulas <code>¬(A ∧ B)</code> e <code>¬A ∧ B</code>:`,
+ options:["Ambas valem V.","Ambas valem F.","¬(A ∧ B) = V e ¬A ∧ B = F.","¬(A ∧ B) = F e ¬A ∧ B = V.","São equivalentes, pois usam os mesmos símbolos."],
+ correct:2,
+ hint:`A negação tem a maior precedência: em ¬A ∧ B ela se aplica <i>só</i> ao A. Os parênteses mudam o alcance do ¬.`,
+ explain:`¬(A ∧ B) = ¬(V ∧ F) = ¬F = <b>V</b>. ¬A ∧ B = (¬V) ∧ F = F ∧ F = <b>F</b>. Mesmos símbolos, resultados diferentes: o parêntese decide sobre o que o ¬ atua.`,
+ fix:`O material traz duas convenções para ∧ e ∨ (mesma precedência × ∧ antes de ∨). O ¬ sempre vem primeiro. Na dúvida, use parênteses.`},
+
+{part:2, unit:4, ref:"U4 · Aula 3 — Tautologia, contradição, contingência",
+ statement:`Classifique a fórmula <code>(A → B) ∨ A</code>:`,
+ options:["Contradição","Contingência","Tautologia","Não é uma fbf","Depende apenas do valor de B"],
+ correct:2,
+ hint:`Separe em dois casos: A = V (o "∨ A" já resolve) e A = F (quanto vale F → B?).`,
+ explain:`Se A = V, o "∨ A" torna tudo V. Se A = F, então A → B = V (antecedente falso), e tudo vale V. Nas 4 linhas o resultado é V → <b>tautologia</b>.
+ <table><tr><th>A</th><th>B</th><th>A → B</th><th>(A → B) ∨ A</th></tr>
+ <tr><td>V</td><td>V</td><td>V</td><td>V</td></tr><tr><td>V</td><td>F</td><td>F</td><td>V</td></tr>
+ <tr><td>F</td><td>V</td><td>V</td><td>V</td></tr><tr><td>F</td><td>F</td><td>V</td><td>V</td></tr></table>`,
+ fix:`Tautologia = sempre V; contradição = sempre F; contingência = às vezes V, às vezes F (ex.: A → B sozinha).`},
+
+{part:2, unit:4, ref:"U4 · Aula 5 — Bicondicional",
+ statement:`Considere P: "2 + 2 = 4" e Q: "Brasília é a capital da Argentina". Quais são os valores de <code>P ↔ Q</code> e <code>P → Q</code>?`,
+ options:["P ↔ Q = V e P → Q = V","P ↔ Q = F e P → Q = V","P ↔ Q = V e P → Q = F","P ↔ Q = F e P → Q = F","P ↔ Q = F e P → Q não pode ser valorada"],
+ correct:3,
+ hint:`P é V e Q é F. O bicondicional é V quando os dois têm o <i>mesmo</i> valor. E a condicional, com V → F?`,
+ explain:`P = V, Q = F. Bicondicional com valores diferentes → <b>F</b>. Condicional V → F → <b>F</b>. Repare que P ↔ Q ≡ (P → Q) ∧ (Q → P): se P → Q já é F, o bicondicional obrigatoriamente é F.`},
+
+{part:2, unit:4, ref:"U4 · Aula 3 — Equivalência pela tabela verdade",
+ statement:`A fórmula <code>(A ∧ B) ∨ (A ∧ ¬B)</code> é equivalente a:`,
+ options:["B","A","A ∧ B","uma tautologia","uma contradição"],
+ correct:1,
+ hint:`Monte as 4 linhas e compare a coluna final com as colunas de A e de B. Qual delas é idêntica?`,
+ explain:`<table><tr><th>A</th><th>B</th><th>A ∧ B</th><th>A ∧ ¬B</th><th>resultado</th></tr>
+ <tr><td>V</td><td>V</td><td>V</td><td>F</td><td>V</td></tr><tr><td>V</td><td>F</td><td>F</td><td>V</td><td>V</td></tr>
+ <tr><td>F</td><td>V</td><td>F</td><td>F</td><td>F</td></tr><tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr></table>
+ A coluna final é idêntica à de A → a fórmula ≡ <b>A</b>. O valor de B não importa: "(A e B) ou (A e não B)" = "A, com B qualquer".`,
+ fix:`Compare com o estudo de caso da Aula 5 (qualificação de candidatos): (A ∧ B) ∨ (¬A ∧ B) ≡ B. Mesmo padrão, papel das variáveis trocado.`},
+
+{part:2, unit:4, ref:"U4 · Aula 1 — Tabela com proposições intermediárias",
+ statement:`Com A, B, C como entradas e as proposições intermediárias X = A ∧ B, Y = ¬C e Z = X ∨ Y: em quantas das 8 linhas da tabela verdade <b>Z é verdadeira</b>?`,
+ options:["2","4","5","6","8"],
+ correct:2,
+ hint:`Y = ¬C é V em metade das linhas (C = F). X = A ∧ B é V em 2 linhas. Some, mas cuidado com as linhas em que X e Y são V ao mesmo tempo.`,
+ explain:`Y é V nas 4 linhas com C = F. X é V nas 2 linhas com A = B = V (uma com C = V, outra com C = F). A linha A = B = V, C = F já foi contada em Y. Total: 4 + 2 − 1 = <b>5</b>.`,
+ fix:`Repare que é a mesma ideia de |X ∪ Y| = |X| + |Y| − |X ∩ Y| da Unidade 2: a disjunção (∨) de lógica corresponde à união (∪) de conjuntos.`},
+
+{part:2, unit:4, ref:"U4 · Aula 4 — Aplicação em programação",
+ statement:`Considere o trecho em Python:
+ <pre>idade = 17
+tem_ingresso = True
+convidado = True
+
+if idade >= 18 and (tem_ingresso or convidado):
+    print("entra")
+else:
+    print("não entra")</pre>
+ O que é impresso e por quê?`,
+ options:["\"entra\", porque tem_ingresso e convidado são True.","\"entra\", porque basta uma condição ser True.","\"não entra\", porque idade >= 18 é False e o and exige as duas partes True.","\"não entra\", porque o or entre dois True resulta em False.","O programa dá erro, pois não se pode combinar and e or."],
+ correct:2,
+ hint:`Avalie primeiro o parêntese (OR), depois o AND com idade &gt;= 18. Quanto vale 17 &gt;= 18?`,
+ explain:`(tem_ingresso or convidado) = True or True = True. idade &gt;= 18 = <b>False</b>. False and True = <b>False</b> → imprime "não entra". A alternativa D erra a tabela do OR (V ∨ V = V); a B confunde AND com OR.`,
+ fix:`Todo <code>if</code> com <code>and</code>/<code>or</code>/<code>not</code> é uma fbf. Quando ficar confuso, monte a tabela verdade das condições — é exatamente a aplicação que a Aula 4 da Unidade 4 propõe.`}
+,
+
+// ================= PARTE 3 — PROVAS ANTERIORES (REAIS) =================
+// Transcritas dos PDFs do Studocu baixados pelo aluno. Fontes em SRC.
+// Os PDFs da AV2 #72509391 e da prova presencial não trazem gabarito: a resposta é pela análise do conteúdo.
+// ----- Unidade 1 -----
+{part:3, unit:1, real:true, src:"gab23", srcQ:"Q15", ref:"Prova 2023 · Q15 — Premissa, argumento, silogismo",
+ statement:`Com base nos termos amplamente utilizados na lógica, analise as afirmativas:<blockquote>I. Premissas: consistem de proposições que são utilizadas como base para um raciocínio.<br>II. Argumento: conjunto de enunciados que se relacionam uns com os outros.<br>III. Silogismo: consiste de um raciocínio dedutivo (premissas), possibilita a dedução de uma conclusão a partir das premissas.</blockquote>É correto o que se afirma em:`,
+ options:["III, apenas.","I, II e III.","II e III, apenas.","I, apenas.","I e II, apenas."],
+ correct:1,
+ hint:`São exatamente as definições do vocabulário da Unidade 1, Aula 1. Alguma delas está distorcida?`,
+ explain:`As três definições são as do material (premissa = base do raciocínio; argumento = enunciados relacionados; silogismo = raciocínio dedutivo). Gabarito oficial: <b>I, II e III</b>.`},
+
+{part:3, unit:1, real:true, src:"pres", srcQ:"Q6", ref:"Prova presencial · Q6 — Indutiva, dedutiva, formal, falácia",
+ statement:`Analise as afirmativas:<blockquote>I. A lógica pode ser classificada em indutiva e dedutiva.<br>II. A lógica formal começa nos estudos de Aristóteles, na Grécia Antiga. A lógica é dita formal quando analisa e representa a forma de qualquer argumento para que possa ser considerado válido para alguma conclusão.<br>III. Falácia: consiste em argumentos que logicamente estão incorretos.</blockquote>Está(ão) correta(s):`,
+ options:["Apenas as afirmativas I e II são corretas.","As afirmativas I, II e III são corretas.","Apenas a afirmativa II é correta.","Apenas a afirmativa III é correta.","Apenas a afirmativa I é correta."],
+ correct:1,
+ hint:`Compare cada frase com o vocabulário da Unidade 1. Há algum erro de definição?`,
+ explain:`Todas estão corretas: a inferência pode ser <b>indutiva</b> ou <b>dedutiva</b>; a lógica formal nasce com Aristóteles e analisa a <b>forma</b> do argumento; falácia é argumento logicamente incorreto. Resposta: <b>I, II e III</b>.`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:1, real:true, src:"gab23", srcQ:"Q9", diverge:true, ref:"Prova 2023 · Q9 — Contar premissas de um argumento",
+ statement:`Dada a frase: <i>"Como a gasolina é extraída do petróleo, que é importado, e todos os produtos importados são caros, a gasolina é cara."</i> Assinale a alternativa CORRETA:`,
+ options:["A frase é um argumento composto por uma premissa e uma conclusão.","A frase é um argumento composto por três premissas e uma conclusão.","A frase é um argumento composto por uma premissa e duas conclusões.","A frase não pode ser classificada como um argumento.","A frase é um argumento composto por duas premissas e uma conclusão."],
+ correct:[1,4],
+ hint:`A conclusão é o que vem depois de "logo/portanto" (aqui: "a gasolina é cara"). Agora conte as afirmações que <i>sustentam</i> a conclusão.`,
+ explain:`Conclusão: "a gasolina é cara". As afirmações que a sustentam são (1) a gasolina é extraída do petróleo; (2) o petróleo é importado; (3) todos os produtos importados são caros. São <b>três premissas</b>, e o raciocínio só fecha com as três.`,
+ note:`O gabarito oficial marca <b>E (duas premissas)</b>, provavelmente lendo "extraída do petróleo, que é importado" como uma só premissa. Pela análise, são três. As duas foram aceitas aqui. Na prova, se aparecer igual, a resposta esperada é a <b>E</b>.`},
+
+{part:3, unit:1, real:true, src:"gab23", srcQ:"Q13", ref:"Prova 2023 · Q13 — Silogismo com 'alguns' e 'todos' (FCC)",
+ statement:`Se é verdade que <b>alguns</b> homens altos são bonitos e <b>todos</b> os homens altos são inteligentes, pode-se concluir, a partir dessa proposição, que`,
+ options:["todo homem inteligente é alto.","todo homem bonito é inteligente.","algum homem bonito é inteligente.","algum homem inteligente não é alto.","todo homem não inteligente é bonito."],
+ correct:2,
+ hint:`Desenhe: o círculo "altos" fica dentro de "inteligentes". Onde ficam os altos que são bonitos?`,
+ explain:`Os altos-bonitos existem ("alguns") e, como todo alto é inteligente, eles também são inteligentes. Logo <b>algum homem bonito é inteligente</b>. A alternativa A inverte o "todo" (não vale); B generaliza para todos os bonitos; D e E não são garantidas por nenhum desenho.`,
+ fix:`"Todo A é B" <b>não</b> permite concluir "todo B é A". É o mesmo erro da recíproca na condicional.`},
+
+{part:3, unit:1, real:true, src:"pres", srcQ:"Q5", ref:"Prova presencial · Q5 — Silogismo com 'todo' (FCC)",
+ statement:`Considere as seguintes afirmações:<blockquote>I. Todo amapaense é brasileiro.<br>II. Todo brasileiro é sul-americano.</blockquote>Então, é correto afirmar:`,
+ options:["Todo sul-americano é brasileiro.","É possível que exista um sul-americano que não seja amapaense.","Existe brasileiro que não é sul-americano.","Todo brasileiro é amapaense.","Existe amapaense que não é brasileiro."],
+ correct:1,
+ hint:`Três círculos encaixados: amapaense ⊆ brasileiro ⊆ sul-americano. Qual alternativa é compatível com esse desenho?`,
+ explain:`Amapaense ⊆ brasileiro ⊆ sul-americano. O círculo dos sul-americanos pode ter gente fora do círculo dos amapaenses, então "<b>é possível</b> existir um sul-americano que não seja amapaense" está correto. A e D invertem o "todo"; C e E contradizem as premissas.`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:1, real:true, src:"pres", srcQ:"Q8", ref:"Prova presencial · Q8 — Conclusão com 'alguns' (COPEVE)",
+ statement:`Alguns professores gostam de ouvir música clássica e outros professores apenas toleram ouvi-las. Somente com essas informações, conclui-se:`,
+ options:["Nenhum professor gosta de música clássica.","As pessoas tolerantes à música clássica não são professores.","Os professores que gostam de outro tipo de música não toleram música clássica.","Entre os amantes de música clássica, há professores.","Todos os professores que gostam de outro tipo de música também gostam de música clássica."],
+ correct:3,
+ hint:`"Alguns professores gostam de música clássica" = os conjuntos "professores" e "amantes de música clássica" se cruzam. O que isso diz, lido do outro lado?`,
+ explain:`Se há interseção entre "professores" e "amantes de música clássica", então entre os amantes há professores. Resposta: <b>D</b>. "Algum A é B" é simétrico ("algum B é A"), ao contrário de "todo A é B". As outras alternativas falam de coisas que o texto não informa.`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:1, real:true, src:"pres", srcQ:"Q10", ref:"Prova presencial · Q10 — Silogismo com 'todo' e negação (SELECON)",
+ statement:`Considere verdadeiras as seguintes proposições:<blockquote>Todo amigo de Marta é sambista.<br>Todo amigo de Pedro não é sambista.</blockquote>Logo, também é verdade que:`,
+ options:["Nenhum sambista é amigo de Marta.","Algum amigo de Marta é amigo de Pedro.","Nenhum amigo de Marta é amigo de Pedro.","Marta e Pedro não têm amigos.","Algum sambista é amigo de Pedro."],
+ correct:2,
+ hint:`Amigos de Marta ficam DENTRO de "sambistas"; amigos de Pedro ficam FORA. Os dois grupos podem se encontrar?`,
+ explain:`Amigos de Marta ⊆ sambistas e amigos de Pedro ⊆ não sambistas. Esses dois grupos são disjuntos, logo <b>nenhum amigo de Marta é amigo de Pedro</b>. A contradiz a primeira premissa; B e E são impossíveis; D não decorre.`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:1, real:true, src:"gab23", srcQ:"Q2", ref:"Prova 2023 · Q2 — Matemática discreta (INCORRETA)",
+ statement:`A matemática discreta (também conhecida como matemática finita ou matemática combinatória) é um ramo da matemática voltado ao estudo de objetos e estruturas discretas ou finitas. Neste contexto, assinale a alternativa <b>INCORRETA</b>:`,
+ options:["Matemática discreta, também chamada matemática finita, é o estudo das estruturas algébricas que não são fundamentalmente discretas, em vez de contínuas.","Nos últimos anos tornou-se uma disciplina importantíssima porque nos computadores a informação é armazenada e manipulada de forma discreta.","Todas as alternativas estão incorretas.","Um princípio imprescindível na matemática discreta é o princípio da contagem.","A matemática discreta é usada quando contamos objetos, quando estudamos relações entre conjuntos finitos e quando processos (algoritmos) envolvendo um número finito de passos são analisados."],
+ correct:0,
+ hint:`Procure a frase que se contradiz: "discreta" estudando o que "não é discreto"?`,
+ explain:`A alternativa A diz que a matemática discreta estuda estruturas que "<b>não são</b> fundamentalmente discretas", o que contradiz o próprio nome. As alternativas B, D e E são as definições do material. Gabarito oficial: <b>A</b>.`},
+
+{part:3, unit:1, real:true, src:"gab23", srcQ:"Q16", ref:"Prova 2023 · Q16 — Evolução da lógica",
+ statement:`Assinale a alternativa CORRETA que se refere à evolução da lógica computacional.`,
+ options:["Todas as alternativas estão corretas.","Com base em premissas, ela permite a construção do raciocínio indutivo ou dedutivo, e também a realização de operações lógicas simbólicas e demonstrações matemáticas.","Em um sentido amplo, a lógica é o estudo da estrutura e dos princípios relativos ao raciocínio, à estruturação do pensamento, com ênfase na argumentação, que pode ser considerada como válida ou inválida.","Período Atual está entre os períodos do estudo da lógica.","O Período Aristotélico e o Período Booleano estão entre os períodos do estudo da lógica."],
+ correct:0,
+ hint:`Os três períodos da lógica são Aristotélico, Booleano e Atual. As definições de B e C batem com o material?`,
+ explain:`B, C, D e E estão corretas (os períodos são <b>Aristotélico, Booleano e Atual</b>). Por isso, a resposta é <b>"Todas as alternativas estão corretas"</b>. Gabarito oficial: A.`,
+ note:`Os "períodos da lógica" aparecem nas teleaulas (TA 1) e em provas antigas, mas quase não aparecem no material escrito das aulas.`},
+
+// ----- Unidade 2 -----
+{part:3, unit:2, real:true, src:"gab23", srcQ:"Q1", ref:"Prova 2023 · Q1 — Interseção (nomes)",
+ statement:`Considere os conjuntos A = {Pati, Cris, João, Pedro} e B = {Renata, Lu, João, Pedro}. Podemos afirmar que A ∩ B é:`,
+ options:["A ∩ B = { }","A ∩ B = {Pati, Cris, João, Pedro, Renata, Lu, João, Pedro}","A ∩ B = {Renata, Lu}","A ∩ B = {Pati, Cris}","A ∩ B = {João, Pedro}"],
+ correct:4,
+ hint:`Interseção = quem aparece nos dois.`,
+ explain:`João e Pedro estão em A e em B → <b>{João, Pedro}</b>. B é uma tentativa de união (e ainda repete elementos, o que não existe em conjunto); C é B − A; D é A − B.`,
+ note:`Na prova original o símbolo ∩ aparece trocado por "Ω" (o próprio enunciado avisa). Questão repetida também na prova presencial (Q7).`},
+
+{part:3, unit:2, real:true, src:"gab23", srcQ:"Q14", ref:"Prova 2023 · Q14 — Interseção (números)",
+ statement:`Considere os conjuntos A = {1, 2, 3, 4} e B = {1, 2, 5, 6}. Podemos afirmar que A ∩ B é:`,
+ options:["A ∩ B = {1, 2, 3, 4, 5, 6}","A ∩ B = {1}","A ∩ B = { }","A ∩ B = {1, 2}","A ∩ B = {3, 4, 5, 6}"],
+ correct:3,
+ hint:`Quem está nos dois?`,
+ explain:`<b>{1, 2}</b>. A alternativa A é A ∪ B; E é A Δ B (os que estão em exatamente um).`},
+
+{part:3, unit:2, real:true, src:"gab23", srcQ:"Q8", ref:"Prova 2023 · Q8 — Venn (pesquisa de jornais)",
+ statement:`Em uma pesquisa com professores sobre o jornal da cidade:<blockquote>230 preferem o jornal A<br>180 preferem o jornal B<br>30 preferem os dois jornais<br>50 não gostam de nenhum dos dois</blockquote>Quantos professores participaram da entrevista?`,
+ options:["400 professores","440 professores","380 professores","490 professores","430 professores"],
+ correct:4,
+ hint:`|A ∪ B| = |A| + |B| − |A ∩ B|. Depois some quem não gosta de nenhum.`,
+ explain:`|A ∪ B| = 230 + 180 − 30 = 380. Total = 380 + 50 = <b>430</b>. Distratores: 380 esqueceu os 50; 490 = 230 + 180 + 30 + 50 (somou a interseção em vez de subtrair); 440 = 230 + 180 + 30.`},
+
+{part:3, unit:2, real:true, src:"pres", srcQ:"Q16", ref:"Prova presencial · Q16 — Venn (bancos de dados)",
+ statement:`Alguns comandos de busca de um aplicativo vão ao Banco de Dados A, outros ao Banco B e outros aos dois. Há <b>20</b> comandos que vão ao Banco A, <b>60</b> comandos distintos no total e <b>11</b> que vão aos dois bancos (A e B). Quantos dos 60 comandos realizam a busca no Banco B?`,
+ options:["54 comandos","53 comandos","50 comandos","52 comandos","51 comandos"],
+ correct:4,
+ hint:`Todos os 60 vão a pelo menos um banco: 60 = |A ∪ B| = |A| + |B| − |A ∩ B|.`,
+ explain:`60 = 20 + |B| − 11 ⇒ |B| = <b>51</b>. Conferindo: só A = 9, ambos = 11, só B = 40 → 9 + 11 + 40 = 60 ✓. Erro comum: 60 − 20 = 40 (esqueceu os 11 que também vão ao B).`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:2, real:true, src:"pres", srcQ:"Q9", ref:"Prova presencial · Q9 — Complemento (INCORRETA)",
+ statement:`Assinale a alternativa <b>INCORRETA</b> quanto a complementos de conjuntos.`,
+ options:["Seja A = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} e B = {1, 2, 3, 5, 8, 9}. Podemos dizer que o complemento de B em relação a A <b>não</b> consiste no conjunto formado por elementos que pertencem exclusivamente a A, quando comparados com os elementos de B.","Em complementos de conjuntos, é necessário ter em mente um conjunto mais abrangente (U) sobre o qual estabeleceremos a relação de complementaridade.","Seja A = {1, ..., 10} e B = {1, 2, 3, 5, 8, 9}. O complemento de B em relação a A consiste no conjunto de todos os elementos pertencentes a A que não pertencem a B. Temos, portanto: {4, 6, 7, 10}.","Seja A = {1, ..., 10} e B = {1, 2, 3, 5, 8, 9}. O complemento de B em relação a A consiste no conjunto de todos os elementos pertencentes a A que não pertencem a B.","Todas as alternativas estão incorretas."],
+ correct:0,
+ hint:`A definição (Unidade 2, Aula 4) diz que o complemento de B em relação a A é formado pelos elementos que pertencem <i>exclusivamente</i> a A. Qual alternativa nega isso?`,
+ explain:`O complemento de B em relação a A <b>é</b> A − B: os elementos exclusivos de A. A alternativa A diz que "<b>não</b> consiste" nisso, por isso é a incorreta. C calcula certo: {4, 6, 7, 10}.`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:2, real:true, src:"pres", srcQ:"Q14", ref:"Prova presencial · Q14 — Formas de descrever um conjunto",
+ statement:`Para descrever um conjunto é necessário identificar seus elementos. Avalie:<blockquote>(A) Listando todos os elementos do conjunto, como o conjunto das cores da bandeira do Brasil. Dependendo do conjunto, essa representação pode se revelar trabalhosa, sendo mais indicada para conjuntos finitos com poucos elementos.<br>(B) Indicando os primeiros elementos do conjunto, que denotem um padrão para uma listagem indefinida. Ex.: B = {2, 4, 6, ...}, conjunto infinito dos inteiros positivos pares.<br>(C) Escrevendo uma propriedade que caracterize os elementos. Ex.: C = {x | x é inteiro e 4 &lt; x ≤ 9} = {5, 6, 7, 8, 9}.</blockquote>`,
+ options:["B e C estão corretas.","A, B e C estão corretas.","Somente B está correta.","A e C estão corretas.","Somente A está correta."],
+ correct:1,
+ hint:`São as três formas de descrever conjuntos da Unidade 2, Aula 2. Confira o exemplo de C: 4 &lt; x ≤ 9.`,
+ explain:`As três são as formas do material: <b>listagem</b>, <b>padrão</b> e <b>propriedade</b>. Em C, 4 fica fora (&lt;) e 9 entra (≤), então {5, 6, 7, 8, 9} está certo. Resposta: <b>A, B e C</b>.`,
+ note:`No PDF original, o item (A) diz "essa maneira de representação <b>não</b> pode se revelar trabalhosa", provavelmente um erro de digitação (o material diz "pode se revelar trabalhosa"). Aqui foi corrigido. O PDF não traz o gabarito.`},
+
+// ----- Unidade 3 -----
+{part:3, unit:3, real:true, src:"av2a", srcQ:"Q1", ref:"AV2 · Q1 — Frase que não pode ser valorada",
+ statement:`Além de distinguir se uma frase é ou não um argumento, é importante distinguir se uma sentença pode ou não ser classificada como verdadeira ou falsa (não ambas ao mesmo tempo). Aponte qual frase <b>não</b> pode ser classificada (valorada) em verdadeira (V) ou falsa (F):`,
+ options:["O Paraguai é um país da América Latina.","Mato Grosso é uma cidade do Brasil.","São Paulo é a capital do Brasil.","Cinco mais um é igual a sete.","Que show!"],
+ correct:4,
+ hint:`Frases falsas podem ser valoradas (como F). Qual delas não é declarativa?`,
+ explain:`"Que show!" é <b>exclamativa</b>: não declara nada que possa ser V ou F. As outras são declarativas. B, C e D são <b>falsas</b>, mas continuam sendo proposições.`,
+ note:`O PDF desta AV2 não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:3, real:true, src:"gab23", srcQ:"Q4", ref:"Prova 2023 · Q4 — Qual é proposição? (Quadrix)",
+ statement:`Proposição é uma sentença declarativa, afirmativa ou negativa, à qual podemos atribuir um valor lógico V ou F. Assinale a <b>única</b> que apresenta uma proposição lógica.`,
+ options:["Reflita sobre sua saúde!","31 de março: dia da saúde e nutrição.","Uma alimentação saudável é um dos princípios básicos para uma vida saudável.","Seja qual for seu ritmo de vida, aprenda a se exercitar sempre.","Já pensou como vai sua saúde?"],
+ correct:2,
+ hint:`Elimine ordens (imperativo), perguntas e frases sem verbo.`,
+ explain:`Só a C é uma frase declarativa completa, com valor V/F. A e D são ordens; E é pergunta; B não tem verbo (é um título). Gabarito oficial: <b>C</b>.`},
+
+{part:3, unit:3, real:true, src:"gab23", srcQ:"Q7", ref:"Prova 2023 · Q7 — V/F: são proposições?",
+ statement:`Analise as sentenças e assinale (V) se forem proposições ou (F) se não forem:<blockquote>1. ( ) A Rússia e o Brasil.<br>2. ( ) A Argentina e a Inglaterra lutaram pela posse das ilhas Malvinas.<br>3. ( ) A Olimpíada do Japão será em 2022.</blockquote>`,
+ options:["V – F – F","F – V – V","V – V – V","F – F – F","V – V – F"],
+ correct:1,
+ hint:`"A Rússia e o Brasil" afirma alguma coisa? E uma afirmação <i>falsa</i> deixa de ser proposição?`,
+ explain:`1 não tem verbo nem afirmação → <b>F</b>. 2 é declarativa → <b>V</b>. 3 é declarativa (ainda que falsa: a Olimpíada de Tóquio foi em 2021) → continua sendo proposição → <b>V</b>. Gabarito oficial: <b>F – V – V</b>.`},
+
+{part:3, unit:3, real:true, src:"av2a", srcQ:"Q2", offsyl:true, ref:"AV2 · Q2 — Disjunção inclusiva × exclusiva",
+ statement:`A disjunção ("ou") pode ser inclusiva ou exclusiva. Avalie:<blockquote>I. Rodrigo é estudante ou é trabalhador. Essa é uma proposição inclusiva.<br>II. Maria é paulista ou é carioca. Essa é uma proposição inclusiva.<br>III. Felipe é gordo ou é magro. Essa é uma proposição exclusiva.<br>IV. Arthur é baixo ou é alto. Essa é uma proposição exclusiva.</blockquote>Assinale a alternativa correta:`,
+ options:["Apenas as afirmativas II, III e IV estão corretas.","Apenas as afirmativas I, III e IV estão corretas.","Apenas as afirmativas I, II e III estão corretas.","Apenas as afirmativas I, II e IV estão corretas.","As afirmativas I, II, III e IV estão corretas."],
+ correct:1,
+ hint:`Para cada frase: dá para as duas partes serem verdadeiras <i>ao mesmo tempo</i>? Se dá, é inclusiva; se não dá, é exclusiva.`,
+ explain:`I: dá para ser estudante <b>e</b> trabalhador → inclusiva ✓. II: ninguém nasce paulista e carioca ao mesmo tempo → <b>exclusiva</b> (II está errada). III e IV: gordo/magro e baixo/alto não acontecem juntos → exclusivas ✓. Resposta: <b>I, III e IV</b>.`,
+ note:`O material escrito das aulas só define o "ou" <b>inclusivo</b> (∨). O exclusivo (XOR, <code>p !== q</code>) aparece nesta AV2; vale saber a diferença. O PDF não traz o gabarito.`},
+
+{part:3, unit:3, real:true, src:"av2a", srcQ:"Q4", ref:"AV2 · Q4 — Traduzir p → ¬q",
+ statement:`Considere as proposições p = "Tem praia em Santos" e q = "Flávio gosta de praia". Assinale a alternativa que corresponde à proposição <code>p → ¬q</code>:`,
+ options:["Tem praia em Santos ou Flávio gosta de praia.","Tem praia em Santos e Flávio não gosta de praia.","Se tem praia em Santos, então Flávio não gosta de praia.","Se não tem praia em Santos, então Flávio gosta de praia.","Tem praia em Santos ou Flávio não gosta de praia."],
+ correct:2,
+ hint:`→ é "se… então", e o ¬ atinge só o q.`,
+ explain:`p → ¬q = "<b>Se</b> tem praia em Santos, <b>então</b> Flávio <b>não</b> gosta de praia". B é p ∧ ¬q (a <i>negação</i> de p → q); D é ¬p → q; E é p ∨ ¬q.`,
+ note:`No PDF a fórmula aparece como "(p → not q)". O PDF não traz o gabarito.`},
+
+{part:3, unit:3, real:true, src:"gab23", srcQ:"Q12", ref:"Prova 2023 · Q12 — Linguagem simbólica (Fortaleza/Curitiba)",
+ statement:`p: Fortaleza é linda. q: Curitiba é fria.<blockquote>"Fortaleza é linda ou Curitiba é fria."<br>"Fortaleza é linda e Curitiba não é fria."</blockquote>Em linguagem lógica, essas sentenças são, respectivamente:`,
+ options:["p ∨ q e ¬(p ∧ q)","p → q e ¬(p ∧ q)","p ∨ q e p ∧ ¬q","p ∨ q e ¬p ∧ q","p ∧ q e ¬p ∧ q"],
+ correct:2,
+ hint:`Na segunda frase, quem leva o "não"? Fortaleza ou Curitiba?`,
+ explain:`"ou" → p ∨ q. "Fortaleza é linda <b>e</b> Curitiba <b>não</b> é fria" → p ∧ ¬q. Resposta: <b>p ∨ q e p ∧ ¬q</b>. ¬(p ∧ q) seria "não é verdade que Fortaleza é linda e Curitiba é fria"; ¬p ∧ q nega a parte errada.`,
+ note:`No original os símbolos aparecem como "v", "Λ" e "~". A mesma questão caiu na prova presencial (Q1), com as alternativas em outra ordem.`},
+
+{part:3, unit:3, real:true, src:"av2b", srcQ:"Q2", ref:"AV2 · Q2 — Completar: disjunção, conjunção, negação",
+ statement:`O conectivo lógico da ________ é utilizado quando desejamos obter um resultado falso se, e somente se, as duas proposições forem falsas. O conectivo lógico da ________ é utilizado quando desejamos obter um resultado verdadeiro se, e somente se, as duas forem verdadeiras. E o conectivo lógico da ________ é utilizado quando desejamos inverter um resultado.`,
+ options:["disjunção, negação e conjunção","conjunção, disjunção e negação","negação, disjunção e conjunção","disjunção, conjunção e negação","conjunção, negação e disjunção"],
+ correct:3,
+ hint:`Qual conectivo só dá F com tudo F? Qual só dá V com tudo V?`,
+ explain:`F só com tudo F → <b>disjunção</b> (∨). V só com tudo V → <b>conjunção</b> (∧). Inverter → <b>negação</b> (¬). Alternativa assinalada no original: D.`},
+
+{part:3, unit:3, real:true, src:"av2b", srcQ:"Q3", ref:"AV2 · Q3 — Mecanismos para validar argumentos",
+ statement:`Uma proposição pode ser verdadeira ou falsa e não pode ser válida ou inválida; do mesmo modo, um argumento pode ser válido ou inválido e não pode ser verdadeiro ou falso. A lógica possui mecanismos que permitem validar um argumento, os quais são compostos`,
+ options:["pelas regras de equivalência e inferência lógica.","pelas regras de covalência e inferência lógica.","pelas regras de covalência e recorrência lógica.","pelas regras de equivalência e recorrência lógica.","pelas regras de tolerância e coerência lógica."],
+ correct:0,
+ hint:`Unidade 3, Aula 4: as regras de dedução se dividem em dois tipos.`,
+ explain:`As regras de dedução são as de <b>equivalência</b> (Quadro 1: comutatividade, De Morgan…) e as de <b>inferência</b> (Quadro 2: MP, MT, SH…). "Covalência" e "recorrência" não existem nesse contexto.`,
+ fix:`Guarde a frase: proposição é V ou F; <b>argumento</b> é válido ou inválido.`},
+
+{part:3, unit:3, real:true, src:"av2b", srcQ:"Q4", rebuilt:true, ref:"AV2 · Q4 — Associar MP, MT, SH às descrições",
+ statement:`Associe as regras de inferência (coluna A) às descrições (coluna B):
+ <table><tr><th>Coluna A</th><th>Coluna B</th></tr>
+ <tr><td>I. Modus Ponens (MP)</td><td style="text-align:left">1. Além de existirem implicações e conjunções nas hipóteses, a conclusão também é uma implicação: (P → Q) ∧ (Q → R) → (P → R)</td></tr>
+ <tr><td>II. Modus Tollens (MT)</td><td style="text-align:left">2. Envolve uma implicação e uma conjunção e possui a estrutura: (P → Q) ∧ P → Q</td></tr>
+ <tr><td>III. Silogismo Hipotético (SH)</td><td style="text-align:left">3. Além de envolver uma implicação e uma conjunção, também envolve a negação de uma das proposições: (P → Q) ∧ ¬Q → ¬P</td></tr></table>`,
+ options:["I – 2, II – 3, III – 1.","I – 2, II – 1, III – 3.","I – 3, II – 2, III – 1.","I – 1, II – 3, III – 2.","I – 3, II – 1, III – 2."],
+ correct:0,
+ hint:`Qual regra tem negação? Qual tem conclusão em forma de implicação?`,
+ explain:`MP = implicação + antecedente → <b>2</b>. MT = envolve a negação (¬Q ⊢ ¬P) → <b>3</b>. SH = conclusão é uma implicação (P → R) → <b>1</b>. Alternativa assinalada no original: <b>I – 2, II – 3, III – 1</b>.`,
+ note:`No PDF as fórmulas da coluna B saíram com símbolos ilegíveis; foram reconstruídas com as estruturas do material (Unidade 3, Aula 4), as mesmas descritas no texto da questão.`},
+
+{part:3, unit:3, real:true, src:"av2b", srcQ:"Q5", ref:"AV2 · Q5 — Associar MP, MT, SH às estruturas",
+ statement:`Associe as regras (coluna A) às estruturas (coluna B):
+ <table><tr><th>Coluna A</th><th>Coluna B</th></tr>
+ <tr><td>I. Modus Ponens (MP)</td><td>1. (P → Q) ∧ ¬Q → ¬P</td></tr>
+ <tr><td>II. Modus Tollens (MT)</td><td>2. (P → Q) ∧ P → Q</td></tr>
+ <tr><td>III. Silogismo Hipotético (SH)</td><td>3. (P → Q) ∧ (Q → R) → (P → R)</td></tr></table>`,
+ options:["I – 1; II – 3; III – 2.","I – 2; II – 1; III – 3.","I – 3; II – 1; III – 2.","I – 3; II – 2; III – 1.","I – 1; II – 2; III – 3."],
+ correct:1,
+ hint:`Ponens = "afirma" o antecedente (P). Tollens = "nega" o consequente (¬Q).`,
+ explain:`MP → <b>2</b> (afirma P, conclui Q). MT → <b>1</b> (nega Q, conclui ¬P). SH → <b>3</b> (encadeia). Alternativa assinalada no original: <b>I – 2; II – 1; III – 3</b>.`},
+
+{part:3, unit:3, real:true, src:"pres", srcQ:"Q3", ref:"Prova presencial · Q3 — Afirmação equivalente (AOCP)",
+ statement:`Assinale a alternativa que apresenta uma afirmação semelhante (equivalente) à seguinte: <i>"Se eu estivesse atento, teria solucionado o crime."</i>`,
+ options:["Estava atento e solucionei o crime.","Se eu não estava atento, então não solucionei o crime.","Se eu solucionei o crime, então estava atento.","Não estava atento e não solucionei o crime.","Se eu não solucionei o crime, então eu não estava atento."],
+ correct:4,
+ hint:`P → Q é equivalente a ¬Q → ¬P: negue <b>e</b> inverta.`,
+ explain:`P = estava atento, Q = solucionei. A equivalente é a <b>contrapositiva</b> ¬Q → ¬P: "Se não solucionei, então não estava atento" → <b>E</b>. B é a inversa (¬P → ¬Q) e C é a recíproca (Q → P): nenhuma das duas é equivalente.`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:3, real:true, src:"gab23", srcQ:"Q5", ref:"Prova 2023 · Q5 — Mesma tabela verdade? (maior de idade/votar)",
+ statement:`A tabela verdade da proposição "se uma pessoa é maior de idade, então pode votar" é a mesma que a tabela verdade da proposição "se uma pessoa não pode votar, então não é maior de idade". Com base em seus conhecimentos, analise se a afirmação acima é:`,
+ options:["Verdadeira","Depende dos valores das proposições simples","Nenhuma das alternativas","Falsa","Ambas as proposições são equivalentes"],
+ correct:[0,4],
+ hint:`P → Q e ¬Q → ¬P: que nome tem essa relação?`,
+ explain:`É a <b>contrapositiva</b>, que tem exatamente a mesma tabela de P → Q. A afirmação é <b>verdadeira</b>. Gabarito oficial: <b>A</b>.`,
+ note:`A alternativa E ("ambas as proposições são equivalentes") também é logicamente correta, e por isso foi aceita aqui. Na prova, marque A, que é o que a pergunta pede (classificar a afirmação).`},
+
+{part:3, unit:3, real:true, src:"pres", srcQ:"Q13", ref:"Prova presencial · Q13 — Modus Tollens encadeado (Leandro)",
+ statement:`Premissa 1: Se Leandro estudar lógica, então não irá ao jogo.<br>Premissa 2: Se Leandro não for ao jogo, seu time ficará desfalcado.<br>Como o time de Leandro <b>não</b> ficou desfalcado, conclui-se que...`,
+ options:["Leandro foi ao cinema.","Leandro sumiu.","Leandro não estudou lógica.","Leandro não foi ao cinema.","Leandro estudou lógica."],
+ correct:2,
+ hint:`Comece pelo fato (time não desfalcado) e volte pelas setas com Modus Tollens, uma premissa de cada vez.`,
+ explain:`E = estuda, J = vai ao jogo, D = desfalcado. Premissas: E → ¬J e ¬J → D. Fato: ¬D.<br>• MT na premissa 2: ¬D ⇒ ¬(¬J) ⇒ <b>J</b> (foi ao jogo).<br>• MT na premissa 1: J ⇒ ¬E ⇒ <b>não estudou lógica</b>.<br>Atalho: por SH, E → D. Com ¬D, MT dá ¬E.`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:3, real:true, src:"pres", srcQ:"Q12", ref:"Prova presencial · Q12 — Estrutura de um argumento",
+ statement:`"Um argumento é um conjunto de proposições, ou de fórmulas, nas quais uma delas (conclusão) deriva, ou é consequência, das outras (premissas)." Avalie:<blockquote>I. Um argumento é composto por hipóteses e conclusão, e ambas podem ser compostas por proposições simples ou fbf.<br>II. No argumento, as proposições são ligadas logicamente pelo conectivo de conjunção (e), as quais implicam logicamente a conclusão.<br>III. A ligação entre as hipóteses e a conclusão não é feita por meio do conectivo condicional.</blockquote>É correto afirmar que:`,
+ options:["I e II são verdadeiras","Somente II é verdadeira","Somente I é verdadeira","II e III são verdadeiras","I e III são verdadeiras"],
+ correct:0,
+ hint:`Unidade 3, Aula 3: o argumento tem a forma P₁ ∧ P₂ ∧ … ∧ Pₙ → Q. Que conectivo liga as hipóteses entre si? E as hipóteses à conclusão?`,
+ explain:`A forma é <b>P₁ ∧ P₂ ∧ … → Q</b>: hipóteses ligadas por ∧ (II ✓), que <b>implicam</b> a conclusão pela condicional →. Por isso, III está <b>errada</b>. I está correta. Resposta: <b>I e II</b>.`,
+ note:`O PDF desta prova não traz o gabarito; a resposta foi definida pela análise do conteúdo.`},
+
+{part:3, unit:3, real:true, src:"gab23", srcQ:"Q3", ref:"Prova 2023 · Q3 — Valoração de fbf",
+ statement:`Avalie as afirmativas sobre lógica proposicional:<blockquote>I. Uma fbf é valorada em verdadeira (V) ou falsa (F) a partir da valoração das proposições com o conectivo lógico em questão, respeitando a ordem de precedência dos operadores lógicos.<br>II. A valoração de uma fórmula também depende dos valores lógicos de entrada para cada uma das proposições.</blockquote>É correto afirmar que:`,
+ options:["Somente I é verdadeira","I é falsa e II é verdadeira","I e II são verdadeiras","Somente II é verdadeira","I é verdadeira e II é falsa"],
+ correct:2,
+ hint:`Para valorar A → B ∧ ¬C, do que você precisa? Da precedência? Dos valores de A, B e C?`,
+ explain:`Para valorar uma fbf você precisa das <b>duas</b> coisas: a ordem de precedência (I) e os valores de entrada das proposições (II). Gabarito oficial: <b>I e II verdadeiras</b>.`},
+
+// ----- Unidade 4 -----
+{part:3, unit:4, real:true, src:"gab23", srcQ:"Q6", ref:"Prova 2023 · Q6 — Quando p OR q é falso",
+ statement:`Complete: a tabela verdade para "p ou q" (p OR q) apresenta o valor verdadeiro quando pelo menos uma das proposições simples é verdadeira, exceto quando ______________.`,
+ options:["Este tipo de proposição lógica nunca é falsa.","Ambas as proposições são falsas.","A proposição p é verdadeira e a proposição q é falsa.","A proposição p é falsa e a proposição q é verdadeira.","Ambas as proposições são verdadeiras."],
+ correct:1,
+ hint:`OR: só uma linha dá F.`,
+ explain:`p ∨ q só é F quando <b>as duas são F</b>. A alternativa E descreveria o "ou exclusivo" (que dá F quando as duas são V). Gabarito oficial: <b>B</b>. A mesma questão caiu na prova presencial (Q4).`},
+
+{part:3, unit:4, real:true, src:"gab23", srcQ:"Q11", diverge:true, ref:"Prova 2023 · Q11 — Afirmativa FALSA sobre tabela verdade",
+ statement:`A tabela verdade é um tipo de tabela matemática usada em lógica para determinar se uma fórmula é válida. Qual das seguintes afirmativas é <b>FALSA</b> sobre tabela verdade?`,
+ options:["A tabela verdade para \"p implica q\" (p → q) é a mesma que a tabela verdade para \"q implica p\" (q → p).","A tabela verdade é uma ferramenta útil para avaliar a validade de argumentos lógicos.","O conectivo lógico \"e\" (AND) resulta em verdadeiro apenas se ambas as proposições simples são verdadeiras.","A tabela verdade só pode ser usada para proposições simples, não para proposições compostas.","Tabela verdade é uma tabela que lista todas as possibilidades de valores lógicos de uma proposição composta."],
+ correct:[0,3],
+ hint:`Teste a linha p = V, q = F em p → q e em q → p. E releia a definição da alternativa E.`,
+ explain:`<b>A é falsa:</b> com p = V e q = F, p → q = F, mas q → p = V (são a condicional e sua <i>recíproca</i>). <b>D também é falsa:</b> a tabela verdade serve justamente para proposições <i>compostas</i>. B, C e E são verdadeiras.`,
+ note:`O gabarito do documento marca <b>B</b>, mas B é uma afirmação <b>verdadeira</b> (a tabela verdade avalia argumentos), então o gabarito parece errado. As duas falsas (A e D) foram aceitas aqui. Se aparecer na prova, prefira a <b>A</b>, que é a pegadinha clássica.`},
+
+{part:3, unit:4, real:true, src:"pres", srcQ:"Q11", diverge:true, ref:"Prova presencial · Q11 — Qual fórmula gera a tabela? (CPCON)",
+ statement:`Diga qual proposição satisfaz a tabela verdade seguinte:
+ <table><tr><th>p</th><th>q</th><th>?</th></tr>
+ <tr><td>F</td><td>F</td><td>V</td></tr><tr><td>F</td><td>V</td><td>F</td></tr>
+ <tr><td>V</td><td>F</td><td>V</td></tr><tr><td>V</td><td>V</td><td>V</td></tr></table>`,
+ options:["q → p","p ∧ q","p ← q","p ∨ q","p ↔ q"],
+ correct:[0,2],
+ hint:`Há um único F. Em que linha ele está (p = ?, q = ?)? Qual condicional só é falsa quando o antecedente é V e o consequente é F?`,
+ explain:`O único F está em p = F, q = V. Uma condicional é F só quando antecedente V e consequente F, então o antecedente é <b>q</b> e o consequente é <b>p</b>: <b>q → p</b>. p ∧ q teria 3 F; p ∨ q daria F na 1ª linha; p ↔ q daria F na 3ª.`,
+ note:`"p ← q" (seta para a esquerda: "p se q") é só outra forma de escrever <b>q → p</b>, então também está correta e foi aceita. Na prova, marque a forma com → (alternativa A), que é a notação do material. O PDF não traz o gabarito.`},
+
+// ================= PARTE 4 — NOVAS NO ESTILO DA PROVA =================
+// ----- Unidade 1 -----
+{part:4, unit:1, ref:"Nova · U1 — Permutação com restrição",
+ statement:`Quantos anagramas da palavra <b>PROVA</b> começam com a letra <b>P</b>?`,
+ options:["120","24","96","5","20"],
+ correct:1,
+ hint:`Se o P está travado na 1ª posição, quantas letras sobram para permutar?`,
+ explain:`Fixando o P, permutam-se R, O, V, A → P(4) = 4! = <b>24</b>. Distratores: 120 = 5! (todos os anagramas); 96 = 120 − 24 (os que <i>não</i> começam com P); 20 = A(5, 2).`},
+
+{part:4, unit:1, ref:"Nova · U1 — Turno × ida e volta",
+ statement:`Um campeonato tem 6 times. Cada time enfrenta cada adversário <b>duas vezes</b>, uma em casa e outra fora (ida e volta). Quantos jogos acontecem?`,
+ options:["15","36","30","12","720"],
+ correct:2,
+ hint:`"Time A em casa contra B" é diferente de "B em casa contra A"? Então a ordem importa.`,
+ explain:`O mando de campo dá ordem ao par → A(6, 2) = 6 · 5 = <b>30</b>. Se fosse turno único (cada par uma vez), seria C(6, 2) = 15. 36 = 6² incluiria o time contra ele mesmo; 720 = 6!.`,
+ fix:`É a mesma ideia do torneio de xadrez da Aula 5: o par de jogadores é combinação; se a cor das peças (ou o mando) importar, vira arranjo.`},
+
+{part:4, unit:1, ref:"Nova · U1 — Arranjo com repetição (vogais)",
+ statement:`Um código é formado por 4 caracteres escolhidos entre as 5 vogais (A, E, I, O, U), <b>podendo repetir</b>. Quantos códigos existem?`,
+ options:["120","625","20","1.024","25"],
+ correct:1,
+ hint:`Base = opções por posição; expoente = número de posições.`,
+ explain:`nᵖ = 5⁴ = <b>625</b>. 120 = A(5, 4) (sem repetir); 1.024 = 4⁵ (base e expoente trocados); 20 = 5 · 4; 25 = 5².`},
+
+{part:4, unit:1, ref:"Nova · U1 — Asserção-razão (combinação)",
+ statement:`Avalie as asserções e a relação proposta entre elas:<blockquote>I. Escolher 3 de 10 alunos para formar uma comissão (sem cargos) é um problema de combinação, cujo resultado é C(10, 3) = 120.<br><b>PORQUE</b><br>II. Em uma comissão sem cargos, a ordem de escolha dos membros não altera o grupo formado.</blockquote>`,
+ options:assertOpts,
+ correct:0,
+ hint:`Avalie cada uma isoladamente, depois pergunte: a II explica por que a I usa combinação?`,
+ explain:`I é verdadeira: 10 · 9 · 8 / 3! = 720 / 6 = 120. II é verdadeira e é <b>exatamente o motivo</b> de usar combinação (a ordem não importa). Logo, as duas são verdadeiras e a II justifica a I.`,
+ fix:`Em asserção-razão, avalie I e II <b>separadamente</b> primeiro. Só se as duas forem verdadeiras você decide se a II justifica a I.`},
+
+{part:4, unit:1, ref:"Nova · U1 — Combinação (equipe)",
+ statement:`Uma empresa tem 12 funcionários e precisa montar uma equipe de 5 para um projeto, sem cargos definidos. De quantas maneiras a equipe pode ser formada?`,
+ options:["95.040","60","792","248.832","120"],
+ correct:2,
+ hint:`Faça o arranjo (12 · 11 · 10 · 9 · 8) e divida pelas 5! ordens de cada grupo.`,
+ explain:`C(12, 5) = 95.040 / 120 = <b>792</b>. 95.040 = A(12, 5) (contou ordem); 248.832 = 12⁵ (com repetição); 120 = 5!; 60 = 12 · 5.`},
+
+// ----- Unidade 2 -----
+{part:4, unit:2, ref:"Nova · U2 — Pertinência × inclusão",
+ statement:`Seja A = {2, 4, 6}. Assinale a alternativa <b>correta</b>:`,
+ options:["2 ⊂ A","{2} ∈ A","6 ∉ A","{2, 4} ⊂ A","A ⊂ {2, 4}"],
+ correct:3,
+ hint:`∈ liga elemento a conjunto; ⊂ liga conjunto a conjunto.`,
+ explain:`{2, 4} é um <b>conjunto</b> cujos elementos estão todos em A (e falta o 6), então {2, 4} ⊂ A ✓. A usa ⊂ com um elemento (deveria ser 2 ∈ A); B usa ∈ com um conjunto ({2} não é elemento de A); C é falsa (6 ∈ A); E inverte a inclusão.`},
+
+{part:4, unit:2, ref:"Nova · U2 — Cardinalidade por propriedade",
+ statement:`Qual é a cardinalidade do conjunto C = {x | x ∈ ℤ e −2 &lt; x ≤ 3}?`,
+ options:["6","4","5","3","infinita"],
+ correct:2,
+ hint:`Liste: −2 entra (&lt;)? 3 entra (≤)? E o zero?`,
+ explain:`C = {−1, 0, 1, 2, 3} → |C| = <b>5</b>. 6 incluiria o −2 (mas o sinal é &lt;); 4 esqueceu o 0 ou o 3. Mesmo raciocínio do exemplo {x | 4 &lt; x ≤ 9} da Aula 2.`},
+
+{part:4, unit:2, ref:"Nova · U2 — Quantificadores",
+ statement:`Qual das afirmações abaixo é <b>verdadeira</b>?`,
+ options:["∀ x ∈ ℤ, x &gt; 0","∀ x ∈ ℕ, x é primo","∃ x ∈ ℕ, x &lt; 0","∃ x ∈ ℕ, x é primo e par","∀ x ∈ ℤ, x é par"],
+ correct:3,
+ hint:`∀ ("para todo") cai com <b>um</b> contraexemplo. ∃ ("existe") fica provado com <b>um</b> exemplo.`,
+ explain:`∃ x ∈ ℕ primo e par: o <b>2</b> ✓ (é o exemplo da Aula 2). A cai com x = −1; B cai com x = 4; C é falsa (ℕ não tem negativos); E cai com x = 3.`},
+
+{part:4, unit:2, ref:"Nova · U2 — Subconjuntos de tamanho fixo",
+ statement:`Quantos subconjuntos com <b>exatamente 2 elementos</b> tem o conjunto {a, b, c, d, e}?`,
+ options:["32","10","20","25","5"],
+ correct:1,
+ hint:`Subconjunto não tem ordem: {a, b} = {b, a}. Que fórmula da Unidade 1 conta grupos sem ordem?`,
+ explain:`É uma combinação: C(5, 2) = (5 · 4) / 2 = <b>10</b>. 32 = 2⁵ conta <i>todos</i> os subconjuntos (de 0 a 5 elementos); 20 = A(5, 2) conta {a, b} e {b, a} como diferentes.`,
+ fix:`Ligação entre unidades: 2ⁿ = C(n,0) + C(n,1) + … + C(n,n). Para n = 5: 1 + 5 + 10 + 10 + 5 + 1 = 32.`},
+
+{part:4, unit:2, ref:"Nova · U2 — Asserção-razão (produto cartesiano)",
+ statement:`Sejam A = {1, 2, 3} e B = {x, y}. Avalie:<blockquote>I. |A × B| = |B × A| = 6.<br><b>PORQUE</b><br>II. A × B = B × A.</blockquote>`,
+ options:assertOpts,
+ correct:2,
+ hint:`(1, x) pertence a B × A?`,
+ explain:`I é verdadeira: as duas cardinalidades são 3 · 2 = 6. II é <b>falsa</b>: (1, x) ∈ A × B, mas (1, x) ∉ B × A (lá os pares começam com x ou y). Os conjuntos têm o mesmo <i>tamanho</i>, mas não são iguais, porque os pares são <b>ordenados</b>.`},
+
+// ----- Unidade 3 -----
+{part:4, unit:3, ref:"Nova · U3 — O que não é fbf",
+ statement:`Qual das expressões abaixo <b>não</b> é uma fórmula bem-formulada (fbf)?`,
+ options:["(P → Q) ∧ R","¬¬P","(P ∨ Q) → ¬R","P ∧ ∨ Q","P ↔ (Q ∧ R)"],
+ correct:3,
+ hint:`Regra de sintaxe: sempre um conectivo <i>entre</i> duas proposições. O único que pode "encostar" em outro conectivo é o ¬.`,
+ explain:`"P ∧ ∨ Q" tem dois conectivos binários seguidos, sem proposição entre eles. É como escrever "2 + × 3". ¬¬P é válida (dupla negação: o ¬ pode vir junto de outro ¬).`},
+
+{part:4, unit:3, ref:"Nova · U3 — Precedência",
+ statement:`Seguindo a ordem de precedência dos conectivos, como deve ser lida a fórmula <code>A ∨ B → C</code>?`,
+ options:["A ∨ (B → C)","(A ∨ B) → C","A ∨ B ∨ C","¬A ∨ (B → C)","Não é uma fbf, pois faltam parênteses"],
+ correct:1,
+ hint:`Quem vem primeiro: ∨ ou →?`,
+ explain:`A ordem é ¬ → ∧/∨ → → → ↔. Então o ∨ é resolvido antes: <b>(A ∨ B) → C</b>. A expressão é uma fbf válida; os parênteses são opcionais aqui.`},
+
+{part:4, unit:3, ref:"Nova · U3 — Valorar fbf",
+ statement:`Sabendo que P = V, Q = F e R = V, qual é o valor de <code>(P ∨ Q) → ¬R</code>?`,
+ options:["V, porque P é verdadeiro.","F, porque P ∨ Q = V e ¬R = F.","V, porque R é verdadeiro.","F, porque Q é falso.","Não é possível determinar sem a tabela completa."],
+ correct:1,
+ hint:`Calcule os dois lados da seta e depois aplique a regra "V → F = F".`,
+ explain:`P ∨ Q = V ∨ F = V. ¬R = ¬V = F. V → F = <b>F</b>. A alternativa D chega ao valor certo pelo motivo errado.`},
+
+{part:4, unit:3, ref:"Nova · U3 — Justificativa de demonstração",
+ statement:`Complete a justificativa da linha 4:
+ <table><tr><th>Linha</th><th>fbf</th><th>Justificativa</th></tr>
+ <tr><td>1</td><td>P → Q</td><td>hip</td></tr>
+ <tr><td>2</td><td>¬Q</td><td>hip</td></tr>
+ <tr><td>3</td><td>¬P → R</td><td>hip</td></tr>
+ <tr><td>4</td><td>¬P</td><td><b>?</b></td></tr>
+ <tr><td>5</td><td>R</td><td>3, 4, MP</td></tr></table>`,
+ options:["1, 2, MP","1, 2, MT","3, ad","2, 3, SH","1, simp"],
+ correct:1,
+ hint:`Linha 1 é uma condicional; linha 2 nega o consequente dela.`,
+ explain:`P → Q (1) e ¬Q (2) ⊢ ¬P por <b>Modus Tollens</b>: "1, 2, MT". Depois, ¬P → R (3) com ¬P (4) dá R por MP.`},
+
+{part:4, unit:3, ref:"Nova · U3 — De Morgan (negar um 'ou')",
+ statement:`Qual é a negação de: "O servidor caiu <b>ou</b> a rede falhou"?`,
+ options:["O servidor não caiu ou a rede não falhou.","O servidor caiu e a rede falhou.","O servidor não caiu e a rede não falhou.","Se o servidor caiu, então a rede não falhou.","O servidor não caiu e a rede falhou."],
+ correct:2,
+ hint:`¬(P ∨ Q) ≡ ¬P ∧ ¬Q: nega as duas partes e troca o conectivo.`,
+ explain:`Para "caiu ou falhou" ser falso, <b>nenhuma</b> das duas coisas pode ter acontecido: ¬P ∧ ¬Q. Em código: <code>!(a || b) === (!a &amp;&amp; !b)</code>. A alternativa A negou as partes mas esqueceu de trocar ∨ por ∧.`},
+
+{part:4, unit:3, ref:"Nova · U3 — Condicional no código (afirmação do consequente)",
+ statement:`Um sistema tem a regra:<pre>if (senhaIncorreta) bloquearAcesso();</pre>Um ticket informa: "o acesso do usuário foi <b>bloqueado</b>". O que se pode concluir apenas com essa regra?`,
+ options:["A senha estava incorreta, por Modus Ponens.","A senha estava incorreta, por Modus Tollens.","A senha estava correta, pois o bloqueio veio de outro motivo.","Nada se pode concluir sobre a senha: concluir que estava incorreta seria a falácia da afirmação do consequente.","O acesso não foi bloqueado."],
+ correct:3,
+ hint:`Pode existir outro <code>if</code> no sistema que também chama bloquearAcesso()?`,
+ explain:`A regra é P → Q, e o ticket informa Q. Concluir P a partir de Q é <b>afirmar o consequente</b>: o bloqueio pode ter vindo de outra regra (tentativas, conta suspensa…). Também não dá para afirmar que a senha estava correta (C). <b>Nada</b> se conclui sobre a senha.`},
+
+// ----- Unidade 4 -----
+{part:4, unit:4, ref:"Nova · U4 — Número de linhas",
+ statement:`A fórmula <code>(P ∧ Q) → (R ∨ ¬S)</code> tem quantas linhas na tabela verdade?`,
+ options:["8","16","4","32","12"],
+ correct:1,
+ hint:`Conte as proposições <i>distintas</i> e use 2ⁿ.`,
+ explain:`P, Q, R e S → n = 4 → 2⁴ = <b>16</b> linhas. O ¬S não é uma nova proposição.`},
+
+{part:4, unit:4, ref:"Nova · U4 — Contradição",
+ statement:`Qual das fórmulas é uma <b>contradição</b>?`,
+ options:["P ∨ ¬P","P → P","P ∧ ¬P","P → Q","¬(P ∧ ¬P)"],
+ correct:2,
+ hint:`Contradição = F em todas as linhas. Algo "e" o seu contrário pode ser verdade?`,
+ explain:`P ∧ ¬P nunca é V → <b>contradição</b> (é o que o princípio da não contradição proíbe). A, B e E são tautologias; D é contingência.`},
+
+{part:4, unit:4, ref:"Nova · U4 — Regra de negócio (aplicação)",
+ statement:`Uma loja define A: "o cliente é VIP", B: "a compra passa de R$ 200" e C: "o frete é grátis". A regra é <code>(A ∨ B) → C</code>. Um pedido de um cliente <b>não VIP</b>, com compra de <b>R$ 250</b>, saiu <b>sem frete grátis</b>. O valor da regra para esse pedido é:`,
+ options:["V: a regra foi cumprida, pois o cliente não é VIP.","F: a regra foi violada, pois A ∨ B = V e C = F.","V: a condicional com antecedente falso é sempre verdadeira.","F: porque A é falso.","Não é possível avaliar sem a tabela completa."],
+ correct:1,
+ hint:`Valores: A = F, B = V, C = F. Calcule o parêntese antes.`,
+ explain:`A ∨ B = F ∨ V = V. V → F = <b>F</b>: a regra foi violada (o pedido deveria ter frete grátis). A alternativa C erra o antecedente: ele é V, não F. É o mesmo tipo de análise do exemplo dos combustíveis (Unidade 4, Aula 4).`},
+
+{part:4, unit:4, ref:"Nova · U4 — not / or em Python",
+ statement:`Em Python, com <code>x = 3</code> e <code>y = False</code>, qual é o resultado de <code>not (x &gt; 5 or y)</code>?`,
+ options:["True, porque x &gt; 5 or y é False","False, porque y é False","True, porque x é 3","False, porque o not inverte só o x &gt; 5","Erro, pois not não pode ser aplicado a parênteses"],
+ correct:0,
+ hint:`Resolva o parêntese inteiro antes de aplicar o not.`,
+ explain:`x &gt; 5 = False; False or False = False; not False = <b>True</b>. O parêntese faz o not atingir a expressão inteira, que equivale por De Morgan a <code>(not x &gt; 5) and (not y)</code> = True and True.`}
+];
+
+const SRC = {
+  av2a:{label:"AV2 (Studocu)", url:"https://www.studocu.com/pt-br/document/anhanguera-educational/logica-computacional/p2-logica-computacional/72509391"},
+  av2b:{label:"AV2 (Studocu)", url:"https://www.studocu.com/pt-br/document/anhanguera-educational/algoritmos-e-programacao-estruturada/av2-logica-e-matematica-computacional/78265607"},
+  gab23:{label:"Prova + gabarito 2023 (Studocu)", url:"https://www.studocu.com/pt-br/document/anhanguera-educational/logica-e-matematica-computacional/prova-gabarito-logica-e-matematica-computacional/83707940"},
+  pres:{label:"Prova presencial 1ª chamada (Studocu)", url:"https://www.studocu.com/pt-br/document/anhanguera-educational/logica-e-matematica-computacional/prova-presencial-1o-chamada-logica-e-matematica-computacional/77573644"}
+};
+
+/* ---------- Dicas de estudo por unidade (aparecem quando há erros) ---------- */
+const unitTips = {
+  1:`<b>Unidade 1: lógica e análise combinatória.</b> Reveja o tutorial da Unidade 1. Antes de qualquer fórmula, responda duas perguntas: <i>a ordem importa?</i> e <i>pode repetir?</i> Nos silogismos com todo/algum/nenhum, desenhe os conjuntos e só aceite a conclusão que vale em <b>todos</b> os desenhos.`,
+  2:`<b>Unidade 2: conjuntos.</b> Traduza cada operação em uma frase: ∪ "em pelo menos um", ∩ "nos dois", A − B "em A e não em B", Δ "em exatamente um". Em Venn, <b>comece pela interseção</b> ou use |A ∪ B| = |A| + |B| − |A ∩ B|. Use a ferramenta de conjuntos do tutorial para conferir.`,
+  3:`<b>Unidade 3: lógica proposicional.</b> Pense na condicional como um <code>if</code>: só valem Modus Ponens (P → Q, P ⊢ Q), Modus Tollens (P → Q, ¬Q ⊢ ¬P) e a contrapositiva. Afirmar o consequente e negar o antecedente são falácias. Na tradução para símbolos, veja em qual proposição fica o "não".`,
+  4:`<b>Unidade 4: tabela verdade.</b> Monte uma coluna por subexpressão. AND só é V com tudo V; OR só é F com tudo F; V → F é a única linha falsa da condicional; ↔ é V quando os valores são iguais. Teste suas fórmulas no gerador de tabela do tutorial.`
+};
+
+const unitInfo = {
+  1:{name:"Unidade 1: fundamentos da lógica e análise combinatória", short:"Unidade 1", color:"var(--u1)"},
+  2:{name:"Unidade 2: álgebra de conjuntos", short:"Unidade 2", color:"var(--u2)"},
+  3:{name:"Unidade 3: lógica proposicional", short:"Unidade 3", color:"var(--u3)"},
+  4:{name:"Unidade 4: tabela verdade", short:"Unidade 4", color:"var(--u4)"}
+};
+const partInfo = {
+  1:{name:"Parte 1: exercícios das unidades", short:"Exercícios", desc:"Questões dos seus exercícios das Unidades 1 a 4, com gabarito revisado.", cls:""},
+  2:{name:"Parte 2: fixação", short:"Fixação", desc:"Questões novas no estilo da prova, com dicas e pontos de fixação.", cls:"p2"},
+  3:{name:"Parte 3: provas anteriores (reais)", short:"Provas reais", desc:"Questões de AV2, prova presencial e prova com gabarito de 2023 desta disciplina. Cada uma tem o link da fonte.", cls:"p3"},
+  4:{name:"Parte 4: novas no estilo da prova", short:"Novas", desc:"Questões inéditas no formato Anhanguera (inclui asserção-razão), cobrindo o que as anteriores não cobriram.", cls:"p4"}
+};
+const letters = ["A","B","C","D","E"];
+const accepted = q => Array.isArray(q.correct) ? q.correct : [q.correct];
+questions.forEach((q, i) => { q.id = "p" + q.part + "|" + q.ref; q.idx = i; });
+
+/* ---------- Estado persistente (localStorage) ---------- */
+const STORE_KEY = "lmc-simulado-v2";
+const defaultState = () => ({
+  answers:{}, mode:"instant", submitted:false, hints:{}, history:[],
+  tab:"tutoriais", filter:"all", reviewed:{}, theme:null,
+  calc:{atual:50, prova:50, minimo:60, criterio:"gte", nq:10}
+});
+function loadState(){
+  const d = defaultState();
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return {...d, ...s, calc:{...d.calc, ...(s.calc || {})}};
+    }
+  } catch (e) {}
+  return d;
+}
+let state = loadState();
+const savedFlag = document.getElementById("savedFlag");
+function save(){
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    savedFlag.textContent = "💾 salvo neste navegador";
+  } catch (e) {
+    savedFlag.textContent = "⚠️ não foi possível salvar";
+  }
+}
+
+/* ---------- Tema ---------- */
+function applyTheme(){
+  if (state.theme) document.documentElement.setAttribute("data-theme", state.theme);
+  else document.documentElement.removeAttribute("data-theme");
+}
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const dark = state.theme ? state.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  state.theme = dark ? "light" : "dark";
+  applyTheme(); save();
+});
+applyTheme();
+
+/* ---------- Abas ---------- */
+function showTab(tab){
+  state.tab = tab;
+  document.querySelectorAll("nav.tabs button[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === "tab-" + tab));
+  if (tab === "nota") renderCalc();
+  save();
+}
+document.querySelectorAll("nav.tabs button[data-tab]").forEach(b => b.addEventListener("click", () => { showTab(b.dataset.tab); window.scrollTo(0, 0); }));
+
+/* ---------- Render das questões ---------- */
+const quiz = document.getElementById("quiz");
+let lastPart = null, lastUnit = null;
+questions.forEach((q, i) => {
+  if (q.part !== lastPart) {
+    lastPart = q.part; lastUnit = null;
+    const pt = document.createElement("div");
+    pt.className = "part-title " + partInfo[q.part].cls;
+    pt.dataset.part = q.part;
+    pt.innerHTML = `<h2>${partInfo[q.part].name}</h2><p>${partInfo[q.part].desc}</p>`;
+    quiz.appendChild(pt);
+  }
+  if (q.unit !== lastUnit) {
+    lastUnit = q.unit;
+    const ut = document.createElement("div");
+    ut.className = "unit-title";
+    ut.dataset.part = q.part; ut.dataset.unit = q.unit;
+    ut.innerHTML = `<div class="dot" style="background:${unitInfo[q.unit].color}"></div><h3>${unitInfo[q.unit].name}</h3>`;
+    quiz.appendChild(ut);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.id = "card-" + i;
+  const fig = q.svg ? `<figure class="qfig">${q.svg}<figcaption>${q.caption || ""}</figcaption></figure>` : "";
+
+  let badges = "";
+  if (q.real) badges += `<a class="badge real" href="${SRC[q.src].url}" target="_blank" rel="noopener">prova real · ${SRC[q.src].label} ${q.srcQ} ↗</a>`;
+  if (q.rebuilt) badges += `<span class="badge rebuilt">${q.real ? "texto reconstruído" : "alternativas recriadas"}</span>`;
+  if (q.diverge) badges += `<span class="badge diverge">gabarito original corrigido</span>`;
+  if (q.offsyl) badges += `<span class="badge offsyl">fora do material escrito</span>`;
+
+  const opts = q.options.map((opt, j) => `
+    <label class="opt" id="opt-${i}-${j}">
+      <input type="radio" name="q${i}" value="${j}">
+      <span><span class="letter">${letters[j]}</span> ${opt}</span>
+    </label>`).join("");
+
+  let extra = "";
+  if (q.fix) extra += `<div class="fix"><b>💡 Para fixar:</b> ${q.fix}</div>`;
+  if (q.note) extra += `<div class="note"><b>Nota:</b> ${q.note}</div>`;
+
+  card.innerHTML = `
+    <div class="qhead"><span class="qnum">Questão ${i + 1}</span><span class="qtag" id="tag-${i}"></span></div>
+    <div class="qref"><span>${q.ref}</span>${badges}</div>
+    <div class="statement">${q.statement}</div>
+    ${fig}
+    <div class="options">${opts}</div>
+    ${q.hint ? `<button class="hint-btn" data-hint="${i}">💡 Dica</button><div class="hint" id="hint-${i}">${q.hint}</div>` : ""}
+    <div class="explain" id="explain-${i}"><b>Explicação:</b> ${q.explain}${extra}</div>`;
+  card.querySelectorAll("input").forEach(inp => inp.addEventListener("change", () => choose(i, +inp.value)));
+  const hb = card.querySelector(".hint-btn");
+  if (hb) hb.addEventListener("click", () => {
+    if (state.hints[q.id]) delete state.hints[q.id]; else state.hints[q.id] = true;
+    paintCard(i); save();
+  });
+  quiz.appendChild(card);
+});
+
+document.getElementById("metaTotal").textContent = questions.length;
+document.getElementById("metaReal").textContent = questions.filter(q => q.part === 3).length;
+
+const answerOf = q => (q.id in state.answers) ? state.answers[q.id] : null;
+const isRevealed = q => state.submitted || (state.mode === "instant" && answerOf(q) !== null);
+const isWrong = q => answerOf(q) !== null && !accepted(q).includes(answerOf(q));
+
+function choose(i, j){
+  const q = questions[i];
+  if (isRevealed(q)) { paintCard(i); return; }
+  state.answers[q.id] = j;
+  save(); paintCard(i); updateProgress();
+}
+
+function paintCard(i){
+  const q = questions[i], sel = answerOf(q), rev = isRevealed(q), ok = accepted(q);
+  const card = document.getElementById("card-" + i), tag = document.getElementById("tag-" + i);
+  card.classList.remove("correct-card", "incorrect-card");
+  q.options.forEach((_, j) => {
+    const el = document.getElementById(`opt-${i}-${j}`), inp = el.querySelector("input");
+    inp.checked = sel === j;
+    inp.disabled = rev;
+    el.classList.toggle("locked", rev);
+    el.classList.toggle("correct", rev && ok.includes(j));
+    el.classList.toggle("incorrect", rev && j === sel && !ok.includes(j));
+  });
+  tag.className = "qtag";
+  if (rev) {
+    if (sel !== null && ok.includes(sel)) { tag.textContent = "correta"; tag.classList.add("good"); card.classList.add("correct-card"); }
+    else { tag.textContent = sel === null ? "sem resposta" : "incorreta"; tag.classList.add("bad"); card.classList.add("incorrect-card"); }
+  } else if (sel !== null) { tag.textContent = "respondida"; tag.classList.add("done"); }
+  else tag.textContent = "não respondida";
+  document.getElementById("explain-" + i).classList.toggle("show", rev);
+  const h = document.getElementById("hint-" + i);
+  if (h) h.classList.toggle("show", !!state.hints[q.id]);
+}
+const paintAll = () => questions.forEach((_, i) => paintCard(i));
+
+/* ---------- Filtros ---------- */
+function matchesFilter(q){
+  const f = state.filter;
+  if (f === "all") return true;
+  if (f[0] === "u") return q.unit === +f.slice(1);
+  if (f[0] === "p") return q.part === +f.slice(1);
+  if (f === "todo") return answerOf(q) === null;
+  if (f === "wrong") return isRevealed(q) && isWrong(q);
+  return true;
+}
+function applyFilter(){
+  let visible = 0;
+  const shownParts = new Set(), shownUnits = new Set();
+  questions.forEach((q, i) => {
+    const show = matchesFilter(q);
+    document.getElementById("card-" + i).classList.toggle("hidden", !show);
+    if (show) { visible++; shownParts.add(q.part); shownUnits.add(q.part + "-" + q.unit); }
+  });
+  quiz.querySelectorAll(".part-title").forEach(el => el.classList.toggle("hidden", !shownParts.has(+el.dataset.part)));
+  quiz.querySelectorAll(".unit-title").forEach(el => el.classList.toggle("hidden", !shownUnits.has(el.dataset.part + "-" + el.dataset.unit)));
+  document.getElementById("emptyMsg").style.display = visible ? "none" : "block";
+  document.getElementById("filterSel").value = state.filter;
+}
+document.getElementById("filterSel").addEventListener("change", e => { state.filter = e.target.value; applyFilter(); save(); });
+
+/* ---------- Modo ---------- */
+function paintMode(){
+  document.querySelectorAll("#modeSeg button").forEach(b => b.classList.toggle("on", b.dataset.mode === state.mode));
+}
+document.querySelectorAll("#modeSeg button").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.mode === state.mode) return;
+  state.mode = b.dataset.mode;
+  paintMode(); paintAll(); updateProgress(); applyFilter(); save();
+}));
+
+/* ---------- Progresso ---------- */
+function tally(list){
+  let c = 0, w = 0, a = 0;
+  list.forEach(q => {
+    const s = answerOf(q);
+    if (s === null) return;
+    a++;
+    if (accepted(q).includes(s)) c++; else w++;
+  });
+  return {c, w, a, t:list.length};
+}
+function updateProgress(){
+  const t = tally(questions);
+  document.getElementById("progressFill").style.width = (t.a / t.t * 100) + "%";
+  document.getElementById("progressText").textContent = `${t.a} / ${t.t} respondidas`;
+  const live = document.getElementById("liveScore");
+  if (state.mode === "instant" || state.submitted) live.textContent = t.a ? `✔ ${t.c} certas · ✘ ${t.w} erradas · ${Math.round(t.c / t.a * 100)}% de acerto` : "";
+  else live.textContent = "modo prova: a correção aparece no final";
+}
+
+/* ---------- Resultado ---------- */
+function barRow(label, s, color){
+  const p = s.t ? Math.round(s.c / s.t * 100) : 0;
+  return `<div class="bar-row"><div>${label}</div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${color}"></div></div><div>${s.c}/${s.t}</div></div>`;
+}
+function projectionText(pct){
+  const c = state.calc;
+  if (!(c.nq > 0) || !(c.prova > 0)) return "";
+  const hits = Math.round(pct / 100 * c.nq);
+  const final = c.atual + hits * c.prova / c.nq;
+  const pass = c.criterio === "gte" ? final >= c.minimo - 1e-9 : final > c.minimo + 1e-9;
+  return `Se você mantiver esse aproveitamento na prova (${c.nq} questões valendo ${fmt(c.prova)}): ≈ <b>${hits} acertos</b> → nota final <b>${fmt(final)}</b> ${pass ? "✅ aprovado" : "❌ abaixo do mínimo"} · <a href="#" data-goto="nota">ajustar na calculadora</a>`;
+}
+function renderResults(){
+  const total = tally(questions);
+  const pct = Math.round(total.c / total.t * 100);
+  document.getElementById("scoreBig").textContent = pct + "%";
+  document.getElementById("scoreSub").textContent = `${total.c} de ${total.t} corretas` + (total.a < total.t ? ` (${total.t - total.a} sem resposta)` : "");
+  document.getElementById("scoreProj").innerHTML = projectionText(pct);
+
+  let bars = "<h4>Por unidade</h4>";
+  [1,2,3,4].forEach(u => {
+    const s = tally(questions.filter(q => q.unit === u));
+    bars += barRow(unitInfo[u].short, s, unitInfo[u].color);
+  });
+  bars += "<h4>Por parte</h4>";
+  [1,2,3,4].forEach(p => {
+    const s = tally(questions.filter(q => q.part === p));
+    bars += barRow(partInfo[p].short, s, "var(--accent)");
+  });
+  document.getElementById("unitBars").innerHTML = bars;
+
+  const weak = [1,2,3,4].map(u => ({u, s:tally(questions.filter(q => q.unit === u))}))
+    .filter(x => x.s.c < x.s.t).sort((a, b) => a.s.c / a.s.t - b.s.c / b.s.t);
+  document.getElementById("tipsCard").style.display = weak.length ? "block" : "none";
+  document.getElementById("tipsList").innerHTML = weak.map(x => `<div class="tip">${unitTips[x.u]}</div>`).join("");
+
+  const wrong = questions.filter(q => !accepted(q).includes(answerOf(q)));
+  document.getElementById("reviewCard").style.display = wrong.length ? "block" : "none";
+  document.getElementById("reviewList").innerHTML = wrong.map(q =>
+    `<a href="#card-${q.idx}" data-jump="${q.idx}">Questão ${q.idx + 1}: ${q.ref}${answerOf(q) === null ? " (sem resposta)" : ""}</a>`).join("");
+
+  const hist = state.history.slice(-10).reverse();
+  document.getElementById("historyCard").style.display = hist.length ? "block" : "none";
+  document.getElementById("historyTable").innerHTML = `<tr><th>Data</th><th>Modo</th><th>Acertos</th><th>%</th></tr>` +
+    hist.map(h => `<tr><td>${new Date(h.date).toLocaleString("pt-BR", {dateStyle:"short", timeStyle:"short"})}</td><td>${h.mode === "exam" ? "prova" : "estudo"}</td><td>${h.c}/${h.t}</td><td>${h.pct}%</td></tr>`).join("");
+
+  document.getElementById("results").classList.add("show");
+}
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const t = tally(questions);
+  if (t.a < t.t && !confirm(`Você ainda não respondeu ${t.t - t.a} questão(ões). Finalizar mesmo assim?`)) return;
+  state.submitted = true;
+  state.history.push({date:new Date().toISOString(), mode:state.mode, c:t.c, t:t.t, pct:Math.round(t.c / t.t * 100)});
+  save(); paintAll(); updateProgress(); applyFilter(); renderResults();
+  document.getElementById("results").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("retryBtn").addEventListener("click", () => {
+  if (!confirm("Apagar todas as respostas e começar de novo? (o histórico de tentativas é mantido)")) return;
+  state.answers = {}; state.submitted = false; state.hints = {}; state.filter = "all";
+  save(); paintAll(); updateProgress(); applyFilter();
+  document.getElementById("results").classList.remove("show");
+  window.scrollTo(0, 0);
+});
+document.getElementById("retryWrongBtn").addEventListener("click", () => {
+  questions.forEach(q => { if (!accepted(q).includes(answerOf(q))) { delete state.answers[q.id]; delete state.hints[q.id]; } });
+  state.submitted = false; state.filter = "todo";
+  save(); paintAll(); updateProgress(); applyFilter();
+  document.getElementById("results").classList.remove("show");
+  window.scrollTo(0, 0);
+});
+
+document.addEventListener("click", e => {
+  const jump = e.target.closest("[data-jump]");
+  if (jump) {
+    e.preventDefault();
+    if (state.filter !== "all") { state.filter = "all"; applyFilter(); save(); }
+    document.getElementById("card-" + jump.dataset.jump).scrollIntoView({behavior:"smooth", block:"center"});
+  }
+  const go = e.target.closest("[data-goto]");
+  if (go) { e.preventDefault(); showTab(go.dataset.goto); window.scrollTo(0, 0); }
+  const pr = e.target.closest("[data-practice]");
+  if (pr) { state.filter = pr.dataset.practice; applyFilter(); showTab("simulado"); window.scrollTo(0, 0); }
+});
+
+/* ---------- Tutoriais: "revisei" ---------- */
+function paintReviewed(){
+  [1,2,3,4].forEach(u => {
+    const yes = !!state.reviewed[u];
+    document.querySelector(`[data-review="${u}"]`).checked = yes;
+    const chip = document.querySelector(`[data-chip="${u}"]`);
+    chip.textContent = yes ? "✓ revisada" : "não revisada";
+    chip.classList.toggle("yes", yes);
+  });
+}
+document.querySelectorAll("[data-review]").forEach(cb => cb.addEventListener("change", () => {
+  state.reviewed[cb.dataset.review] = cb.checked; paintReviewed(); save();
+}));
+
+/* ---------- Ferramenta: combinatória ---------- */
+const big = n => BigInt(n);
+const fmtBig = n => n.toLocaleString("pt-BR");
+function prodDown(n, k){ let r = 1n; for (let i = 0; i < k; i++) r *= big(n - i); return r; }
+function factStr(k){ return k <= 1 ? "1" : Array.from({length:k}, (_, i) => k - i).join(" · "); }
+function renderComb(){
+  const n = Math.max(1, Math.min(30, parseInt(document.getElementById("cbN").value) || 1));
+  let k = Math.max(0, Math.min(30, parseInt(document.getElementById("cbK").value) || 0));
+  const ord = document.querySelector('input[name="cbOrd"]:checked').value === "1";
+  const rep = document.querySelector('input[name="cbRep"]:checked').value === "1";
+  const out = document.getElementById("cbOut");
+  if (!rep && k > n) { out.innerHTML = `<span class="chip bad">k &gt; n</span> Sem repetição não dá para escolher ${k} entre ${n}.`; return; }
+  let html;
+  if (!ord && rep) {
+    html = `<span class="chip mid">fora do conteúdo</span> Combinação <i>com</i> repetição não faz parte do material da disciplina. Na prova, se não importa a ordem, considere sem repetição.`;
+  } else if (ord && rep) {
+    html = `<b>Arranjo com repetição</b> · nᵏ = ${n}<sup>${k}</sup> = <b>${fmtBig(big(n) ** big(k))}</b><br><span style="color:var(--muted)">cada uma das ${k} posições tem as ${n} opções.</span>`;
+  } else if (ord) {
+    const a = prodDown(n, k);
+    const name = k === n ? "Permutação (k = n)" : "Arranjo simples";
+    html = `<b>${name}</b> · A(${n},${k}) = ${k ? Array.from({length:k}, (_, i) => n - i).join(" · ") : "1"} = <b>${fmtBig(a)}</b>`;
+  } else {
+    const a = prodDown(n, k), f = prodDown(k, k);
+    html = `<b>Combinação</b> · C(${n},${k}) = A(${n},${k}) ÷ ${k}! = ${fmtBig(a)} ÷ ${fmtBig(f)} = <b>${fmtBig(a / f)}</b><br><span style="color:var(--muted)">${k}! = ${factStr(k)}: são as ordens de cada grupo, que a combinação não diferencia.</span>`;
+  }
+  let cmp = "";
+  if (k <= n) {
+    const a = prodDown(n, k), f = prodDown(k, k);
+    cmp = `<table><tr><th>Arranjo A(n,k)</th><th>Combinação C(n,k)</th><th>Com repetição nᵏ</th><th>Permutação n!</th></tr>
+      <tr><td>${fmtBig(a)}</td><td>${fmtBig(a / f)}</td><td>${fmtBig(big(n) ** big(k))}</td><td>${fmtBig(prodDown(n, n))}</td></tr></table>
+      <span style="font-size:12px;color:var(--muted)">Esses são os valores que costumam aparecer como alternativas erradas.</span>`;
+  }
+  out.innerHTML = html + (cmp ? "<div style='margin-top:8px'>" + cmp + "</div>" : "");
+}
+["cbN","cbK"].forEach(id => document.getElementById(id).addEventListener("input", renderComb));
+document.querySelectorAll('input[name="cbOrd"],input[name="cbRep"]').forEach(r => r.addEventListener("change", renderComb));
+
+/* ---------- Ferramenta: conjuntos ---------- */
+const parseSet = s => [...new Set(s.split(/[,;]/).map(x => x.trim()).filter(Boolean))];
+const showSet = arr => arr.length ? "{" + arr.join(", ") + "}" : "∅";
+function renderSets(){
+  const A = parseSet(document.getElementById("stA").value), B = parseSet(document.getElementById("stB").value);
+  const inB = x => B.includes(x), inA = x => A.includes(x);
+  const uni = [...A, ...B.filter(x => !inA(x))];
+  const inter = A.filter(inB), aMinusB = A.filter(x => !inB(x)), bMinusA = B.filter(x => !inA(x));
+  const sym = [...aMinusB, ...bMinusA];
+  const bSubA = B.every(inA);
+  const rows = [
+    ["A ∪ B", "em pelo menos um", showSet(uni)],
+    ["A ∩ B", "nos dois", showSet(inter)],
+    ["A − B", "em A e não em B", showSet(aMinusB)],
+    ["B − A", "em B e não em A", showSet(bMinusA)],
+    ["A Δ B", "em exatamente um", showSet(sym)],
+    ["Complemento de B em A", "A − B, só se B ⊆ A", bSubA ? showSet(aMinusB) : "não existe (B ⊄ A)"],
+    ["|A|, |B|", "cardinalidade", `${A.length}, ${B.length}`],
+    ["nº de subconjuntos de A", "2^|A|", `2<sup>${A.length}</sup> = ${2 ** A.length}`],
+    ["|A × B|", "|A| · |B|", `${A.length} · ${B.length} = ${A.length * B.length}`]
+  ];
+  let html = `<table><tr><th>Operação</th><th>Significado</th><th>Resultado</th></tr>` +
+    rows.map(r => `<tr><td>${r[0]}</td><td style="text-align:left">${r[1]}</td><td style="text-align:left">${r[2]}</td></tr>`).join("") + `</table>`;
+  if (A.length * B.length && A.length * B.length <= 24) {
+    html += `<div style="font-size:12.5px;margin-top:4px"><b>A × B</b> = {${A.flatMap(a => B.map(b => `(${a}, ${b})`)).join(", ")}}</div>`;
+  }
+  document.getElementById("stOut").innerHTML = html;
+}
+["stA","stB"].forEach(id => document.getElementById(id).addEventListener("input", renderSets));
+
+/* ---------- Ferramenta: inferência ---------- */
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function renderInfer(){
+  const P = esc(document.getElementById("ifP").value.trim() || "P");
+  const Q = esc(document.getElementById("ifQ").value.trim() || "Q");
+  const obs = document.getElementById("ifObs").value;
+  const cases = {
+    P:{fact:`${P}`, ok:true, concl:`${Q}`, name:"Modus Ponens (MP)", why:`O <code>if</code> executa: se a condição é verdadeira, a ação acontece.`},
+    nQ:{fact:`não é verdade que ${Q}`, ok:true, concl:`não é verdade que ${P}`, name:"Modus Tollens (MT)", why:`Se "${P}" fosse verdade, o <code>if</code> teria produzido "${Q}". Como isso não aconteceu, a condição era falsa.`},
+    Q:{fact:`${Q}`, ok:false, concl:`nada se conclui sobre "${P}"`, name:"Falácia: afirmação do consequente", why:`"${Q}" pode ter sido causado por <b>outro</b> trecho do código. A regra não diz que esse é o único caminho.`},
+    nP:{fact:`não é verdade que ${P}`, ok:false, concl:`nada se conclui sobre "${Q}"`, name:"Falácia: negação do antecedente", why:`O <code>if</code> não executa, mas <b>outro</b> trecho do código ainda pode produzir "${Q}".`}
+  };
+  const c = cases[obs];
+  document.getElementById("ifOut").innerHTML =
+    `<pre style="margin:0 0 8px">if (${P}) {\n  ${Q};\n}</pre>` +
+    `<div>Premissas: <b>se ${P}, então ${Q}</b> · observado: <b>${c.fact}</b></div>` +
+    `<div style="margin-top:4px">Conclusão: <b>${c.concl}</b> <span class="chip ${c.ok ? "good" : "bad"}">${c.ok ? "✅ válido" : "❌ inválido"}</span> · ${c.name}</div>` +
+    `<div style="margin-top:6px;color:var(--muted)">${c.why}</div>`;
+}
+["ifP","ifQ"].forEach(id => document.getElementById(id).addEventListener("input", renderInfer));
+document.getElementById("ifObs").addEventListener("change", renderInfer);
+
+/* ---------- Ferramenta: tabela verdade ---------- */
+function tokenize(src){
+  const toks = []; let i = 0;
+  const two = {"->":"IMP","=>":"IMP","&&":"AND","||":"OR"};
+  while (i < src.length) {
+    const ch = src[i];
+    if (/\s/.test(ch)) { i++; continue; }
+    if (src.startsWith("<->", i) || src.startsWith("<=>", i)) { toks.push({t:"IFF"}); i += 3; continue; }
+    if (two[src.substr(i, 2)]) { toks.push({t:two[src.substr(i, 2)]}); i += 2; continue; }
+    if ("(".includes(ch)) { toks.push({t:"("}); i++; continue; }
+    if (")".includes(ch)) { toks.push({t:")"}); i++; continue; }
+    if ("¬~!".includes(ch)) { toks.push({t:"NOT"}); i++; continue; }
+    if ("∧&".includes(ch)) { toks.push({t:"AND"}); i++; continue; }
+    if ("∨|".includes(ch)) { toks.push({t:"OR"}); i++; continue; }
+    if ("→⇒".includes(ch)) { toks.push({t:"IMP"}); i++; continue; }
+    if ("↔⇔".includes(ch)) { toks.push({t:"IFF"}); i++; continue; }
+    if (/[A-Za-z]/.test(ch)) {
+      let w = ""; while (i < src.length && /[A-Za-z]/.test(src[i])) w += src[i++];
+      const lw = w.toLowerCase();
+      if (lw === "not") toks.push({t:"NOT"});
+      else if (lw === "and") toks.push({t:"AND"});
+      else if (lw === "or") toks.push({t:"OR"});
+      else if (w.length === 1) toks.push({t:"VAR", v:w.toUpperCase()});
+      else throw new Error(`"${w}" não é reconhecido: use uma letra por proposição (P, Q, R…).`);
+      continue;
+    }
+    throw new Error(`Símbolo inesperado: "${ch}"`);
+  }
+  return toks;
+}
+function parseExpr(src){
+  const toks = tokenize(src); let pos = 0; let mixWarn = false;
+  const peek = () => toks[pos] && toks[pos].t;
+  const binary = (sub, types) => () => {
+    let left = sub(); const seen = new Set();
+    while (types.includes(peek())) {
+      const op = toks[pos++].t; seen.add(op);
+      left = {op, l:left, r:sub()};
+    }
+    if (seen.size > 1) mixWarn = true;
+    return left;
+  };
+  function atom(){
+    const tk = toks[pos];
+    if (!tk) throw new Error("A expressão terminou antes do esperado.");
+    if (tk.t === "VAR") { pos++; return {op:"VAR", v:tk.v}; }
+    if (tk.t === "(") { pos++; const e = iff(); if (peek() !== ")") throw new Error("Falta fechar um parêntese."); pos++; return e; }
+    throw new Error("Esperava uma proposição ou \"(\" e encontrei um conectivo: isso não é uma fbf.");
+  }
+  function not(){ if (peek() === "NOT") { pos++; return {op:"NOT", c:not()}; } return atom(); }
+  const andor = binary(not, ["AND","OR"]);
+  const imp = binary(andor, ["IMP"]);
+  const iff = binary(imp, ["IFF"]);
+  const tree = iff();
+  if (pos < toks.length) throw new Error("Sobrou algo no fim da expressão: confira os conectivos e parênteses.");
+  return {tree, mixWarn};
+}
+const SYM = {AND:"∧", OR:"∨", IMP:"→", IFF:"↔"};
+function show(n, top){
+  if (n.op === "VAR") return n.v;
+  if (n.op === "NOT") return "¬" + show(n.c, false);
+  const s = `${show(n.l, false)} ${SYM[n.op]} ${show(n.r, false)}`;
+  return top ? s : "(" + s + ")";
+}
+function evalNode(n, env){
+  switch (n.op) {
+    case "VAR": return env[n.v];
+    case "NOT": return !evalNode(n.c, env);
+    case "AND": return evalNode(n.l, env) && evalNode(n.r, env);
+    case "OR": return evalNode(n.l, env) || evalNode(n.r, env);
+    case "IMP": return !evalNode(n.l, env) || evalNode(n.r, env);
+    case "IFF": return evalNode(n.l, env) === evalNode(n.r, env);
+  }
+}
+function collect(n, vars, cols, seen){
+  if (n.op === "VAR") { vars.add(n.v); return; }
+  if (n.op === "NOT") collect(n.c, vars, cols, seen);
+  else { collect(n.l, vars, cols, seen); collect(n.r, vars, cols, seen); }
+  const key = show(n, true);
+  if (!seen.has(key)) { seen.add(key); cols.push(n); }
+}
+function renderTT(){
+  const out = document.getElementById("ttOut");
+  const src = document.getElementById("ttExpr").value;
+  let parsed;
+  try { parsed = parseExpr(src); }
+  catch (e) { out.innerHTML = `<span class="chip bad">não é uma fbf válida</span> ${esc(e.message)}`; return; }
+  const vars = new Set(), cols = [];
+  collect(parsed.tree, vars, cols, new Set());
+  const vs = [...vars].sort();
+  if (vs.length > 5) { out.innerHTML = `<span class="chip mid">muitas proposições</span> Use até 5 (com ${vs.length} seriam ${2 ** vs.length} linhas).`; return; }
+  const n = vs.length, rows = 2 ** n, finals = [];
+  let html = `<table><tr>${vs.map(v => `<th>${v}</th>`).join("")}${cols.map(c => `<th>${show(c, true)}</th>`).join("")}</tr>`;
+  for (let r = 0; r < rows; r++) {
+    const env = {};
+    vs.forEach((v, i) => env[v] = !((r >> (n - 1 - i)) & 1));
+    html += "<tr>" + vs.map(v => `<td>${env[v] ? "V" : "F"}</td>`).join("");
+    cols.forEach((c, ci) => {
+      const val = evalNode(c, env);
+      if (ci === cols.length - 1) finals.push(val);
+      html += `<td class="${ci === cols.length - 1 ? (val ? "v" : "f") : ""}">${val ? "V" : "F"}</td>`;
+    });
+    html += "</tr>";
+  }
+  html += "</table>";
+  if (!cols.length) { out.innerHTML = `Digite uma fórmula com pelo menos um conectivo.`; return; }
+  const allV = finals.every(Boolean), allF = finals.every(v => !v);
+  const kind = allV ? `<span class="chip good">Tautologia</span> todas as linhas V` : allF ? `<span class="chip bad">Contradição</span> todas as linhas F` : `<span class="chip mid">Contingência</span> ${finals.filter(Boolean).length} V e ${finals.filter(v => !v).length} F`;
+  const warn = parsed.mixWarn ? `<div style="margin-top:6px;font-size:12.5px;color:var(--hint)">⚠️ ∧ e ∨ misturados sem parênteses: aqui foram avaliados da esquerda para a direita (regra da Unidade 3). Algumas fontes dão prioridade ao ∧. Na prova, confira os parênteses.</div>` : "";
+  out.innerHTML = `<div style="margin-bottom:6px">${n} ${n === 1 ? "proposição" : "proposições"} → 2<sup>${n}</sup> = <b>${rows} linhas</b> · ${kind}</div>${html}${warn}`;
+}
+document.getElementById("ttGo").addEventListener("click", renderTT);
+document.getElementById("ttExpr").addEventListener("keydown", e => { if (e.key === "Enter") renderTT(); });
+const presets = ["P → Q", "(P → Q) ↔ (¬Q → ¬P)", "¬(P ∧ Q) ↔ (¬P ∨ ¬Q)", "P ∧ ¬P", "(A → B) ∨ A", "(¬A ∧ B) → C", "(P ∨ Q) ∧ (¬Q ∨ R)"];
+document.getElementById("ttPresets").innerHTML = presets.map(p => `<button class="btn ghost small" type="button">${p}</button>`).join("");
+document.querySelectorAll("#ttPresets button").forEach(b => b.addEventListener("click", () => { document.getElementById("ttExpr").value = b.textContent; renderTT(); }));
+
+/* ---------- Calculadora de nota ---------- */
+const fmt = x => (Math.round(x * 100) / 100).toLocaleString("pt-BR");
+const calcIds = {atual:"cAtual", prova:"cProva", minimo:"cMin", criterio:"cCrit", nq:"cNq"};
+Object.entries(calcIds).forEach(([k, id]) => {
+  const el = document.getElementById(id);
+  el.value = state.calc[k];
+  el.addEventListener("input", () => {
+    state.calc[k] = k === "criterio" ? el.value : parseFloat(el.value);
+    save(); renderCalc();
+  });
+});
+function renderCalc(){
+  const {atual, prova, minimo, criterio, nq} = state.calc;
+  const v = document.getElementById("calcVerdict"), tb = document.getElementById("calcTable"), pj = document.getElementById("calcProj");
+  if ([atual, prova, minimo, nq].some(x => !isFinite(x)) || prova <= 0 || nq < 1) {
+    v.innerHTML = `<div class="verdict need">Preencha todos os campos com números (prova e nº de questões maiores que zero).</div>`;
+    tb.innerHTML = ""; pj.innerHTML = ""; return;
+  }
+  const n = Math.round(nq), per = prova / n;
+  const passes = f => criterio === "gte" ? f >= minimo - 1e-9 : f > minimo + 1e-9;
+  const sign = criterio === "gte" ? "≥" : "&gt;";
+  let k = null;
+  for (let a = 0; a <= n; a++) if (passes(atual + a * per)) { k = a; break; }
+  const needPts = minimo - atual;
+  if (k === 0) {
+    v.innerHTML = `<div class="verdict ok">✅ Você <b>já tem a nota mínima</b>: ${fmt(atual)} ${sign} ${fmt(minimo)}. Mesmo zerando a prova, passa por esse critério. (Confira se a sua disciplina exige nota mínima na própria prova.)</div>`;
+  } else if (k === null) {
+    v.innerHTML = `<div class="verdict no">❌ Mesmo acertando tudo, a nota máxima seria <b>${fmt(atual + prova)}</b>, que não passa de ${fmt(minimo)}. Veja no AVA as opções de prova substitutiva ou recuperação.</div>`;
+  } else {
+    v.innerHTML = `<div class="verdict need">Você precisa de <span class="num">${k} de ${n} questões</span>
+      Ou seja, <b>${fmt(k * per)} pontos</b> na prova (${Math.round(k / n * 100)}% de acerto). Em pontos exatos, faltam ${fmt(needPts)}${criterio === "gt" ? " e um pouco mais" : ""}; cada questão vale ${fmt(per)}.<br>
+      Nota final com ${k} acertos: <b>${fmt(atual + k * per)}</b> ${sign} ${fmt(minimo)} ✅</div>`;
+  }
+  const last = state.history[state.history.length - 1];
+  const myHits = last ? Math.round(last.pct / 100 * n) : null;
+  pj.innerHTML = last ? `<div class="key" style="font-size:14px">📈 No último simulado você acertou <b>${last.pct}%</b>. Na prova isso dá cerca de <b>${myHits} de ${n}</b> → nota final <b>${fmt(atual + myHits * per)}</b> ${passes(atual + myHits * per) ? "✅ passaria" : "❌ ainda não passaria"}. (Linha destacada em azul na tabela.)</div>`
+    : `<div style="font-size:13px;color:var(--muted)">Termine um simulado (botão "Finalizar e ver resultado") para ver aqui a projeção da sua nota.</div>`;
+  let html = `<tr><th>Acertos</th><th>Pontos na prova</th><th>Nota final</th><th>Situação</th></tr>`;
+  for (let a = 0; a <= n; a++) {
+    const f = atual + a * per, ok = passes(f);
+    const cls = [ok ? "pass" : "", a === k ? "min" : "", a === myHits ? "me" : ""].join(" ");
+    html += `<tr class="${cls}"><td>${a}/${n}</td><td>${fmt(a * per)}</td><td>${fmt(f)}</td><td>${ok ? "✅ aprovado" : "❌"}${a === k ? " ← mínimo" : ""}</td></tr>`;
+  }
+  tb.innerHTML = html;
+}
+
+/* ---------- Inicialização ---------- */
+paintMode(); paintAll(); updateProgress(); applyFilter(); paintReviewed();
+renderComb(); renderSets(); renderInfer(); renderTT();
+if (state.submitted) renderResults();
+showTab(state.tab || "tutoriais");
+</script>
+</body>
+</html>
