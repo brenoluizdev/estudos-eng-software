@@ -1,0 +1,2552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado — Algoritmos e Programação Estruturada</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --ink:#1e2433; --muted:#5b6478; --line:#e2e6f0; --soft:#f1f3f9;
+    --accent:#3454d1; --accent-ink:#233a9e; --accent-soft:#eaf0ff;
+    --brand:#233a9e; --brand2:#3454d1;
+    --good:#1a8f5e; --good-soft:#e7f7ef; --good-ink:#145c3d;
+    --bad:#c93838; --bad-soft:#fdecec; --bad-ink:#7a1f1f; --bad-line:#f2c9c9;
+    --hint:#b8860b; --hint-soft:#fff8e6; --hint-ink:#5a4410; --hint-line:#f0d98c;
+    --explain-bg:#f7f9ff; --explain-ink:#2a3150;
+    --pre-bg:#1e2433; --pre-ink:#e8ecf8;
+    --u1:#3454d1; --u2:#1a8f5e; --u3:#b8860b; --u4:#8a3ffc;
+    --radius:14px;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10131a; --card:#181d28; --ink:#e6e9f2; --muted:#9aa3b8; --line:#2b3243; --soft:#222a39;
+      --accent:#5b78f0; --accent-ink:#aab8ff; --accent-soft:#1f2848;
+      --good:#3cc489; --good-soft:#12301f; --good-ink:#9be3c0;
+      --bad:#ff6b6b; --bad-soft:#3a1717; --bad-ink:#ffb3b3; --bad-line:#6b2a2a;
+      --hint:#e0b341; --hint-soft:#2e2510; --hint-ink:#f1d999; --hint-line:#5c4a17;
+      --explain-bg:#1c2233; --explain-ink:#d5dbec;
+      --pre-bg:#0b0d13; --pre-ink:#e8ecf8;
+      --u1:#7b93ff; --u2:#3cc489; --u3:#e0b341; --u4:#b48cff;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10131a; --card:#181d28; --ink:#e6e9f2; --muted:#9aa3b8; --line:#2b3243; --soft:#222a39;
+    --accent:#5b78f0; --accent-ink:#aab8ff; --accent-soft:#1f2848;
+    --good:#3cc489; --good-soft:#12301f; --good-ink:#9be3c0;
+    --bad:#ff6b6b; --bad-soft:#3a1717; --bad-ink:#ffb3b3; --bad-line:#6b2a2a;
+    --hint:#e0b341; --hint-soft:#2e2510; --hint-ink:#f1d999; --hint-line:#5c4a17;
+    --explain-bg:#1c2233; --explain-ink:#d5dbec;
+    --pre-bg:#0b0d13; --pre-ink:#e8ecf8;
+    --u1:#7b93ff; --u2:#3cc489; --u3:#e0b341; --u4:#b48cff;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;}
+  a{color:var(--accent-ink);}
+  code{background:var(--soft);padding:1px 5px;border-radius:5px;font-size:.93em;}
+  pre{background:var(--pre-bg);color:var(--pre-ink);padding:12px 14px;border-radius:10px;font-size:13px;overflow-x:auto;line-height:1.45;}
+  pre code{background:none;padding:0;color:inherit;}
+  table{border-collapse:collapse;}
+  input, select, button, textarea{font:inherit;color:inherit;}
+
+  header.exam{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;padding:26px 16px 20px;}
+  header.exam .wrap{max-width:920px;margin:0 auto;}
+  header.exam .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-bottom:6px;}
+  header.exam h1{margin:0 0 10px;font-size:26px;}
+  header.exam .meta{display:flex;flex-wrap:wrap;gap:12px 26px;font-size:13.5px;opacity:.95;}
+  header.exam .meta b{display:block;font-weight:600;}
+
+  nav.tabs{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);}
+  nav.tabs .wrap{max-width:920px;margin:0 auto;display:flex;gap:4px;padding:0 10px;overflow-x:auto;align-items:center;}
+  nav.tabs button{background:none;border:none;border-bottom:3px solid transparent;padding:13px 12px 10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--muted);white-space:nowrap;}
+  nav.tabs button.active{color:var(--accent-ink);border-bottom-color:var(--accent);}
+  nav.tabs .saved{margin-left:auto;font-size:11.5px;color:var(--muted);white-space:nowrap;padding-left:10px;}
+  nav.tabs .theme-btn{font-size:16px;padding:8px;border-bottom:none;}
+
+  .container{max-width:920px;margin:0 auto;padding:20px 16px 80px;}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+  .notice{background:var(--hint-soft);border:1px solid var(--hint-line);color:var(--hint-ink);border-radius:var(--radius);padding:14px 16px;font-size:13.8px;margin-bottom:20px;}
+  .notice ul{margin:6px 0 0;padding-left:20px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;}
+
+  /* ---------- Tutoriais ---------- */
+  .cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:10px 0 4px;}
+  .cheat > div{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:13.4px;}
+  .cheat h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .cheat ul{margin:0;padding-left:18px;}
+  details.tut{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--uc,var(--accent));border-radius:var(--radius);margin-bottom:16px;}
+  details.tut > summary{cursor:pointer;padding:16px 18px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  details.tut > summary::-webkit-details-marker{display:none;}
+  details.tut > summary::before{content:"▸";color:var(--muted);transition:transform .15s;}
+  details.tut[open] > summary::before{transform:rotate(90deg);}
+  details.tut > summary h2{margin:0;font-size:17px;flex:1;min-width:200px;}
+  details.tut > summary .done-chip{font-size:11.5px;padding:2px 10px;border-radius:99px;background:var(--soft);color:var(--muted);}
+  details.tut > summary .done-chip.yes{background:var(--good-soft);color:var(--good-ink);}
+  .tut-body{padding:0 20px 18px;font-size:14.4px;}
+  .tut-body h3{font-size:15.5px;margin:22px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line);}
+  .tut-body table{margin:8px 0 12px;font-size:13.6px;display:block;overflow-x:auto;}
+  .tut-body th,.tut-body td{border:1px solid var(--line);padding:5px 10px;text-align:left;vertical-align:top;}
+  .tut-body th{background:var(--soft);}
+  .tut-body td.c,.tut-body th.c{text-align:center;}
+  .key{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;}
+  .trap{background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;color:var(--bad-ink);}
+  .trap b{color:inherit;}
+  .tool{border:1px dashed var(--accent);border-radius:12px;padding:14px 16px;margin:16px 0 6px;background:var(--explain-bg);}
+  .tool h4{margin:0 0 10px;font-size:14px;color:var(--accent-ink);}
+  .tool .row{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:10px;font-size:13.8px;}
+  .tool input[type=number],.tool input[type=text],.tool select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 9px;}
+  .tool input[type=number]{width:80px;}
+  .tool input[type=text]{min-width:0;flex:1 1 220px;}
+  .tool .out{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.8px;overflow-x:auto;}
+  .tool .out table{font-size:13px;margin:6px 0;display:table;}
+  .tool .out td,.tool .out th{border:1px solid var(--line);padding:3px 9px;text-align:center;}
+  .tool .out th{background:var(--soft);}
+  .tool .out td.v{color:var(--good);font-weight:700;}
+  .tool .out td.f{color:var(--bad);font-weight:700;}
+  .chip{display:inline-block;font-size:12px;padding:2px 10px;border-radius:99px;font-weight:600;}
+  .chip.good{background:var(--good-soft);color:var(--good-ink);}
+  .chip.bad{background:var(--bad-soft);color:var(--bad-ink);}
+  .chip.mid{background:var(--hint-soft);color:var(--hint-ink);}
+  .btn{background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:99px;cursor:pointer;font-weight:600;font-size:13.5px;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn.ghost{background:none;color:var(--accent-ink);border:1px solid var(--accent);}
+  .btn.small{padding:4px 11px;font-size:12.5px;}
+  .presets{display:flex;flex-wrap:wrap;gap:6px;}
+  .tut-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px;padding-top:12px;border-top:1px solid var(--line);}
+  .tut-foot label{font-size:13.5px;display:flex;gap:6px;align-items:center;cursor:pointer;}
+
+  /* ---------- Simulado ---------- */
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:13.5px;}
+  .toolbar .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;}
+  .seg button{background:var(--card);border:none;padding:6px 12px;cursor:pointer;font-size:13px;color:var(--muted);}
+  .seg button.on{background:var(--accent);color:#fff;}
+  .toolbar select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%;}
+  .progress-wrap{position:sticky;top:47px;z-index:5;background:var(--bg);padding:10px 0 8px;}
+  .progress-bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
+  .progress-bar > div{height:100%;background:var(--accent);width:0%;transition:width .25s ease;}
+  .progress-label{font-size:12px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .part-title{margin:34px 0 4px;padding:16px 18px;border-radius:var(--radius);background:var(--brand);color:#fff;}
+  .part-title h2{margin:0;font-size:19px;}
+  .part-title p{margin:4px 0 0;font-size:13px;opacity:.92;}
+  .part-title.p2{background:#5b2bb5;}
+  .part-title.p3{background:#0f766e;}
+  .part-title.p4{background:#a3236f;}
+  .unit-title{margin:26px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:10px;}
+  .unit-title .dot{width:12px;height:12px;border-radius:50%;flex:none;}
+  .unit-title h3{font-size:16px;margin:0;}
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap;}
+  .qnum{font-weight:700;font-size:14.5px;color:var(--accent-ink);}
+  .qtag{font-size:11px;color:#fff;background:var(--muted);padding:2px 9px;border-radius:99px;white-space:nowrap;}
+  .qtag.done{background:var(--accent);}
+  .qtag.good{background:var(--good);}
+  .qtag.bad{background:var(--bad);}
+  .qref{font-size:11.5px;color:var(--muted);margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .badge{font-size:10.5px;padding:1px 8px;border-radius:99px;border:1px solid var(--line);background:var(--soft);color:var(--muted);text-decoration:none;}
+  .badge.rebuilt{border-color:var(--hint-line);background:var(--hint-soft);color:var(--hint-ink);}
+  .badge.diverge{border-color:var(--bad-line);background:var(--bad-soft);color:var(--bad-ink);}
+  .badge.real{border-color:#5fb3a9;background:rgba(15,118,110,.12);color:var(--good-ink);}
+  .badge.offsyl{border-color:var(--hint-line);background:var(--hint-soft);color:var(--hint-ink);}
+  .statement{font-size:14.8px;margin-bottom:12px;}
+  .statement table,.explain table{margin:8px 0;font-size:13.5px;display:block;overflow-x:auto;}
+  .statement th,.statement td,.explain th,.explain td{border:1px solid var(--line);padding:4px 12px;text-align:center;}
+  .statement th,.explain th{background:var(--soft);}
+  .explain td{background:var(--card);}
+  .statement blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--line);color:var(--muted);}
+  figure.qfig{margin:8px 0 14px;text-align:center;}
+  figure.qfig svg{max-width:100%;height:auto;background:#fbfcff;border:1px solid var(--line);border-radius:10px;}
+  figure.qfig figcaption{font-size:11.5px;color:var(--muted);margin-top:5px;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .opt{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:14.3px;transition:border-color .15s,background .15s;}
+  .opt:hover{border-color:var(--accent);background:var(--accent-soft);}
+  .opt input{margin-top:4px;flex:none;accent-color:var(--accent);}
+  .opt .letter{font-weight:700;color:var(--accent-ink);margin-right:2px;}
+  .opt.correct{border-color:var(--good);background:var(--good-soft);}
+  .opt.incorrect{border-color:var(--bad);background:var(--bad-soft);}
+  .opt.correct .letter::after{content:" ✓";}
+  .opt.incorrect .letter::after{content:" ✗";}
+  .opt.locked{cursor:default;}
+  .opt.locked:hover{background:inherit;}
+  .opt.correct.locked:hover{background:var(--good-soft);}
+  .opt.incorrect.locked:hover{background:var(--bad-soft);}
+  .hint-btn{margin-top:10px;background:none;border:1px dashed var(--hint);color:var(--hint);border-radius:99px;padding:4px 12px;font-size:12.5px;cursor:pointer;}
+  .hint-btn:hover{background:var(--hint-soft);}
+  .hint{display:none;margin-top:8px;padding:10px 14px;background:var(--hint-soft);border-left:4px solid var(--hint);border-radius:0 8px 8px 0;font-size:13.6px;color:var(--hint-ink);}
+  .hint.show{display:block;}
+  .explain{display:none;margin-top:12px;padding:12px 14px;background:var(--explain-bg);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;font-size:13.8px;color:var(--explain-ink);}
+  .explain.show{display:block;}
+  .explain b{color:var(--accent-ink);}
+  .explain .fix{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+  .explain .note{margin-top:8px;padding:8px 10px;background:var(--bad-soft);border-radius:8px;color:var(--bad-ink);}
+  .explain .note b{color:inherit;}
+  .card.correct-card{border-color:var(--good);}
+  .card.incorrect-card{border-color:var(--bad);}
+  .card.hidden,.part-title.hidden,.unit-title.hidden{display:none;}
+  .empty{text-align:center;color:var(--muted);padding:30px 10px;}
+  .actions{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,var(--bg) 35%);padding:18px 0 6px;text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .big-btn{background:var(--accent);color:#fff;border:none;padding:13px 30px;font-size:15px;border-radius:99px;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(52,84,209,.3);}
+  .big-btn:hover{filter:brightness(1.08);}
+  .big-btn.ghost{background:var(--card);color:var(--accent-ink);border:1px solid var(--accent);box-shadow:none;}
+  #results{display:none;margin-top:10px;}
+  #results.show{display:block;}
+  .score-hero{text-align:center;}
+  .score-hero .big{font-size:44px;font-weight:800;color:var(--accent-ink);}
+  .score-hero .sub{color:var(--muted);font-size:14px;margin-top:4px;}
+  .score-hero .proj{margin-top:10px;font-size:14px;}
+  .bars{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+  .bars h4{margin:8px 0 0;font-size:12.5px;color:var(--muted);text-align:left;text-transform:uppercase;letter-spacing:.08em;}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;font-size:13px;text-align:left;}
+  .bar-track{height:14px;background:var(--line);border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;}
+  .review-list a{display:block;padding:8px 12px;margin-bottom:6px;border-radius:8px;background:var(--bad-soft);color:var(--bad-ink);text-decoration:none;font-size:13.3px;border:1px solid var(--bad-line);}
+  .tips .tip{padding:10px 12px;margin-bottom:8px;border-radius:8px;background:var(--hint-soft);border:1px solid var(--hint-line);color:var(--hint-ink);font-size:13.6px;}
+  .tips .tip b{color:inherit;}
+  .history{font-size:13px;width:100%;}
+  .history td,.history th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;}
+
+  /* ---------- Nota ---------- */
+  .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px 16px;}
+  .calc-grid label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);}
+  .calc-grid input,.calc-grid select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:15px;color:var(--ink);}
+  .verdict{border-radius:var(--radius);padding:18px 20px;margin:16px 0;font-size:15px;}
+  .verdict.ok{background:var(--good-soft);color:var(--good-ink);border:1px solid var(--good);}
+  .verdict.need{background:var(--accent-soft);color:var(--ink);border:1px solid var(--accent);}
+  .verdict.no{background:var(--bad-soft);color:var(--bad-ink);border:1px solid var(--bad);}
+  .verdict .num{font-size:30px;font-weight:800;display:block;margin:4px 0;}
+  .gtable{width:100%;font-size:13.5px;}
+  .gtable th,.gtable td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:center;}
+  .gtable tr.pass td{color:var(--good-ink);}
+  .gtable tr.min td{background:var(--good-soft);font-weight:700;}
+  .gtable tr.me td{outline:2px solid var(--accent);outline-offset:-2px;}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:40px;}
+  @media (max-width:560px){
+    .bar-row{grid-template-columns:86px 1fr 44px;}
+    header.exam h1{font-size:21px;}
+    .card{padding:14px 14px;}
+    .tut-body{padding:0 14px 16px;}
+    .progress-wrap{top:45px;}
+  }
+  .explain ul.why{margin:8px 0 0;padding-left:0;list-style:none;}
+  .explain ul.why li{margin:4px 0;padding-left:26px;text-indent:-26px;}
+  .explain ul.why li b.l{display:inline-block;width:22px;text-indent:0;}
+  .explain ul.why li.ok b.l{color:var(--good);}
+  .explain ul.why li.no b.l{color:var(--bad);}
+  .statement pre{margin:10px 0;}
+  .tool code{font-size:12.5px;}
+  .trace{font-family:Consolas,"Courier New",monospace;font-size:12.8px;white-space:pre;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<header class="exam">
+  <div class="wrap">
+    <div class="kicker">Simulado + revisão · Não vale nota</div>
+    <h1>Algoritmos e Programação Estruturada (linguagem C)</h1>
+    <div class="meta">
+      <div><b>Curso</b>Engenharia de Software</div>
+      <div><b>Instituição</b>Anhanguera / Unopar</div>
+      <div><b>Questões</b><span id="metaTotal">—</span> · múltipla escolha</div>
+      <div><b>Provas reais</b><span id="metaReal">—</span> questões de prova anterior</div>
+      <div><b>Unidades</b>1 a 4 (conteúdo completo)</div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap">
+    <button data-tab="tutoriais">📘 Tutoriais</button>
+    <button data-tab="simulado">📝 Simulado</button>
+    <button data-tab="nota">🎯 Minha nota</button>
+    <span class="saved" id="savedFlag">💾 salvo neste navegador</span>
+    <button class="theme-btn" id="themeBtn" title="Alternar tema claro/escuro">🌓</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ======================= TUTORIAIS ======================= -->
+<section class="tab-panel" id="tab-tutoriais">
+
+  <div class="card">
+    <b>📌 Cola de véspera: o que mais cai</b>
+    <div class="cheat">
+      <div><h4>Entrada e saída</h4><ul>
+        <li><code>%d</code> int · <code>%f</code> float · <code>%c</code> char · <code>%s</code> string · <code>%e</code> científica · <code>%p</code> endereço</li>
+        <li><code>%.2f</code> = 2 casas decimais</li>
+        <li><code>scanf("%d", &amp;x)</code> pede o <b>endereço</b> (<code>&amp;</code>); string não precisa</li>
+        <li><code>scanf("%s")</code> para no espaço · <code>fgets</code> lê a frase</li></ul></div>
+      <div><h4>Operadores</h4><ul>
+        <li><code>int / int</code> = divisão <b>inteira</b> · <code>%</code> = resto</li>
+        <li><code>x++</code> usa e depois soma · <code>++x</code> soma e depois usa</li>
+        <li>Comparação vale <b>1</b> (V) ou <b>0</b> (F)</li>
+        <li>( ) → unários → * / % → + − → relacionais → && → ||</li></ul></div>
+      <div><h4>Controle</h4><ul>
+        <li><code>while</code>: 0 ou mais vezes · <code>do-while</code>: 1 ou mais (tem <code>;</code> no fim)</li>
+        <li><code>for(início; condição; incremento)</code></li>
+        <li><code>switch</code> sem <code>break</code> “cai” no próximo <code>case</code></li>
+        <li><code>break</code> sai · <code>continue</code> pula a volta · <code>goto</code> desvia p/ rótulo</li></ul></div>
+      <div><h4>Dados e funções</h4><ul>
+        <li>Vetor de N posições: índices 0 a N−1 · string precisa de +1 p/ <code>'\0'</code></li>
+        <li><code>*p</code> conteúdo · <code>&amp;x</code> endereço · <code>p-&gt;campo</code> = <code>(*p).campo</code></li>
+        <li>Por valor = cópia · por referência = <code>tipo *</code> + <code>&amp;var</code></li>
+        <li>Vetor vai por referência; struct vai por <b>valor</b></li>
+        <li>Recursão: caso base obrigatório</li></ul></div>
+    </div>
+    <p style="font-size:13.4px;color:var(--muted);margin:10px 0 0">Cada unidade abaixo tem explicação, armadilhas que a prova usa e uma <b>ferramenta interativa</b> para testar seus próprios exemplos. Marque "Revisei esta unidade" quando terminar: fica salvo.</p>
+  </div>
+
+  <!-- ---------- U1 ---------- -->
+  <details class="tut" data-unit="1" style="--uc:var(--u1)">
+    <summary><h2>Unidade 1 · Fundamentos de algoritmos e da linguagem C</h2><span class="done-chip" data-chip="1">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Algoritmo e formas de representação</h3>
+      <p><b>Algoritmo</b> é uma sequência lógica e <b>finita</b> de passos para resolver um problema, dividida em <b>entrada → processamento → saída</b>.</p>
+      <table>
+        <tr><th>Forma</th><th>Vantagem</th><th>Desvantagem</th></tr>
+        <tr><td><b>Linguagem natural</b></td><td>não exige aprender nada novo</td><td>ambiguidade, várias interpretações</td></tr>
+        <tr><td><b>Fluxograma</b> (diagrama de blocos, padrão ANSI)</td><td>gráfico, menos ambíguo</td><td>exige aprender os símbolos; pouco detalhe</td></tr>
+      </table>
+      <table>
+        <tr><th>Símbolo</th><th>Uso</th></tr>
+        <tr><td>Terminal</td><td>início ou fim</td></tr>
+        <tr><td>Entrada manual</td><td>dados digitados (teclado)</td></tr>
+        <tr><td>Processamento</td><td>cálculos e atribuições</td></tr>
+        <tr><td>Exibição</td><td>mostrar algo na tela</td></tr>
+        <tr><td>Decisão</td><td>teste V/F (desvios e laços)</td></tr>
+      </table>
+
+      <h3>2. Estrutura de um programa C</h3>
+<pre><code>#include &lt;stdio.h&gt;      // biblioteca: printf e scanf
+int main(){              // função principal: o programa começa aqui
+    float n1, n2, media; // declaração: &lt;tipo&gt; &lt;nome&gt;;
+    scanf("%f", &amp;n1);    // entrada: & = endereço da variável
+    scanf("%f", &amp;n2);
+    media = (n1 + n2) / 2;  // processamento
+    printf("Media = %.2f\n", media);  // saída com 2 casas
+    return 0;            // 0 = terminou sem erro
+}</code></pre>
+      <table>
+        <tr><th>Tipo</th><th>Bytes (típico)</th><th>Observação</th></tr>
+        <tr><td><code>char</code></td><td>1</td><td>um caractere, entre aspas simples: <code>'A'</code></td></tr>
+        <tr><td><code>int</code> / <code>short int</code> / <code>unsigned int</code></td><td>4 / 2 / 4</td><td><code>int</code>: −2.147.483.648 a 2.147.483.647 · <code>unsigned</code>: só não negativos</td></tr>
+        <tr><td><code>float</code> / <code>double</code> / <code>long double</code></td><td>4 / 8 / 16</td><td>números reais</td></tr>
+        <tr><td><code>bool</code></td><td>—</td><td>exige <code>#include &lt;stdbool.h&gt;</code></td></tr>
+      </table>
+      <div class="key"><b>Constantes:</b> <code>#define PI 3.14</code> (sem <code>;</code>, sem tipo, não ocupa memória, não aceita <code>&amp;</code>) × <code>const float g = 9.8;</code> (tem tipo, ocupa memória, alterar dá erro de compilação).</div>
+      <div class="trap"><b>Nomes de variáveis:</b> começam com letra; só letras, números e <code>_</code>; sem espaço, acento ou outro símbolo. C diferencia maiúsculas: <code>valor</code> ≠ <code>Valor</code>. O próprio material tinha <code>float salário</code> (inválido) — veja a nota de revisão da U2 · Aula 1.</div>
+
+      <h3>3. Operadores e as armadilhas de prova</h3>
+      <table>
+        <tr><th>Expressão</th><th>Resultado</th><th>Por quê</th></tr>
+        <tr><td><code>7 / 2</code></td><td>3</td><td>dois <code>int</code> → divisão inteira</td></tr>
+        <tr><td><code>7 / 2.0</code> ou <code>(float) 7 / 2</code></td><td>3.5</td><td>um operando real → divisão real</td></tr>
+        <tr><td><code>43 % 3</code></td><td>1</td><td>resto (exemplo da Aula 4)</td></tr>
+        <tr><td><code>x = 10; y = x++;</code></td><td>y = 10, x = 11</td><td>pós: usa e depois incrementa</td></tr>
+        <tr><td><code>x = 10; y = ++x;</code></td><td>y = 11, x = 11</td><td>pré: incrementa e depois usa</td></tr>
+        <tr><td><code>printf("%d", 5 &gt; 3)</code></td><td>1</td><td>comparação vale 1 (V) ou 0 (F)</td></tr>
+        <tr><td><code>y *= x + 1</code></td><td><code>y = y * (x + 1)</code></td><td>atribuição composta (U2 · Aula 2)</td></tr>
+      </table>
+      <div class="trap"><b>Pegadinhas:</b> (1) <code>float m = a / b;</code> com <code>a</code> e <code>b</code> inteiros já perdeu as casas <b>antes</b> da atribuição. (2) Vírgula decimal em C é o operador vírgula: <code>x = 8,5;</code> guarda 8. (3) <code>!</code> é unário e tem prioridade alta; <code>&amp;&amp;</code> vem antes de <code>||</code>.</div>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: como o C calcula com inteiros</h4>
+        <div class="row">
+          <label>a (int) <input type="number" id="opA" value="17" step="1"></label>
+          <label>b (int) <input type="number" id="opB" value="5" step="1"></label>
+        </div>
+        <div class="out" id="opOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="1"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u1">Praticar Unidade 1 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U2 ---------- -->
+  <details class="tut" data-unit="2" style="--uc:var(--u2)">
+    <summary><h2>Unidade 2 · Estruturas de decisão e repetição</h2><span class="done-chip" data-chip="2">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Decisão: if, else if, switch</h3>
+      <table>
+        <tr><th>Estrutura</th><th>Regra que cai na prova</th></tr>
+        <tr><td><code>if</code> simples</td><td>pode existir sem <code>else</code>; um <code>else</code> sempre precisa de um <code>if</code> antes</td></tr>
+        <tr><td><code>if / else if / else</code></td><td>testa de cima para baixo; executa <b>só o primeiro</b> bloco verdadeiro</td></tr>
+        <tr><td><code>switch (expr)</code></td><td>compara com constantes <b>inteiras ou caracteres</b>; nenhum casou → <code>default</code></td></tr>
+        <tr><td><code>break</code> no switch</td><td>sem ele, a execução “cai” nos <code>case</code> seguintes</td></tr>
+      </table>
+<pre><code>switch (op) {          // op = 2
+    case 1: printf("A");
+    case 2: printf("B");   // entra aqui...
+    case 3: printf("C");   // ...cai aqui (sem break)
+            break;         // ...e sai.  Saída: BC
+    default: printf("?");
+}</code></pre>
+
+      <h3>2. Repetição</h3>
+      <table>
+        <tr><th></th><th><code>while</code></th><th><code>do-while</code></th><th><code>for</code></th></tr>
+        <tr><td>Teste</td><td>no início</td><td>no fim</td><td>no início</td></tr>
+        <tr><td>Mínimo de execuções</td><td>0</td><td><b>1</b></td><td>0</td></tr>
+        <tr><td>Uso típico</td><td>repetir enquanto algo vale</td><td>menus, “deseja continuar?”</td><td>número de repetições conhecido (determinístico)</td></tr>
+      </table>
+      <p>No <code>for (inicialização; condição; incremento)</code>: a inicialização roda <b>uma vez</b>; a condição é testada antes de cada volta; o incremento roda <b>depois</b> dos comandos. Contador, acumulador e incremento evitam laço infinito.</p>
+      <table>
+        <tr><th></th><th><code>break</code></th><th><code>continue</code></th><th><code>goto</code></th></tr>
+        <tr><td>Efeito</td><td>encerra o laço/switch</td><td>pula o resto da volta (no <code>for</code>, o incremento ainda roda)</td><td>salta para um rótulo <code>nome:</code></td></tr>
+        <tr><td>Onde vale</td><td>laços e <code>switch</code></td><td>só laços</td><td>só dentro da mesma função</td></tr>
+      </table>
+      <div class="trap"><b>Pegadinhas:</b> (1) Depois de um <code>for (i = 1; i &lt;= 10; i++)</code>, <code>i</code> vale <b>11</b>. (2) <code>for (i = 10; i &lt; 10; i++)</code> não executa nenhuma vez (erro do Quadro 1 da Aula 3). (3) A condição <code>x &gt;= 0, y &lt;= 10</code> usa o operador vírgula: só a última vale. O certo é <code>&amp;&amp;</code>.</div>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: teste de mesa de um <code>for</code></h4>
+        <div class="row" style="font-family:Consolas,monospace">
+          for (i = <input type="number" id="frIni" value="1" style="width:64px">;
+          i <select id="frOp"><option>&lt;</option><option selected>&lt;=</option><option>&gt;</option><option>&gt;=</option><option>!=</option></select>
+          <input type="number" id="frLim" value="10" style="width:64px">;
+          i += <input type="number" id="frPasso" value="3" style="width:64px">)
+        </div>
+        <div class="out" id="frOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="2"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u2">Praticar Unidade 2 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U3 ---------- -->
+  <details class="tut" data-unit="3" style="--uc:var(--u3)">
+    <summary><h2>Unidade 3 · Vetores, matrizes, structs e ponteiros</h2><span class="done-chip" data-chip="3">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Variáveis compostas</h3>
+      <table>
+        <tr><th>Estrutura</th><th>Tipo</th><th>Declaração</th><th>Acesso</th></tr>
+        <tr><td>Vetor</td><td>homogênea, 1 dimensão</td><td><code>int v[5];</code></td><td><code>v[0]</code> … <code>v[4]</code></td></tr>
+        <tr><td>String</td><td>vetor de <code>char</code> terminado em <code>'\0'</code></td><td><code>char nome[16];</code> (15 úteis)</td><td><code>%s</code></td></tr>
+        <tr><td>Matriz</td><td>homogênea, 2+ dimensões</td><td><code>float t[5][2];</code></td><td><code>t[linha][coluna]</code></td></tr>
+        <tr><td>Struct</td><td>heterogênea (registro)</td><td><code>struct Aluno a;</code></td><td><code>a.nome</code> · <code>alunos[1].idade</code></td></tr>
+      </table>
+      <div class="key"><b>Vetor é estático</b>: o tamanho é fixado na declaração e não muda. Sem inicializar, as posições contêm <b>lixo</b>. Diagonal principal: <code>m[i][i]</code>; secundária (3×3): <code>m[i][2 - i]</code>.</div>
+      <div class="trap"><b>Strings:</b> <code>scanf("%s", nome)</code> (sem <code>&amp;</code>) para no primeiro espaço; <code>fgets(frase, 101, stdin)</code> lê a frase inteira e pode guardar o <code>'\n'</code>. Não se faz <code>nome = "Ana";</code> depois da declaração: use <code>strcpy(nome, "Ana")</code>. Comparar: <code>strcmp(a, b) == 0</code>.</div>
+<pre><code>typedef struct {          // typedef: dispensa a palavra struct na declaração
+    char titulo[100];
+    int estoque;
+} Livro;                  // struct criada antes do main()
+
+Livro livros[3];                 // vetor de structs
+livros[1].estoque = 5;           // índice primeiro, depois .campo</code></pre>
+
+      <h3>2. Ponteiros</h3>
+<pre><code>int ano = 2018;
+int *p = &amp;ano;   // p guarda o ENDEREÇO de ano
+*p = 2024;        // altera ano através de p (desreferência)
+printf("%p", p);  // endereço  ·  printf("%d", *p) → 2024</code></pre>
+      <table>
+        <tr><th>Expressão</th><th>Significado</th></tr>
+        <tr><td><code>&amp;x</code></td><td>endereço de x (operador de referência)</td></tr>
+        <tr><td><code>*p</code></td><td>conteúdo apontado por p</td></tr>
+        <tr><td><code>p++</code> / <code>p + k</code></td><td>avança 1 / k <b>elementos</b> (soma <code>k · sizeof(*p)</code> bytes)</td></tr>
+        <tr><td><code>(*p)++</code></td><td>incrementa o <b>valor</b> apontado</td></tr>
+        <tr><td><code>p = v;</code></td><td>o nome do vetor já é o endereço de <code>v[0]</code></td></tr>
+        <tr><td><code>ptr-&gt;campo</code></td><td>o mesmo que <code>(*ptr).campo</code></td></tr>
+        <tr><td><code>NULL</code></td><td>“não aponta para nada”</td></tr>
+      </table>
+      <div class="trap"><b>Pegadinhas:</b> ponteiros só aceitam <b>soma e subtração</b> de inteiros. <code>&lt;</code>/<code>&gt;</code> entre ponteiros só fazem sentido dentro do mesmo vetor. Matriz fica na memória <b>linha por linha</b>: <code>m[i][j]</code> está na posição <code>i · colunas + j</code>.</div>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: onde fica cada elemento na memória</h4>
+        <div class="row">
+          <label>Tipo <select id="mmTipo"><option value="1">char (1 byte)</option><option value="4" selected>int (4 bytes)</option><option value="4f">float (4 bytes)</option><option value="8">double (8 bytes)</option></select></label>
+          <label>Endereço inicial <input type="text" id="mmBase" value="1000" style="max-width:90px;flex:none"></label>
+        </div>
+        <div class="row">
+          <label>Linhas <input type="number" id="mmL" value="1" min="1" max="10"></label>
+          <label>Colunas <input type="number" id="mmC" value="5" min="1" max="10"></label>
+          <label>i <input type="number" id="mmI" value="0" min="0"></label>
+          <label>j <input type="number" id="mmJ" value="2" min="0"></label>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Com 1 linha, é um vetor <code>v[colunas]</code> e o elemento é <code>v[j]</code>. Com mais linhas, é uma matriz <code>m[linhas][colunas]</code>. Endereços fictícios, em decimal.</div>
+        <div class="out" id="mmOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="3"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u3">Praticar Unidade 3 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U4 ---------- -->
+  <details class="tut" data-unit="4" style="--uc:var(--u4)">
+    <summary><h2>Unidade 4 · Funções, parâmetros e recursividade</h2><span class="done-chip" data-chip="4">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Funções e procedimentos</h3>
+<pre><code>&lt;tipo de retorno&gt; nome(&lt;parâmetros&gt;) {
+    comandos;
+    return valor;   // obrigatório se o tipo não for void; encerra a função
+}</code></pre>
+      <table>
+        <tr><th>Conceito</th><th>O que a prova cobra</th></tr>
+        <tr><td>Procedimento</td><td>função <code>void</code>: não devolve valor</td></tr>
+        <tr><td><code>return</code></td><td>devolve <b>um único</b> valor e encerra a função; pode haver vários <code>return</code> (um por caminho)</td></tr>
+        <tr><td>Função sem <code>return</code> mas com tipo <code>float</code></td><td>erro de lógica (exercício da U4): o valor devolvido é indefinido</td></tr>
+        <tr><td>Retornar vetor</td><td>só por ponteiro (<code>int* f()</code>), e o vetor deve ser <code>static</code></td></tr>
+        <tr><td>Vantagens</td><td>“dividir para conquistar”, reutilização, modularização</td></tr>
+      </table>
+
+      <h3>2. Escopo</h3>
+      <table>
+        <tr><th></th><th>Local</th><th>Global</th></tr>
+        <tr><td>Onde</td><td>dentro da função/bloco</td><td>fora de todas as funções</td></tr>
+        <tr><td>Visível</td><td>só na própria função</td><td>em todo o programa</td></tr>
+        <tr><td>Vida</td><td>criada na chamada, destruída no fim</td><td>todo o tempo de execução</td></tr>
+      </table>
+      <div class="key">Local com o mesmo nome de uma global <b>esconde</b> a global dentro daquela função. Para acessar a global ali, usa-se um bloco com <code>extern int x;</code> (Quadro 4 da Aula 2).</div>
+
+      <h3>3. Passagem de parâmetros</h3>
+      <table>
+        <tr><th>Argumento</th><th>Padrão</th><th>Para alterar o original</th></tr>
+        <tr><td><code>int</code>, <code>float</code>…</td><td>por valor (cópia)</td><td>parâmetro <code>int *p</code>, chamada <code>f(&amp;x)</code>, uso <code>*p</code></td></tr>
+        <tr><td>vetor / matriz</td><td>por referência (endereço de <code>v[0]</code>)</td><td>já altera; matriz precisa das colunas: <code>int m[][3]</code></td></tr>
+        <tr><td>struct</td><td>por <b>valor</b> (cópia inteira)</td><td><code>struct T *s</code>, chamada <code>f(&amp;s)</code>, uso <code>s-&gt;campo</code></td></tr>
+      </table>
+
+      <h3>4. Recursividade</h3>
+<pre><code>int fatorial(int n) {
+    if (n &gt; 0)
+        return n * fatorial(n - 1);  // chamada recursiva
+    else
+        return 1;                    // caso base: 0! = 1
+}</code></pre>
+      <div class="trap"><b>Sem caso base</b> (ou com um caso base que nunca é alcançado, como <code>somar(-3)</code> com <code>if (valor != 0)</code>) as instâncias se acumulam até o <b>estouro de pilha</b>. Toda recursão tem versão iterativa; a recursiva costuma usar mais memória.</div>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: pilha de chamadas recursivas</h4>
+        <div class="row">
+          <label>Função <select id="rcF">
+            <option value="fat">fatorial(n): n * fatorial(n - 1), base n == 0</option>
+            <option value="som">somar(n): n + somar(n - 1), base n == 0</option>
+            <option value="pot">potencia(2, n): 2 * potencia(2, n - 1), base n == 0</option>
+          </select></label>
+          <label>n <input type="number" id="rcN" value="4" min="0" max="12"></label>
+        </div>
+        <div class="out trace" id="rcOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="4"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u4">Praticar Unidade 4 →</button>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ======================= SIMULADO ======================= -->
+<section class="tab-panel" id="tab-simulado">
+  <div class="notice">
+    Suas respostas são <b>salvas automaticamente</b> neste navegador. Pode fechar a aba e voltar depois.
+    <ul>
+      <li><b>Correção imediata:</b> cada questão é corrigida assim que você responde (bom para estudar). <b>Modo prova:</b> tudo é corrigido só no final (bom para medir sua nota).</li>
+      <li><b>Parte 1</b> traz questões de fixação por aula. As de "qual a saída" foram compiladas e executadas para conferir o gabarito.</li>
+      <li><b>Parte 2</b> traz questões de uma <b>prova presencial real</b> da disciplina (Studocu, ano letivo 2023/2024), com o link da fonte. Quando o gabarito publicado estava errado, vale a resposta correta (selo vermelho). Questões sobre listas/filas/pilhas estão marcadas como fora do material das aulas.</li>
+      <li><b>Parte 3</b> traz questões novas no formato da prova (asserção-razão, V/F, completar código), cobrindo o que a prova real não cobriu.</li>
+      <li>Depois de responder, a explicação mostra o motivo de <b>cada alternativa</b> estar certa ou errada.</li>
+    </ul>
+  </div>
+
+  <div class="card toolbar">
+    <div class="grp"><span>Modo:</span>
+      <div class="seg" id="modeSeg"><button data-mode="instant">Correção imediata</button><button data-mode="exam">Modo prova</button></div>
+    </div>
+    <div class="grp"><label for="filterSel">Mostrar:</label>
+      <select id="filterSel">
+        <option value="all">Todas as questões</option>
+        <option value="u1">Unidade 1: fundamentos e operadores</option>
+        <option value="u2">Unidade 2: decisão e repetição</option>
+        <option value="u3">Unidade 3: vetores, structs e ponteiros</option>
+        <option value="u4">Unidade 4: funções e recursividade</option>
+        <option value="p1">Parte 1: fixação por aula</option>
+        <option value="p2">Parte 2: prova anterior (real)</option>
+        <option value="p3">Parte 3: novas no estilo da prova</option>
+        <option value="todo">Só as não respondidas</option>
+        <option value="wrong">Só as que errei</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div id="progressFill"></div></div>
+    <div class="progress-label"><span id="liveScore"></span><span id="progressText">0 respondidas</span></div>
+  </div>
+
+  <div id="quiz"></div>
+  <div class="empty" id="emptyMsg" style="display:none">Nenhuma questão neste filtro. 🎉</div>
+
+  <div class="actions">
+    <button class="big-btn" id="submitBtn">Finalizar e ver resultado</button>
+  </div>
+
+  <div id="results">
+    <div class="card score-hero">
+      <div class="big" id="scoreBig">0%</div>
+      <div class="sub" id="scoreSub">0 corretas</div>
+      <div class="proj" id="scoreProj"></div>
+      <div class="bars" id="unitBars"></div>
+    </div>
+    <div class="card" id="tipsCard" style="display:none"><b>Sugestões de estudo (com base nos seus erros)</b><div class="tips" id="tipsList"></div></div>
+    <div class="card" id="reviewCard" style="display:none"><b>Questões para revisar</b><div class="review-list" id="reviewList" style="margin-top:8px"></div></div>
+    <div class="card" id="historyCard" style="display:none"><b>Suas tentativas</b><table class="history" id="historyTable" style="margin-top:8px"></table></div>
+    <div class="actions" style="position:static">
+      <button class="big-btn ghost" id="retryWrongBtn">Refazer só as que errei</button>
+      <button class="big-btn" id="retryBtn">Refazer tudo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= NOTA ======================= -->
+<section class="tab-panel" id="tab-nota">
+  <div class="card">
+    <b>🎯 Quanto preciso tirar na prova?</b>
+    <p style="font-size:13.6px;color:var(--muted);margin:6px 0 14px">Preencha com os seus números. A calculadora mostra quantos pontos e quantas questões você precisa acertar para passar. Os valores ficam salvos.</p>
+    <div class="calc-grid">
+      <label>Pontos que você já tem<input type="number" id="cAtual" step="0.1" min="0"></label>
+      <label>Quanto vale a prova<input type="number" id="cProva" step="0.1" min="0"></label>
+      <label>Nota mínima para aprovação<input type="number" id="cMin" step="0.1" min="0"></label>
+      <label>Critério
+        <select id="cCrit"><option value="gte">nota ≥ mínima</option><option value="gt">nota &gt; mínima (estritamente maior)</option></select>
+      </label>
+      <label>Nº de questões da prova<input type="number" id="cNq" step="1" min="1" max="100"></label>
+    </div>
+    <div id="calcVerdict"></div>
+    <div id="calcProj"></div>
+  </div>
+  <div class="card">
+    <b>Nota final por número de acertos</b>
+    <div style="overflow-x:auto;margin-top:8px"><table class="gtable" id="calcTable"></table></div>
+    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">A calculadora supõe que todas as questões valem o mesmo (valor da prova ÷ nº de questões). Confira no AVA as regras da sua disciplina: nota mínima, se é "≥" ou "&gt;", e se existe prova substitutiva ou recuperação.</p>
+  </div>
+</section>
+
+<footer>Gerado a partir das 20 aulas, dos exercícios das unidades (só para calibrar o estilo; nenhuma questão deles foi copiada) e de uma prova anterior da disciplina · bons estudos!</footer>
+</div>
+
+<script>
+/* ---------- Banco de questões ----------
+   part: 1 = fixação, 2 = prova real, 3 = novas no estilo da prova
+   correct: índice (ou array de índices aceitos) · why: justificativa por alternativa
+   diverge: o gabarito publicado estava errado/discutível · offsyl: fora do material das aulas */
+const questions = [
+{
+"part": 1,
+"unit": 1,
+"ref": "U1 · Aula 1 — Símbolos do fluxograma",
+"statement": "Em um diagrama de blocos (fluxograma) com os símbolos padronizados pela ANSI, um programador quer representar o passo <b>“o usuário digita a nota do 1º bimestre pelo teclado”<\/b>. Qual símbolo ele deve usar?",
+"options": [
+"Terminal",
+"Entrada manual",
+"Processamento",
+"Exibição",
+"Decisão/Condicional"
+],
+"correct": 1,
+"why": [
+"O terminal marca só o <b>início ou o fim<\/b> do fluxo.",
+"Correta: a entrada manual representa dados digitados, geralmente pelo teclado.",
+"Processamento representa cálculos/atribuições (ex.: <code>soma ← n1 + n2<\/code>), não a leitura.",
+"Exibição é o contrário: mostra uma informação na tela (saída).",
+"Decisão representa um teste com saídas V/F (desvios e laços)."
+],
+"hint": "Separe os símbolos em entrada, processamento, saída e controle (início/fim, decisão).",
+"explain": "No fluxograma da média (Aula 1), a leitura de cada nota é feita com o símbolo de <b>entrada manual<\/b>, logo depois de um símbolo de <b>exibição<\/b> que mostra a mensagem pedindo a nota."
+},
+{
+"part": 1,
+"unit": 1,
+"ref": "U1 · Aula 2 — printf com casas decimais",
+"statement": "Qual é a saída exata do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    float a = 7, b = 2;\n    printf(\"%.2f\", a / b);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"3",
+"3.5",
+"3.50",
+"3.500000",
+"3,50"
+],
+"correct": 2,
+"why": [
+"Seria a divisão inteira, mas <code>a<\/code> e <code>b<\/code> são <code>float<\/code>: 7.0 / 2.0 = 3.5.",
+"O valor é 3.5, mas <code>%.2f<\/code> obriga a exibir <b>duas<\/b> casas decimais.",
+"Correta: 3.5 formatado com duas casas.",
+"Esse seria o resultado de <code>%f<\/code> sem precisão (6 casas por padrão).",
+"O <code>printf<\/code> usa ponto como separador decimal, não vírgula."
+],
+"hint": "Olhe primeiro o tipo das variáveis (a divisão é inteira ou real?) e depois o que o <code>.2<\/code> faz no especificador.",
+"explain": "Como as duas variáveis são <code>float<\/code>, a divisão é real: 3.5. O especificador <code>%.2f<\/code> arredonda/completa para 2 casas: <b>3.50<\/b>."
+},
+{
+"part": 1,
+"unit": 1,
+"ref": "U1 · Aula 4 — Divisão inteira e módulo",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int a = 17, b = 5;\n    float m;\n    m = a / b;\n    printf(\"%d %d %.1f\", a / b, a % b, m);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"3 2 3.4",
+"3 2 3.0",
+"3.4 2 3.4",
+"3 3 3.0",
+"2 3 3.0"
+],
+"correct": 1,
+"why": [
+"O erro clássico: <code>a / b<\/code> é calculado entre dois <code>int<\/code> (= 3) <b>antes<\/b> de ir para o <code>float<\/code>, então <code>m<\/code> recebe 3.0.",
+"Correta: 17 / 5 = 3 (divisão inteira), 17 % 5 = 2 (resto), e m = 3.0.",
+"<code>%d<\/code> com divisão de inteiros nunca mostra casas decimais.",
+"O resto de 17 por 5 é 2 (5 · 3 = 15; 17 − 15 = 2), não 3.",
+"Inverteu quociente e resto."
+],
+"hint": "Divisão entre dois <code>int<\/code> descarta a parte decimal. Só depois o resultado é guardado em <code>m<\/code>.",
+"explain": "É exatamente a <b>nota de revisão<\/b> da Aula 4: a divisão é inteira porque os dois operandos são <code>int<\/code>. Para obter 3.4 seria preciso <code>(float) a / b<\/code> ou <code>a / 5.0<\/code>.",
+"fix": "Regra: o tipo do <b>resultado<\/b> depende dos operandos, não da variável que vai recebê-lo."
+},
+{
+"part": 1,
+"unit": 1,
+"ref": "U1 · Aula 4 — Pré e pós-incremento",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int x = 5, y;\n    y = x++ * 2;\n    printf(\"%d %d\\n\", x, y);\n    y = ++x * 2;\n    printf(\"%d %d\", x, y);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"6 10 / 7 14",
+"6 12 / 7 14",
+"5 10 / 6 12",
+"6 10 / 7 12",
+"6 12 / 8 16"
+],
+"correct": 0,
+"why": [
+"Correta: <code>x++<\/code> usa 5 e depois vira 6 (y = 10); <code>++x<\/code> vira 7 antes e é usado (y = 14).",
+"Tratou <code>x++<\/code> como pré-incremento (usou 6 na conta).",
+"Esqueceu que o <code>x++<\/code> altera x depois da expressão: na hora do <code>printf<\/code> x já vale 6.",
+"Tratou <code>++x<\/code> como pós-incremento (usou 6 na segunda conta).",
+"Incrementou duas vezes em cada linha."
+],
+"hint": "Pós (<code>x++<\/code>): usa o valor e <b>depois<\/b> soma. Pré (<code>++x<\/code>): soma <b>antes<\/b> e usa o novo valor. As duas linhas aparecem separadas por “/”.",
+"explain": "Linha 1: y = 5 · 2 = 10 e x passa a 6. Linha 2: x passa a 7 e y = 7 · 2 = 14. Saída: <b>6 10<\/b> e, na linha seguinte, <b>7 14<\/b>."
+},
+{
+"part": 1,
+"unit": 1,
+"ref": "U1 · Aula 3 — Nomes de variáveis",
+"statement": "Seguindo as regras de nomes apresentadas na Aula 3, qual declaração é <b>válida<\/b> em C?",
+"options": [
+"<code>int 2nota;<\/code>",
+"<code>float salário;<\/code>",
+"<code>float media_final;<\/code>",
+"<code>int valor total;<\/code>",
+"<code>float preco-venda;<\/code>"
+],
+"correct": 2,
+"why": [
+"Nome não pode começar com número.",
+"Nome não pode ter letra acentuada (é justamente o erro da nota de revisão do Quadro 5 da U2 · Aula 1).",
+"Correta: começa com letra e usa só letras e underline.",
+"Nome não pode conter espaço: o compilador vê dois identificadores.",
+"O hífen é lido como o operador de subtração: <code>preco - venda<\/code>."
+],
+"hint": "Comece com letra; depois letras, números ou <code>_<\/code>. Sem espaços, acentos ou outros símbolos.",
+"explain": "Das cinco, só <code>media_final<\/code> respeita todas as regras. Lembre também que C diferencia maiúsculas de minúsculas: <code>Media<\/code> e <code>media<\/code> seriam variáveis diferentes."
+},
+{
+"part": 1,
+"unit": 1,
+"ref": "U1 · Aula 3 — #define × const",
+"statement": "Sobre as duas formas de criar constantes em C, assinale a alternativa correta.",
+"options": [
+"Os dois casos terminam com ponto e vírgula: <code>#define TAXA 0.1;<\/code> e <code>const float taxa = 0.1;<\/code>",
+"<code>#define TAXA 0.1<\/code> não ocupa memória (é um rótulo substituído antes da compilação), enquanto <code>const float taxa = 0.1;<\/code> ocupa 4 bytes e não pode ter o valor alterado.",
+"É possível obter o endereço de uma constante criada com <code>#define<\/code> usando o operador <code>&amp;<\/code>.",
+"Uma constante declarada com <code>const<\/code> pode ter o valor alterado durante a execução, desde que seja do mesmo tipo.",
+"<code>#define<\/code> exige informar o tipo da constante, como em <code>#define int TAXA 10<\/code>."
+],
+"correct": 1,
+"why": [
+"A diretiva <code>#define<\/code> <b>não<\/b> leva ponto e vírgula (o <code>;<\/code> seria colado em todo lugar onde TAXA aparece).",
+"Correta: resume a tabela da Aula 3 (memória, tipo e alteração).",
+"Como <code>#define<\/code> não aloca memória, não existe endereço para pegar com <code>&<\/code>.",
+"Tentar alterar uma <code>const<\/code> gera erro de compilação.",
+"<code>#define<\/code> não tem tipo: a sintaxe é <code>#define NOME valor<\/code>."
+],
+"hint": "Lembre a tabela comparativa: ocupa memória? tem tipo? aceita &? termina com ;?",
+"explain": "<code>#define<\/code> é tratado pelo pré-processador (troca de texto); <code>const<\/code> é uma variável de verdade, com tipo e endereço, cujo valor o compilador proíbe alterar."
+},
+{
+"part": 1,
+"unit": 1,
+"ref": "U1 · Aula 4 — Operadores relacionais e lógicos",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int a = 4, b = 7, c = 4;\n    printf(\"%d %d %d\", a == c &amp;&amp; b &lt; a, a != b || c &gt; b, !(a == c));\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"1 1 0",
+"0 1 0",
+"0 0 1",
+"0 1 1",
+"true true false"
+],
+"correct": 1,
+"why": [
+"No 1º termo, <code>b &lt; a<\/code> (7 &lt; 4) é falso, e o <code>&&<\/code> exige os dois verdadeiros.",
+"Correta: 1 && 0 = 0; 1 || 0 = 1; !(1) = 0.",
+"O <code>||<\/code> é verdadeiro porque <code>a != b<\/code> é verdadeiro (basta um).",
+"<code>a == c<\/code> é verdadeiro (1); a negação dá 0.",
+"Em C, comparações resultam nos inteiros <b>1<\/b> (verdadeiro) e <b>0<\/b> (falso), impressos com <code>%d<\/code>."
+],
+"hint": "Avalie cada comparação como 1 ou 0 e só depois aplique <code>&&<\/code>, <code>||<\/code> e <code>!<\/code>.",
+"explain": "(4 == 4) && (7 &lt; 4) → 1 && 0 = <b>0<\/b>; (4 != 7) || (4 &gt; 7) → 1 || 0 = <b>1<\/b>; !(4 == 4) → !1 = <b>0<\/b>."
+},
+{
+"part": 1,
+"unit": 2,
+"ref": "U2 · Aula 1 — switch sem break",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int op = 2;\n    switch (op) {\n        case 1: printf(\"A\");\n        case 2: printf(\"B\");\n        case 3: printf(\"C\"); break;\n        case 4: printf(\"D\");\n        default: printf(\"E\");\n    }\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"B",
+"BC",
+"BCDE",
+"BE",
+"ABC"
+],
+"correct": 1,
+"why": [
+"Sem <code>break<\/code> no <code>case 2<\/code>, a execução continua no caso seguinte.",
+"Correta: entra no <code>case 2<\/code>, “cai” no <code>case 3<\/code> e para no <code>break<\/code>.",
+"O <code>break<\/code> do <code>case 3<\/code> encerra o <code>switch<\/code> antes do D e do E.",
+"O <code>default<\/code> só roda se nenhum caso casar (ou se a execução cair até ele).",
+"A execução começa no caso que casa com o valor (2), não no primeiro."
+],
+"hint": "O <code>switch<\/code> pula para o <code>case<\/code> igual ao valor e executa tudo dali para baixo até achar um <code>break<\/code>.",
+"explain": "É o comportamento descrito na Aula 1: “os comandos são executados até que o comando <code>break<\/code> seja encontrado”. Saída: <b>BC<\/b>."
+},
+{
+"part": 1,
+"unit": 2,
+"ref": "U2 · Aula 1 — Ordem do if-else-if",
+"statement": "Qual é a saída do programa para <code>idade = 70<\/code>?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int idade = 70;\n    if (idade &gt;= 18)\n        printf(\"adulto\");\n    else if (idade &gt;= 60)\n        printf(\"idoso\");\n    else\n        printf(\"menor\");\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"idoso",
+"adulto",
+"adultoidoso",
+"menor",
+"Nada é impresso"
+],
+"correct": 1,
+"why": [
+"70 ≥ 60 é verdade, mas esse teste nunca é feito: a primeira condição já foi verdadeira.",
+"Correta: as condições são avaliadas de cima para baixo e só o primeiro bloco verdadeiro executa.",
+"Em um <code>if-else-if<\/code>, no máximo <b>um<\/b> bloco é executado.",
+"O <code>else<\/code> final só roda se todas as condições forem falsas.",
+"A primeira condição é verdadeira, então algo é impresso."
+],
+"hint": "Quantos blocos de uma cadeia <code>if / else if / else<\/code> podem executar?",
+"explain": "A regra da Aula 1: assim que uma condição verdadeira é encontrada, o resto não é avaliado. Para o programa funcionar, o teste mais restritivo (<code>idade >= 60<\/code>) deveria vir <b>primeiro<\/b>.",
+"fix": "Em faixas de valores, ordene do caso mais específico para o mais geral."
+},
+{
+"part": 1,
+"unit": 2,
+"ref": "U2 · Aula 2 — while × do-while",
+"statement": "Qual valor é impresso?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int i = 10, cont = 0;\n    while (i &lt; 5) {\n        cont++;\n        i++;\n    }\n    do {\n        cont++;\n    } while (i &lt; 5);\n    printf(\"%d\", cont);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"0",
+"1",
+"2",
+"5",
+"O programa entra em laço infinito"
+],
+"correct": 1,
+"why": [
+"O <code>do-while<\/code> sempre executa o bloco pelo menos uma vez.",
+"Correta: o <code>while<\/code> roda 0 vezes (10 &lt; 5 é falso) e o <code>do-while<\/code> roda 1 vez.",
+"O <code>while<\/code> testa antes e não executa nenhuma vez.",
+"Não há repetição: as duas condições são falsas desde o início.",
+"A condição do <code>do-while<\/code> é falsa no primeiro teste, então o laço termina."
+],
+"hint": "Onde cada laço testa a condição: no início ou no fim?",
+"explain": "<code>while<\/code>: mínimo de 0 execuções. <code>do-while<\/code>: mínimo de 1. Como <code>i<\/code> já começa em 10, só o bloco do <code>do-while<\/code> roda, uma vez: <b>1<\/b>."
+},
+{
+"part": 1,
+"unit": 2,
+"ref": "U2 · Aula 3 — for com passo 3",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int i, soma = 0;\n    for (i = 1; i &lt;= 10; i += 3)\n        soma += i;\n    printf(\"%d %d\", soma, i);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"22 10",
+"22 13",
+"12 10",
+"55 11",
+"21 13"
+],
+"correct": 1,
+"why": [
+"O laço só termina quando a condição fica <b>falsa<\/b>: depois do 10, o incremento leva i a 13.",
+"Correta: i = 1, 4, 7, 10 → soma 22; o incremento final leva i a 13, que encerra o laço.",
+"Esqueceu o último termo (10), que ainda satisfaz <code>i &lt;= 10<\/code>.",
+"Seria a soma de 1 a 10 com passo 1.",
+"Erro de soma: 1 + 4 + 7 + 10 = 22."
+],
+"hint": "Faça o teste de mesa: anote i e soma a cada volta, incluindo o incremento que torna a condição falsa.",
+"explain": "Iterações: i = 1, 4, 7, 10 (soma = 22). Após somar 10, executa <code>i += 3<\/code> → 13; 13 &lt;= 10 é falso, sai do laço. Saída: <b>22 13<\/b>."
+},
+{
+"part": 1,
+"unit": 2,
+"ref": "U2 · Aula 4 — break e continue",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    for (int i = 1; i &lt;= 10; i++) {\n        if (i % 3 == 0)\n            continue;\n        if (i == 8)\n            break;\n        printf(\"%d \", i);\n    }\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"1 2 4 5 7",
+"1 2 4 5 7 8 10",
+"1 2",
+"3 6",
+"1 2 4 5 7 10"
+],
+"correct": 0,
+"why": [
+"Correta: pula os múltiplos de 3 (3 e 6) e encerra o laço ao chegar no 8.",
+"O <code>break<\/code> no 8 encerra o laço inteiro: nem 8 nem 10 são impressos.",
+"O <code>continue<\/code> no 3 não encerra o laço, só pula aquela iteração.",
+"Os múltiplos de 3 são justamente os que <b>não<\/b> são impressos.",
+"Depois do <code>break<\/code> não há mais iterações; o 10 nunca é alcançado."
+],
+"hint": "<code>continue<\/code> pula para a próxima volta; <code>break<\/code> sai do laço.",
+"explain": "i = 1, 2 impressos; 3 → continue; 4, 5 impressos; 6 → continue; 7 impresso; 8 → break. Saída: <b>1 2 4 5 7<\/b>."
+},
+{
+"part": 1,
+"unit": 2,
+"ref": "U2 · Aula 3 — Laços aninhados",
+"statement": "Quantas vezes a instrução <code>cont++<\/code> é executada?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int cont = 0;\n    for (int i = 0; i &lt; 4; i++)\n        for (int j = i; j &lt; 4; j++)\n            cont++;\n    printf(\"%d\", cont);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"16",
+"10",
+"6",
+"4",
+"8"
+],
+"correct": 1,
+"why": [
+"Seria 4 · 4 se o laço interno começasse sempre em 0; aqui ele começa em <code>j = i<\/code>.",
+"Correta: 4 + 3 + 2 + 1 = 10.",
+"Esqueceu que o interno também roda quando j = i (inclui a diagonal).",
+"Contou só as voltas do laço externo.",
+"Não há relação com 2 · 4; some as voltas do interno para cada i."
+],
+"hint": "Para cada valor de i, quantas voltas o laço interno dá?",
+"explain": "i = 0 → j de 0 a 3 (4 voltas); i = 1 → 3; i = 2 → 2; i = 3 → 1. Total <b>10<\/b>. É o padrão “triângulo” usado no desenho do Quadro 5 da Aula 3."
+},
+{
+"part": 1,
+"unit": 3,
+"ref": "U3 · Aula 1 — Maior elemento do vetor",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int v[5] = {3, 8, 1, 9, 4};\n    int maior = v[0], pos = 0;\n    for (int i = 1; i &lt; 5; i++)\n        if (v[i] &gt; maior) {\n            maior = v[i];\n            pos = i;\n        }\n    printf(\"%d %d\", maior, pos);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"9 4",
+"9 3",
+"8 1",
+"4 4",
+"9 2"
+],
+"correct": 1,
+"why": [
+"Contou a posição a partir de 1 (9 é o 4º elemento), mas o índice começa em 0.",
+"Correta: o maior é 9, que está no índice 3.",
+"8 é o maior só até a 2ª iteração; depois aparece o 9.",
+"4 é o último elemento, não o maior.",
+"O índice 2 contém o valor 1."
+],
+"hint": "Índices de um vetor de 5 posições vão de 0 a 4.",
+"explain": "Teste de mesa: maior começa em 3; i=1 → 8 (pos 1); i=2 → 1 não troca; i=3 → 9 (pos 3); i=4 → 4 não troca. Saída: <b>9 3<\/b>."
+},
+{
+"part": 1,
+"unit": 3,
+"ref": "U3 · Aula 1 — scanf(\"%s\") com espaço",
+"statement": "O usuário digita <b>Ana Maria<\/b> e tecla Enter. O que o programa exibe?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    char nome[20];\n    scanf(\"%s\", nome);\n    printf(\"[%s]\", nome);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"[Ana Maria]",
+"[Ana]",
+"[Maria]",
+"[A]",
+"Erro de compilação: falta o &amp; antes de nome"
+],
+"correct": 1,
+"why": [
+"O <code>scanf<\/code> com <code>%s<\/code> para no primeiro espaço em branco; para ler frases, use <code>fgets<\/code>.",
+"Correta: só a primeira palavra é armazenada.",
+"A leitura começa no início da entrada; “Maria” fica no buffer.",
+"<code>%s<\/code> lê a palavra inteira, não um caractere só (isso seria <code>%c<\/code>).",
+"Para strings o <code>&amp;<\/code> não é necessário: o nome do vetor já é o endereço do primeiro elemento."
+],
+"hint": "Qual é a limitação do <code>scanf<\/code> com <code>%s<\/code> citada na Aula 1?",
+"explain": "O <code>scanf(\"%s\")<\/code> armazena só palavras simples, pois interrompe a leitura ao encontrar um espaço. Saída: <b>[Ana]<\/b>."
+},
+{
+"part": 1,
+"unit": 3,
+"ref": "U3 · Aula 2 — Diagonal secundária",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int m[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};\n    int s = 0;\n    for (int i = 0; i &lt; 3; i++)\n        s += m[i][2 - i];\n    printf(\"%d\", s);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"15",
+"45",
+"12",
+"18",
+"6"
+],
+"correct": 0,
+"why": [
+"Correta: m[0][2] + m[1][1] + m[2][0] = 3 + 5 + 7 = 15.",
+"Seria a soma de todos os elementos (exigiria dois laços).",
+"Somou a 1ª coluna (1 + 4 + 7).",
+"Somou a 3ª coluna (3 + 6 + 9).",
+"Somou a 1ª linha (1 + 2 + 3)."
+],
+"hint": "Para i = 0, 1, 2, qual coluna é <code>2 - i<\/code>?",
+"explain": "A coluna diminui enquanto a linha aumenta: (0,2), (1,1), (2,0) — a <b>diagonal secundária<\/b>, como no Quadro 3 da Aula 2. 3 + 5 + 7 = <b>15<\/b>. (Nesta matriz, a diagonal principal 1 + 5 + 9 também dá 15, mas não é ela que o código percorre.)"
+},
+{
+"part": 1,
+"unit": 3,
+"ref": "U3 · Aula 3 — Vetor de structs",
+"statement": "Considere:<pre><code>typedef struct {\n    char nome[30];\n    float preco;\n} Produto;\n\nProduto itens[3];<\/code><\/pre>Qual comando atribui o preço 9.90 ao <b>segundo<\/b> produto do vetor?",
+"options": [
+"<code>itens.preco[1] = 9.90;<\/code>",
+"<code>itens[1].preco = 9.90;<\/code>",
+"<code>itens[2].preco = 9.90;<\/code>",
+"<code>Produto[1].preco = 9.90;<\/code>",
+"<code>itens[1]-&gt;preco = 9.90;<\/code>"
+],
+"correct": 1,
+"why": [
+"O índice vai no vetor (<code>itens[1]<\/code>), não no campo: <code>preco<\/code> não é vetor.",
+"Correta: primeiro o índice do vetor, depois o <code>.<\/code> e o campo.",
+"O índice 2 é o <b>terceiro<\/b> produto (índices começam em 0).",
+"<code>Produto<\/code> é o nome do tipo, não da variável.",
+"<code>-&gt;<\/code> é para ponteiro para struct; <code>itens[1]<\/code> é uma struct, use <code>.<\/code>."
+],
+"hint": "A ordem que a Aula 3 destaca: <code>vetor[índice].campo<\/code>.",
+"explain": "Em um vetor de structs, o operador <code>.<\/code> vem <b>depois<\/b> dos colchetes: <code>itens[1].preco<\/code>. O segundo elemento tem índice 1."
+},
+{
+"part": 1,
+"unit": 3,
+"ref": "U3 · Aula 4 — Desreferência",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int a = 10, b = 20;\n    int *p = &amp;a;\n    *p = *p + 5;\n    p = &amp;b;\n    *p = *p * 2;\n    printf(\"%d %d\", a, b);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"10 20",
+"15 40",
+"15 20",
+"30 40",
+"10 40"
+],
+"correct": 1,
+"why": [
+"Alterar <code>*p<\/code> altera a variável apontada; a e b mudam.",
+"Correta: com p = &a, a vira 15; com p = &b, b vira 40.",
+"Depois de <code>p = &b<\/code>, o <code>*p * 2<\/code> altera b.",
+"Trocar o endereço guardado em p não muda o valor de a.",
+"A primeira atribuição <code>*p = *p + 5<\/code> altera a."
+],
+"hint": "<code>*p<\/code> = “o conteúdo do endereço que p guarda”. Acompanhe para onde p aponta em cada linha.",
+"explain": "Linha 4: p aponta para a → a = 15. Linha 5: p passa a apontar para b. Linha 6: b = 20 · 2 = 40. Saída: <b>15 40<\/b>."
+},
+{
+"part": 1,
+"unit": 3,
+"ref": "U3 · Aula 4 — Aritmética de ponteiros",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int v[5] = {10, 20, 30, 40, 50};\n    int *p = v;\n    p += 2;\n    printf(\"%d %d\", *p, *(p + 1) + 1);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"12 13",
+"30 41",
+"30 31",
+"20 31",
+"30 50"
+],
+"correct": 1,
+"why": [
+"Somar 2 ao ponteiro avança 2 <b>elementos<\/b>; não soma 2 ao valor apontado.",
+"Correta: p aponta para v[2] = 30; *(p + 1) = v[3] = 40, mais 1 = 41.",
+"<code>*(p + 1)<\/code> é o próximo elemento (40), não 30 + 1.",
+"Depois de <code>p += 2<\/code>, p aponta para v[2], não v[1].",
+"O <code>+ 1<\/code> está fora do parêntese: soma 1 ao valor 40, não avança mais uma posição."
+],
+"hint": "<code>p + k<\/code> anda k elementos no vetor; <code>*(p + k)<\/code> lê esse elemento.",
+"explain": "O nome do vetor é o endereço de v[0]. <code>p += 2<\/code> → v[2] (30). <code>*(p + 1)<\/code> → v[3] (40), e o <code>+ 1<\/code> fora do parêntese soma ao valor: 41. Saída: <b>30 41<\/b>."
+},
+{
+"part": 1,
+"unit": 3,
+"ref": "U3 · Aula 4 — Operador seta",
+"statement": "Considere:<pre><code>struct ponto { int x, y; };\nstruct ponto pt = {3, 4};\nstruct ponto *q = &amp;pt;<\/code><\/pre>Qual expressão é <b>equivalente<\/b> a <code>q-&gt;x<\/code>?",
+"options": [
+"<code>*q.x<\/code>",
+"<code>(*q).x<\/code>",
+"<code>q.x<\/code>",
+"<code>&amp;q.x<\/code>",
+"<code>*(q-&gt;x)<\/code>"
+],
+"correct": 1,
+"why": [
+"Sem parênteses, o <code>.<\/code> é aplicado antes do <code>*<\/code>: vira <code>*(q.x)<\/code>, e q não é struct.",
+"Correta: primeiro desreferencia o ponteiro, depois acessa o campo.",
+"<code>q<\/code> é ponteiro; o <code>.<\/code> só vale para a struct em si.",
+"<code>&amp;<\/code> pega um endereço; aqui queremos o valor do campo.",
+"<code>q-&gt;x<\/code> já é um <code>int<\/code>; aplicar <code>*<\/code> nele é inválido."
+],
+"hint": "A dica da Aula 4: a seta é só uma forma mais legível de escrever outra coisa.",
+"explain": "<code>ptr-&gt;campo<\/code> é o mesmo que <code>(*ptr).campo<\/code>. Os parênteses são necessários porque o <code>.<\/code> tem precedência maior que o <code>*<\/code>."
+},
+{
+"part": 1,
+"unit": 3,
+"ref": "U3 · Aula 1 — Tamanho de string",
+"statement": "Um programa declara <code>char cidade[10];<\/code>. Qual é o maior número de caracteres <b>visíveis<\/b> que essa string pode guardar com segurança?",
+"options": [
+"10",
+"9",
+"11",
+"8",
+"Ilimitado, pois strings crescem conforme a digitação"
+],
+"correct": 1,
+"why": [
+"A última posição é reservada para o terminador <code>'\\0'<\/code>.",
+"Correta: 9 caracteres + <code>'\\0'<\/code> = 10 posições.",
+"O vetor tem 10 posições no total; 11 escreveria fora dele.",
+"Só uma posição é reservada para o terminador, não duas.",
+"Vetores em C são estáticos: o tamanho é fixado na declaração."
+],
+"hint": "Lembre o caso <code>char nome[16]<\/code> da Aula 1 e o erro do <code>cpf2[11]<\/code> apontado na nota de revisão.",
+"explain": "Toda string termina em <code>'\\0'<\/code>. É o mesmo problema da nota de revisão do CPF: 11 dígitos precisam de <code>char cpf2[12]<\/code>."
+},
+{
+"part": 1,
+"unit": 4,
+"ref": "U4 · Aula 2 — Escopo local × global",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint x = 1;\n\nvoid f() {\n    x = x + 10;\n}\n\nint g() {\n    return x;\n}\n\nint main() {\n    int x = 5;\n    f();\n    printf(\"%d %d\", x, g());\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"5 1",
+"15 11",
+"5 11",
+"11 11",
+"15 15"
+],
+"correct": 2,
+"why": [
+"A função <code>f<\/code> altera a global: g() já devolve 11.",
+"<code>f<\/code> não enxerga o x local do <code>main<\/code>; ela soma 10 na global.",
+"Correta: no <code>main<\/code> o x local (5) se sobrepõe à global; f e g usam a global (1 + 10 = 11).",
+"Dentro do <code>main<\/code>, <code>x<\/code> é o local, que continua 5.",
+"Nenhuma função altera o x local do <code>main<\/code>."
+],
+"hint": "Dentro de cada função, qual <code>x<\/code> está visível?",
+"explain": "“A variável local sempre se sobrepõe à global” (Aula 2), mas só dentro da função onde foi declarada. <code>f<\/code> e <code>g<\/code> não têm x local, então usam a global. Saída: <b>5 11<\/b>."
+},
+{
+"part": 1,
+"unit": 4,
+"ref": "U4 · Aulas 2 e 3 — Valor × referência",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nvoid troca(int a, int *b) {\n    int t = a;\n    a = *b;\n    *b = t;\n}\n\nint main() {\n    int x = 3, y = 7;\n    troca(x, &amp;y);\n    printf(\"%d %d\", x, y);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"7 3",
+"3 7",
+"3 3",
+"7 7",
+"Erro de compilação"
+],
+"correct": 2,
+"why": [
+"Seria a troca completa, mas x foi passado por <b>valor<\/b>: a alteração em <code>a<\/code> fica na cópia.",
+"y foi passado por referência e é alterado pela função.",
+"Correta: x não muda (cópia); y recebe t = 3 pelo ponteiro.",
+"x não pode mudar, pois a função só recebeu uma cópia dele.",
+"Misturar parâmetro por valor e por referência é permitido."
+],
+"hint": "Qual argumento a função recebe como cópia e qual recebe como endereço?",
+"explain": "<code>a<\/code> é cópia de x (3) e <code>b<\/code> aponta para y. t = 3; a = 7 (só a cópia); *b = 3 → y = 3. Saída: <b>3 3<\/b>. Para trocar de verdade, os dois parâmetros precisam ser ponteiros."
+},
+{
+"part": 1,
+"unit": 4,
+"ref": "U4 · Aula 3 — Vetor como parâmetro",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nvoid dobra(int v[], int n) {\n    for (int i = 0; i &lt; n; i++)\n        v[i] *= 2;\n}\n\nint main() {\n    int a[3] = {1, 2, 3};\n    dobra(a, 2);\n    printf(\"%d %d %d\", a[0], a[1], a[2]);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"1 2 3",
+"2 4 6",
+"2 4 3",
+"1 4 6",
+"2 2 3"
+],
+"correct": 2,
+"why": [
+"Vetores são passados implicitamente por <b>referência<\/b>: a função altera o original.",
+"A função recebeu n = 2, então só dobra as duas primeiras posições.",
+"Correta: dobra a[0] e a[1]; a[2] fica 3.",
+"O laço começa em i = 0.",
+"<code>v[i] *= 2<\/code> dobra também a[1]."
+],
+"hint": "Vetor como parâmetro: é cópia ou endereço? E quantas posições o laço percorre?",
+"explain": "Em C, passar um vetor envia o endereço do primeiro elemento, então <code>dobra<\/code> altera o vetor do <code>main<\/code>. Com n = 2: a = {2, 4, 3}."
+},
+{
+"part": 1,
+"unit": 4,
+"ref": "U4 · Aula 4 — Recursão com passo 2",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nint f(int n) {\n    if (n &lt;= 1)\n        return 1;\n    return n + f(n - 2);\n}\n\nint main() {\n    printf(\"%d\", f(7));\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"28",
+"16",
+"15",
+"13",
+"O programa entra em recursão infinita"
+],
+"correct": 1,
+"why": [
+"Seria 7 + 6 + … + 1; aqui o passo é 2, então só os ímpares entram.",
+"Correta: 7 + 5 + 3 + f(1), e f(1) = 1 → 16.",
+"Esqueceu o valor do caso base (f(1) devolve 1, não 0).",
+"Parou em f(3) sem somar o retorno do caso base.",
+"7, 5, 3, 1: chega em n ≤ 1, que é o caso base."
+],
+"hint": "Expanda as chamadas até chegar no caso base e depois “volte” somando.",
+"explain": "f(7) = 7 + f(5) = 7 + 5 + f(3) = 7 + 5 + 3 + f(1) = 15 + 1 = <b>16<\/b>."
+},
+{
+"part": 1,
+"unit": 4,
+"ref": "U4 · Aula 4 — Caso base mal definido",
+"statement": "A função do Quadro 1 da Aula 4 é:<pre><code>int somar(int valor) {\n    if (valor != 0)\n        return valor + somar(valor - 1);\n    else\n        return valor;\n}<\/code><\/pre>O que acontece se o usuário digitar <b>−3<\/b>?",
+"options": [
+"A função devolve −6 (−3 + −2 + −1).",
+"A função devolve 0, pois −3 é diferente de 0.",
+"O valor nunca chega a 0; as chamadas se acumulam até estourar a memória (<i>stack overflow<\/i>).",
+"Erro de compilação, pois o parâmetro é negativo.",
+"A função devolve −3 sem chamar a si mesma."
+],
+"correct": 2,
+"why": [
+"Para somar −3 + −2 + −1 o valor teria de <b>subir<\/b> até 0, mas a função faz <code>valor - 1<\/code>.",
+"Como −3 ≠ 0, a função chama a si mesma; não retorna 0 de imediato.",
+"Correta: −3, −4, −5, … nunca atinge o caso base.",
+"O compilador não sabe o valor digitado; o problema aparece só na execução.",
+"Só retornaria direto se o valor fosse 0."
+],
+"hint": "A partir de −3, subtraindo 1 a cada chamada, quando <code>valor<\/code> chega a 0?",
+"explain": "É a nota de revisão da Aula 4: com n negativo a recursão nunca atinge o caso base e termina em estouro de pilha. Um critério mais robusto seria <code>if (valor &gt; 0)<\/code>."
+},
+{
+"part": 1,
+"unit": 4,
+"ref": "U4 · Aula 1 — Função × procedimento",
+"statement": "Sobre a declaração <code>void imprimir(int v[], int n)<\/code>, assinale a alternativa correta.",
+"options": [
+"É uma função que retorna um inteiro, pois recebe parâmetros do tipo int.",
+"É um procedimento: não retorna valor, então não precisa de <code>return<\/code> com valor.",
+"É inválida, pois todo procedimento precisa de pelo menos um <code>return<\/code>.",
+"O <code>void<\/code> pode ser omitido, já que a função não retorna nada.",
+"Ela retorna o vetor <code>v<\/code> modificado ao chamador."
+],
+"correct": 1,
+"why": [
+"O tipo de retorno é o que vem antes do nome (<code>void<\/code>), não o tipo dos parâmetros.",
+"Correta: função <code>void<\/code> é chamada de procedimento na Aula 1.",
+"Com <code>void<\/code>, o <code>return<\/code> não é necessário: o controle volta ao fim do corpo.",
+"A nota de revisão da Aula 1 mostra que, no C atual, omitir o tipo é erro de compilação.",
+"Procedimento não devolve valor; alterações em <code>v<\/code> valem porque vetores são passados por referência, não por retorno."
+],
+"hint": "O que significa o tipo de retorno <code>void<\/code>?",
+"explain": "Procedimento = função com tipo de retorno <code>void<\/code>. Ela executa um processo sem devolver valor ao chamador."
+},
+{
+"part": 2,
+"unit": 1,
+"real": true,
+"src": "pres",
+"srcQ": "Q2",
+"ref": "Prova presencial · Q2 — Tipos primitivos (V/F)",
+"statement": "Todas as linguagens de programação possuem tipos primitivos (ou básicos) e compostos. Sabendo disso, analise as afirmativas a seguir e marque V para verdadeiro e F para falso:<br>( ) O numérico inteiro pode-se dizer que é parte do conjunto dos números naturais, ou seja, valores inteiros que podem ser positivos, negativos ou zero;<br>( ) O numérico de ponto flutuante é utilizado para armazenar valores pertencentes ao conjunto dos números reais, ou seja, valores com casas decimais.<br>( ) A variável do tipo booleano só pode armazenar um de dois valores: verdadeiro ou falso.<br>Assinale a alternativa que apresenta a sequência CORRETA:",
+"options": [
+"F-F-V",
+"V-V-V",
+"F-F-F",
+"V-F-F",
+"F-V-V"
+],
+"correct": [
+1,
+4
+],
+"diverge": true,
+"why": [
+"A 2ª afirmativa é verdadeira (é a definição de ponto flutuante da U1 · Aula 3).",
+"Gabarito oficial. Vale se você ler a 1ª afirmativa pela intenção (o <code>int<\/code> guarda negativos, positivos e zero).",
+"As afirmativas 2 e 3 são definições do próprio material.",
+"A 2ª e a 3ª são verdadeiras.",
+"Aceita aqui também: rigorosamente a 1ª é falsa, pois números <b>naturais<\/b> não incluem negativos (o certo seria “inteiros”)."
+],
+"hint": "Compare com a tabela de tipos primitivos da U1 · Aula 3.",
+"explain": "O gabarito da prova é <b>B (V-V-V)<\/b>. A 2ª e a 3ª afirmativas reproduzem o material. A 1ª tem um erro de redação: o <code>int<\/code> representa números <b>inteiros<\/b> (ℤ), não naturais (ℕ não tem negativos).",
+"note": "Por isso o simulado aceita B (gabarito oficial) e E (leitura rigorosa). Na prova, se essa questão aparecer igual, marque o gabarito oficial: V-V-V."
+},
+{
+"part": 2,
+"unit": 1,
+"real": true,
+"src": "pres",
+"srcQ": "Q12",
+"ref": "Prova presencial · Q12 — Formas de representar algoritmos",
+"statement": "Algoritmos são definidos como sendo o processo sistemático para a resolução de um problema. Relacione o tipo de algoritmo com sua definição:<br>I- Linguagem Natural; II- Fluxograma; III- Pseudocódigo;<br>1- conjunto de símbolos gráficos, em que cada um desses símbolos representa ações específicas a serem executadas pelo computador.<br>2- pode ser escrita em palavras similares ao inglês ou ao português para facilitar a interpretação e desenvolvimento de um programa, este tipo de representação busca uma estrutura semelhante às utilizadas nas linguagens de programação.<br>3- é uma forma de comunicação entre as pessoas de diversas línguas, ela pode ser falada, escrita, gesticulada entre outras formas de comunicação. [...] pode direcionar de forma simples e eficiente as descrições dos problemas e suas soluções.<br>Assinale a alternativa que contém a sequência correta da associação:",
+"options": [
+"I-1; II-2; III-3;",
+"I-2; II-1; III-3;",
+"I-3; II-2; III-1;",
+"I-3; II-1; III-2;",
+"I-2; II-3; III-1;"
+],
+"correct": 3,
+"offsyl": true,
+"why": [
+"Linguagem natural não é um conjunto de símbolos gráficos.",
+"A definição 2 (estrutura parecida com linguagem de programação) é o pseudocódigo.",
+"Fluxograma é gráfico (1), não textual (2).",
+"Correta: natural = 3, fluxograma = 1, pseudocódigo = 2.",
+"Linguagem natural é a 3, a forma de comunicação entre pessoas."
+],
+"hint": "Fluxograma é a única forma gráfica.",
+"explain": "As definições 1 e 3 são frases da U1 · Aula 1. O <b>pseudocódigo<\/b> não é detalhado nas aulas escritas desta disciplina (por isso o selo “fora do material escrito”), mas dá para resolver por eliminação."
+},
+{
+"part": 2,
+"unit": 2,
+"real": true,
+"src": "pres",
+"srcQ": "Q3",
+"ref": "Prova presencial · Q3 — if e else",
+"statement": "Podemos dizer que o comando “else” é uma forma de negar o que foi colocado em uma situação do comando “if”. Sendo assim, “else” é o caso contrário do comando “if”. Assinale a alternativa que melhor se compõe à contextualização acima:",
+"options": [
+"Para cada “if” é necessário um “else” para completar uma condição.",
+"Vários “ifs” precisam de um único “else” dentro de uma condição.",
+"Para cada “else” é necessário um “if” anterior, no entanto, nem todos os “ifs” precisam de um “else”.",
+"Podemos dizer que o comando “else” é a afirmação de um comando “if”.",
+"Para cada “else” é necessário um “if” anterior, sendo assim, todos os “ifs” precisam de um “else”."
+],
+"correct": 2,
+"why": [
+"O <code>if<\/code> simples (sem <code>else<\/code>) é válido: é a “estrutura condicional simples”.",
+"Cada <code>else<\/code> se associa ao <code>if<\/code> do seu nível; não existe um “else” coletivo.",
+"Correta: <code>else<\/code> sem <code>if<\/code> não compila; <code>if<\/code> sem <code>else<\/code> é permitido.",
+"O <code>else<\/code> é o caso <b>contrário<\/b> (negação), não a afirmação.",
+"A primeira parte está certa, mas a conclusão (“todos os ifs precisam”) é falsa."
+],
+"hint": "Lembre do exemplo da carteira de habilitação (U2 · Aula 1, Quadro 1).",
+"explain": "O Quadro 1 da U2 · Aula 1 usa um <code>if<\/code> sem <code>else<\/code> (se a condição for falsa, nada é exibido). Já um <code>else<\/code> sozinho é erro de sintaxe."
+},
+{
+"part": 2,
+"unit": 2,
+"real": true,
+"src": "pres",
+"srcQ": "Q14",
+"ref": "Prova presencial · Q14 — Partes do for",
+"statement": "Quando trabalhamos com o comando “for”, podemos encontrar três expressões separadas por ponto e vírgula. A primeira expressão é a Inicialização, que é executada uma única vez, antes de começar o laço. A segunda é a condição final, em que é realizado um teste que determina se a condição é verdadeira ou falsa e, caso seja verdadeira, permanece no laço, caso falsa, encerra o laço e passa para a próxima instrução. A última expressão é executada depois dos comandos. Qual é o nome dado para esta última expressão?",
+"options": [
+"Substituição.",
+"Somatório.",
+"Processamento.",
+"Incremento.",
+"Finalização."
+],
+"correct": 3,
+"why": [
+"Não é um termo usado para o <code>for<\/code>.",
+"Somatório é um uso comum do laço (acumulador), não uma das três expressões.",
+"Processamento é o bloco de comandos, não a 3ª expressão.",
+"Correta: <code>for (inicialização; condição; incremento)<\/code>.",
+"Não existe expressão de “finalização”; o laço termina quando a condição é falsa."
+],
+"hint": "<code>for (___; ___; ___)<\/code>",
+"explain": "A U2 · Aula 3 nomeia as três expressões: <b>inicialização<\/b>, <b>condição<\/b> e <b>incremento<\/b> — este último executado após os comandos de cada iteração.",
+"note": "Essa questão também aparece nos exercícios da Unidade 2: é um sinal de que a instituição reaproveita questões."
+},
+{
+"part": 2,
+"unit": 2,
+"real": true,
+"src": "pres",
+"srcQ": "Q16",
+"ref": "Prova presencial · Q16 — switch e default",
+"statement": "O ___________________ testa sucessivamente o valor de uma expressão contra uma lista de constantes inteiras ou de caractere. Caso nenhum dos valores seja encontrado, o comando _________________ será executado. Assinale a alternativa que completa corretamente as lacunas:",
+"options": [
+"While; break;",
+"Do; break;",
+"While; default;",
+"Switch; default;",
+"Case; break;"
+],
+"correct": 3,
+"why": [
+"<code>while<\/code> é laço de repetição, não seleção de casos.",
+"<code>do<\/code> também é laço; e o <code>break<\/code> não é o que roda quando nada casa.",
+"A 2ª lacuna está certa, mas a 1ª não: <code>while<\/code> não compara com lista de constantes.",
+"Correta: definição da U2 · Aula 1.",
+"<code>case<\/code> é cada item da lista; o comando que testa é o <code>switch<\/code>. E <code>break<\/code> só encerra o switch."
+],
+"hint": "Qual estrutura tem uma lista de <code>case<\/code>?",
+"explain": "“Esta estrutura avalia sucessivamente o valor de uma expressão em relação a uma lista de constantes inteiras ou caracteres… Se nenhum dos valores for encontrado, o comando <code>default<\/code> será executado.” (U2 · Aula 1)"
+},
+{
+"part": 2,
+"unit": 3,
+"real": true,
+"src": "pres",
+"srcQ": "Q4",
+"ref": "Prova presencial · Q4 — Matrizes",
+"statement": "_____________ são arranjos de duas ou mais dimensões. Todos os elementos são do mesmo tipo, armazenando informações semanticamente semelhantes. Assinale a alternativa que completa corretamente a lacuna:",
+"options": [
+"Matrizes;",
+"Pilha;",
+"Structs;",
+"Vetores;",
+"Lista;"
+],
+"correct": 0,
+"why": [
+"Correta: matriz = variável composta homogênea e multidimensional.",
+"Pilha não é estudada nesta disciplina e não é definida por dimensões.",
+"Struct é heterogênea (campos de tipos diferentes).",
+"Vetor é unidimensional.",
+"Lista não é definida por dimensões."
+],
+"hint": "Homogênea + duas ou mais dimensões.",
+"explain": "Pela classificação da U3 · Aula 1: homogêneas e <b>multidimensionais<\/b> = matrizes."
+},
+{
+"part": 2,
+"unit": 3,
+"real": true,
+"src": "pres",
+"srcQ": "Q5",
+"ref": "Prova presencial · Q5 — Operadores de ponteiro",
+"statement": "Variáveis do tipo ponteiro são usadas exclusivamente para armazenar endereços de memória. O acesso à memória é feito usando dois operadores, __________ usado para criação do ponteiro e o _____________ que é usado para acessar o endereço da memória, por isso é chamado de operador de referência. Assinale a alternativa que completa corretamente as lacunas:",
+"options": [
+"*; &amp;;",
+"&amp;; %;",
+"&amp;; *;",
+"*; #;",
+"%; *;"
+],
+"correct": 0,
+"why": [
+"Correta: <code>*<\/code> declara o ponteiro; <code>&amp;<\/code> obtém o endereço (operador de referência).",
+"<code>%<\/code> é o módulo (resto da divisão).",
+"Ordem invertida.",
+"<code>#<\/code> é usado em diretivas (<code>#include<\/code>, <code>#define<\/code>).",
+"<code>%<\/code> não tem relação com ponteiros."
+],
+"hint": "Como se declara: <code>int ___p = ___x;<\/code>",
+"explain": "É a tabela da U3 · Aula 4: <code>*<\/code> para declarar (e desreferenciar) e <code>&amp;<\/code>, o operador de referência, para obter o endereço."
+},
+{
+"part": 2,
+"unit": 3,
+"real": true,
+"src": "pres",
+"srcQ": "Q6",
+"ref": "Prova presencial · Q6 — Variáveis compostas (V/F)",
+"statement": "Sobre as variáveis do tipo composta, analise as afirmativas a seguir e marque V para verdadeiro e F para falso:<br>( ) As structs são variáveis compostas heterogêneas, este tipo só pode armazenar valores de um mesmo tipo.<br>( ) A criação de um vetor é similar a uma variável primitiva, tendo que acrescentar apenas um número entre colchetes indicando qual será o tamanho desse vetor;<br>( ) Na linguagem C, a criação de uma struct deve ser feita antes da função main();<br>Assinale a alternativa que apresenta a sequência CORRETA:",
+"options": [
+"V-V-V",
+"F-V-V",
+"F-F-V",
+"F-F-F",
+"V-F-F"
+],
+"correct": 1,
+"why": [
+"A 1ª se contradiz: heterogênea significa tipos <b>diferentes<\/b>.",
+"Correta.",
+"A 2ª é a definição de criação de vetor da U3 · Aula 1.",
+"A 2ª e a 3ª são frases do material.",
+"A 1ª é falsa e as outras duas verdadeiras."
+],
+"hint": "Heterogênea = tipos iguais ou diferentes?",
+"explain": "1ª F (struct é heterogênea: tipos diferentes); 2ª V (U3 · Aula 1); 3ª V (a U3 · Aula 3 diz que a struct deve ser criada antes do <code>main()<\/code>)."
+},
+{
+"part": 2,
+"unit": 3,
+"real": true,
+"src": "pres",
+"srcQ": "Q8",
+"ref": "Prova presencial · Q8 — Características do vetor",
+"statement": "Vetor é uma das estruturas que existe para o armazenamento de dados. [...] Considere as afirmações sobre os vetores e escolha a opção correta:<br>I – O vetor é uma estrutura de dados dinâmica, ou seja, seu tamanho pode ser redimensionado em tempo de execução.<br>II – Como o vetor é uma estrutura unidimensional, para acessar seus dados é preciso somente um índice.<br>III – Uma das características dos vetores é que eles podem armazenar dados de qualquer tipo.",
+"options": [
+"Somente a alternativa I está correta.",
+"Somente a alternativa II está correta.",
+"Somente as alternativas II e III estão corretas.",
+"Somente as alternativas I e II estão corretas.",
+"Somente a alternativa III está correta."
+],
+"correct": 2,
+"why": [
+"I é falsa: o vetor é <b>estático<\/b>.",
+"III também é correta.",
+"Correta.",
+"I é falsa.",
+"II também é correta."
+],
+"hint": "O vetor é estático ou dinâmico?",
+"explain": "I: falsa — “um vetor é uma estrutura de dados estática” (U3 · Aula 1). II: verdadeira. III: verdadeira, entendida como “pode ser de qualquer tipo” (int, float, char, struct…), mas todos os elementos de um mesmo vetor têm o <b>mesmo<\/b> tipo."
+},
+{
+"part": 2,
+"unit": 3,
+"real": true,
+"src": "pres",
+"srcQ": "Q15",
+"ref": "Prova presencial · Q15 — Função de inserção em lista",
+"offsyl": true,
+"statement": "Podemos inserir um elemento em uma lista em três situações diferentes. Ao inserirmos uma informação na lista ligada, é imprescindível que seja atualizado o valor do ponteiro dessa lista, assim a lista ligada deverá apontar ao novo elemento da lista. Qual a funcionalidade do código informado?<pre><code>Lista* inserir (Lista* l, int i) {\n    Lista* novo = (Lista*) malloc(sizeof(Lista));\n    novo -&gt; info = i;\n    novo -&gt; prox = l;\n    return novo;\n}<\/code><\/pre>",
+"options": [
+"Estrutura Lista não foi declarada, apesar dos campos info e prox.",
+"Inserir um elemento no final da lista.",
+"A função aloca dinamicamente memória para um novo elemento da lista com o comando <code>Lista* novo = (Lista*) malloc(sizeof(Lista))<\/code>. O valor de i é atribuído ao campo info deste novo elemento.",
+"Apagar toda a lista para recomeçar.",
+"O campo info do novo elemento é atribuído com o valor de 1, de forma que o novo elemento passa a ser o primeiro da lista. Por fim, a função retorna o endereço de memória deste novo elemento, que agora é o início da lista encadeada."
+],
+"correct": 2,
+"why": [
+"O trecho mostra só a função; a declaração da struct pode estar em outro lugar do programa.",
+"<code>novo-&gt;prox = l<\/code> faz o novo apontar para o antigo início: a inserção é no <b>início<\/b>.",
+"Correta (gabarito).",
+"Nada é apagado; um elemento é criado.",
+"Quase certa, mas o campo recebe o valor de <b>i<\/b>, não 1 — é a “pegadinha” da alternativa."
+],
+"hint": "Mesmo sem conhecer <code>malloc<\/code>, leia as duas atribuições com <code>-&gt;<\/code>.",
+"explain": "A função cria um nó, guarda <code>i<\/code> em <code>info<\/code>, faz ele apontar para o início atual (<code>l<\/code>) e devolve o novo endereço: inserção no início.",
+"note": "<code>malloc<\/code> e listas ligadas não são ensinados nas aulas desta disciplina (a U3 · Aula 4 só cita listas ao falar de NULL). Dá para resolver com o operador <code>-&gt;<\/code> e leitura atenta."
+},
+{
+"part": 2,
+"unit": 3,
+"real": true,
+"src": "pres",
+"srcQ": "Q1",
+"ref": "Prova presencial · Q1 — Nó de lista ligada",
+"offsyl": true,
+"diverge": true,
+"statement": "Uma lista ligada, também conhecida como lista encadeada, é um conjunto de dados dispostos por uma sequência de nós, em que a relação de sucessão desses elementos é determinada por um ponteiro que indica a posição do próximo elemento, podendo estar ordenado ou não. Assinale a alternativa a seguir que apresenta a informação correta quanto à composição de um nó da lista ligada:",
+"options": [
+"Ponteiro para o próximo elemento e um ponteiro para NULL.",
+"Ponteiro para o elemento anterior e uma informação.",
+"Ponteiro para o próximo elemento e um ponteiro para o elemento anterior.",
+"Uma informação e um ponteiro para o próximo elemento.",
+"Uma informação e um ponteiro para o elemento anterior."
+],
+"correct": 3,
+"why": [
+"Falta a informação; e NULL é um valor que o ponteiro pode ter, não um campo.",
+"É o gabarito publicado, mas contradiz o próprio enunciado: a sucessão é dada pelo ponteiro para o <b>próximo<\/b>.",
+"Não há informação, e o ponteiro para o anterior é de lista <b>duplamente<\/b> encadeada.",
+"Correta: <code>info<\/code> + <code>prox<\/code> — exatamente os campos da Q15 desta mesma prova.",
+"Ponteiro para o anterior não é o que o enunciado descreve."
+],
+"hint": "Releia o enunciado: “um ponteiro que indica a posição do próximo elemento”.",
+"explain": "Um nó de lista simplesmente encadeada tem <b>uma informação e um ponteiro para o próximo<\/b> (os campos <code>info<\/code> e <code>prox<\/code> da Q15). O gabarito publicado (B) está errado.",
+"note": "O gabarito do documento é B; este simulado considera D. Listas ligadas não fazem parte das aulas desta disciplina."
+},
+{
+"part": 2,
+"unit": 3,
+"real": true,
+"src": "pres",
+"srcQ": "Q9",
+"ref": "Prova presencial · Q9 — Lista, fila e pilha",
+"offsyl": true,
+"statement": "Uma estrutura de dados é uma coleção de valores que possuem uma organização dependendo das suas características. Relacione a estrutura de dados com a sua definição:<br>I- Lista; II- Fila; III- Pilha;<br>1- é um conjunto de elementos ordenados que permite a inserção e a remoção de mais elementos em apenas uma das extremidades da estrutura denominada topo;<br>2- esta estrutura de dados é do tipo FIFO (First in, First out), ou seja, o primeiro elemento que entra é o primeiro a ser removido.<br>3- é composta de um conjunto de dados dispostos por uma sequência de nós, em que a relação de sucessão desses elementos é determinada por um ponteiro que indica a posição do próximo elemento [...].<br>Assinale a alternativa que contém a sequência correta da associação:",
+"options": [
+"I-3; II-2; III-1;",
+"I-2; II-1; III-3;",
+"I-1; II-2; III-3;",
+"I-2; II-3; III-1;",
+"I-3; II-1; III-2;"
+],
+"correct": 0,
+"why": [
+"Correta: lista = nós com ponteiro (3); fila = FIFO (2); pilha = topo (1).",
+"Fila não é a estrutura do “topo”.",
+"Lista não é a do topo; pilha não é a de nós ligados.",
+"Lista não é FIFO.",
+"Fila é FIFO (2), não a do topo."
+],
+"hint": "“Topo” → pilha. “FIFO” → fila.",
+"explain": "Pilha: inserção e remoção só no <b>topo<\/b>. Fila: <b>FIFO<\/b>. Lista ligada: nós ligados por ponteiro.",
+"note": "Fila e pilha não são ensinadas nesta disciplina (são de Estrutura de Dados), mas apareceram na prova."
+},
+{
+"part": 2,
+"unit": 3,
+"real": true,
+"src": "pres",
+"srcQ": "Q11",
+"ref": "Prova presencial · Q11 — Listas e struct",
+"offsyl": true,
+"statement": "Analise as afirmativas a seguir sobre listas e struct:<br>I- Só é possível retirar um elemento da lista do seu final;<br>II- Para inserir e retirar um elemento da lista deve-se atualizar o valor do ponteiro;<br>III- A struct é uma variável que armazena valores de tipos diferentes;<br>Assinale a alternativa que apresenta a resposta CORRETA:",
+"options": [
+"Apenas as afirmativas I e II estão corretas;",
+"As afirmativas I, II e III estão corretas.",
+"Apenas a afirmativa II está incorreta;",
+"Apenas as afirmativas II e III estão corretas;",
+"Apenas a afirmativa I está correta;"
+],
+"correct": 3,
+"why": [
+"I é falsa: na lista, inserção e remoção não seguem regra fixa.",
+"I é falsa.",
+"II é correta (é o que diz o enunciado da Q15).",
+"Correta.",
+"I é a única falsa."
+],
+"hint": "A Q9 desta prova diz como é a inserção/remoção em listas.",
+"explain": "I: falsa (“só no final” é restrição de outras estruturas). II: verdadeira. III: verdadeira — struct é heterogênea (U3 · Aula 3)."
+},
+{
+"part": 2,
+"unit": 4,
+"real": true,
+"src": "pres",
+"srcQ": "Q7",
+"ref": "Prova presencial · Q7 — Recursão (asserção-razão)",
+"statement": "Sobre a recursão, analise as asserções a seguir:<br>I- Um algoritmo recursivo resolve um problema dividindo-o em subproblemas mais simples, cuja a solução é a aplicação dele mesmo.<br>Por essa razão,<br>II- o algoritmo recursivo não possui uma versão iterativa.<br>Analisando-se as asserções apresentadas, conclui-se que:",
+"options": [
+"As duas afirmações são verdadeiras, e a segunda não justifica a primeira.",
+"A primeira afirmação é falsa, e a segunda é verdadeira.",
+"As duas afirmações são falsas.",
+"As duas afirmações são verdadeiras, e a segunda justifica a primeira.",
+"A primeira afirmação é verdadeira, e a segunda é falsa."
+],
+"correct": 4,
+"why": [
+"II é falsa.",
+"I é verdadeira e II é falsa.",
+"I é verdadeira.",
+"II é falsa; não pode justificar nada.",
+"Correta."
+],
+"hint": "A U4 · Aula 4 reescreve a função <code>somar()<\/code> recursiva com um <code>for<\/code>.",
+"explain": "I é a definição de recursão. II é falsa: a Aula 4 mostra que a recursão pode ser substituída por uma estrutura de repetição (a função <code>somar()<\/code> virou um <code>for<\/code>)."
+},
+{
+"part": 2,
+"unit": 4,
+"real": true,
+"src": "pres",
+"srcQ": "Q13",
+"ref": "Prova presencial · Q13 — Escopo de variáveis",
+"statement": "O escopo de variável é dividido em duas categorias, local ou global. Sobre este conceito, analise as afirmativas a seguir:<br>I- As variáveis do tipo local são “enxergadas” somente dentro do corpo da função onde foram definidas.<br>II- As variáveis do tipo local devem ser definidas fora da função, assim ela será visível por todas as funções do programa;<br>III- As variáveis do tipo global podem ser utilizadas por qualquer função do programa, logo isso exige um cuidado ao manipulá-la.",
+"options": [
+"Apenas as afirmativas I e II estão corretas;",
+"Apenas a afirmativa II está correta;",
+"As afirmativas I, II e III estão corretas.",
+"Apenas as afirmativas I e III estão corretas;",
+"Apenas a afirmativa I está correta;"
+],
+"correct": 3,
+"why": [
+"II é falsa.",
+"II descreve a variável <b>global<\/b>, não a local.",
+"II é falsa.",
+"Correta.",
+"III também é correta."
+],
+"hint": "A afirmativa II troca local por global.",
+"explain": "I e III reproduzem a tabela de escopo da U4 · Aula 2. II descreve a variável global, mas diz “local”."
+},
+{
+"part": 3,
+"unit": 1,
+"ref": "Nova · U1 — Completar código (divisibilidade)",
+"statement": "O programa abaixo deve ler dois inteiros e informar se o primeiro é divisível pelo segundo. Complete as lacunas (1) e (2):<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int a, b;\n    scanf(\"__(1)__ __(1)__\", &amp;a, &amp;b);\n    if (a __(2)__ b == 0)\n        printf(\"divisivel\");\n    else\n        printf(\"nao divisivel\");\n    return 0;\n}<\/code><\/pre>Assinale a alternativa que completa corretamente as lacunas:",
+"options": [
+"(1) %f; (2) /",
+"(1) %d; (2) %",
+"(1) %d; (2) /",
+"(1) %c; (2) %",
+"(1) %s; (2) =="
+],
+"correct": 1,
+"why": [
+"<code>%f<\/code> é para <code>float<\/code>; e a divisão não diz se sobrou resto.",
+"Correta: <code>%d<\/code> lê inteiros e <code>a % b == 0<\/code> testa se o resto é zero.",
+"<code>a / b == 0<\/code> só é verdade quando a &lt; b (quociente zero), não quando é divisível.",
+"<code>%c<\/code> lê um caractere, não um número.",
+"<code>%s<\/code> lê string; <code>a == b == 0<\/code> não testa divisibilidade."
+],
+"hint": "Divisível = o resto da divisão é zero. Qual operador dá o resto?",
+"explain": "Com entrada 12 4 o programa imprime “divisivel”, pois 12 % 4 = 0. O operador módulo (<code>%<\/code>) é apresentado na U1 · Aula 4 (ex.: 43 % 3 = 1)."
+},
+{
+"part": 3,
+"unit": 1,
+"ref": "Nova · U1 — Asserção-razão (operador &&)",
+"statement": "Analise as asserções a seguir:<br>I. O comando <code>printf(\"%d\", 10 &gt; 3 &amp;&amp; 2 &gt; 5);<\/code> exibe o valor 0.<br>PORQUE<br>II. O operador <code>&amp;&amp;<\/code> só resulta em verdadeiro quando todas as condições são verdadeiras, e em C o falso é representado pelo inteiro 0.<br>A respeito dessas asserções, assinale a alternativa correta.",
+"options": [
+"As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+"As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+"A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+"A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+"As asserções I e II são proposições falsas."
+],
+"correct": 0,
+"why": [
+"Correta: I é verdadeira e II explica exatamente o porquê.",
+"II é justamente a razão do resultado 0.",
+"II é verdadeira: é a definição da U1 · Aula 4.",
+"I é verdadeira: 1 && 0 = 0.",
+"As duas são verdadeiras."
+],
+"hint": "Calcule 10 &gt; 3 e 2 &gt; 5 como 1 ou 0.",
+"explain": "10 &gt; 3 → 1; 2 &gt; 5 → 0; 1 && 0 → <b>0<\/b>. A II explica o resultado: conjunção exige tudo verdadeiro, e a comparação em C resulta em 1 ou 0."
+},
+{
+"part": 3,
+"unit": 1,
+"ref": "Nova · U1 — Tipos e modificadores",
+"statement": "Considere os tamanhos típicos apresentados na Aula 3 (plataforma de 64 bits) e analise as afirmativas:<br>I. Uma variável <code>unsigned int<\/code> armazena valores de 0 até 4.294.967.295.<br>II. Uma variável <code>short int<\/code> ocupa 2 bytes.<br>III. Uma variável <code>char<\/code> ocupa 4 bytes.<br>IV. Uma variável <code>double<\/code> ocupa 8 bytes.<br>É correto o que se afirma em:",
+"options": [
+"I e III, apenas.",
+"II e IV, apenas.",
+"I, II e IV, apenas.",
+"I, II, III e IV.",
+"III e IV, apenas."
+],
+"correct": 2,
+"why": [
+"III é falsa e II e IV são verdadeiras.",
+"I também é verdadeira (2³² − 1 = 4.294.967.295).",
+"Correta.",
+"III é falsa: <code>char<\/code> ocupa 1 byte.",
+"III é falsa."
+],
+"hint": "Revise a Tabela 1 da Aula 3 (e a nota de revisão sobre o maior valor ser 2ⁿ − 1).",
+"explain": "I: verdadeira (o maior valor é 2³² − 1, pois o zero também ocupa uma combinação). II: verdadeira. III: falsa — <code>char<\/code> = 1 byte. IV: verdadeira."
+},
+{
+"part": 3,
+"unit": 1,
+"ref": "Nova · U1 — Precedência aritmética",
+"statement": "Qual valor é armazenado em <code>r<\/code>?<pre><code>int r = 2 + 3 * 4 % 5 - 1;<\/code><\/pre>",
+"options": [
+"−1",
+"13",
+"3",
+"9",
+"0"
+],
+"correct": 2,
+"why": [
+"Calculou tudo da esquerda para a direita: ((2 + 3) · 4) % 5 − 1.",
+"Fez o <code>%<\/code> antes da multiplicação: 2 + 3 · (4 % 5) − 1. <code>*<\/code> e <code>%<\/code> têm a mesma prioridade e são avaliados da esquerda para a direita.",
+"Correta: 3 · 4 = 12; 12 % 5 = 2; 2 + 2 − 1 = 3.",
+"Não há combinação válida de precedência que leve a 9.",
+"O resto de 12 por 5 é 2, não 0."
+],
+"hint": "Primeiro <code>*<\/code>, <code>/<\/code> e <code>%<\/code> (da esquerda para a direita); depois <code>+<\/code> e <code>-<\/code>.",
+"explain": "Multiplicação, divisão e módulo vêm antes de adição e subtração (U1 · Aula 4). Entre <code>*<\/code> e <code>%<\/code>, que têm a mesma prioridade, vale a ordem da esquerda para a direita."
+},
+{
+"part": 3,
+"unit": 2,
+"ref": "Nova · U2 — Completar código (for decrescente)",
+"statement": "O trecho deve imprimir os números pares de 20 até 2, em ordem decrescente (20 18 16 … 2). Complete as lacunas:<pre><code>for (i = __(1)__; i __(2)__ 2; i __(3)__)\n    printf(\"%d \", i);<\/code><\/pre>",
+"options": [
+"(1) 2; (2) &lt;=; (3) += 2",
+"(1) 20; (2) &gt;=; (3) -= 2",
+"(1) 20; (2) &gt;; (3) -= 2",
+"(1) 20; (2) &gt;=; (3) --",
+"(1) 20; (2) &lt;=; (3) -= 2"
+],
+"correct": 1,
+"why": [
+"Seria a ordem crescente (2, 4, …), e a condição <code>i &lt;= 2<\/code> pararia logo.",
+"Correta: começa em 20, continua enquanto i ≥ 2 e desce de 2 em 2.",
+"Com <code>i &gt; 2<\/code>, o 2 não é impresso (off-by-one).",
+"<code>i--<\/code> imprimiria também os ímpares.",
+"20 &lt;= 2 é falso no primeiro teste: o laço não executa."
+],
+"hint": "A condição é testada antes de cada volta: ela deve ser verdadeira para o 2 e falsa logo depois.",
+"explain": "<code>for (i = 20; i &gt;= 2; i -= 2)<\/code> imprime 20 18 16 14 12 10 8 6 4 2. A atribuição composta <code>-=<\/code> aparece na U2 · Aula 2."
+},
+{
+"part": 3,
+"unit": 2,
+"ref": "Nova · U2 — break, continue e goto (V/F)",
+"statement": "Julgue as afirmativas em (V) verdadeiras ou (F) falsas:<br>( ) Em um laço <code>for<\/code>, o <code>continue<\/code> pula o resto da iteração, mas o incremento ainda é executado antes do próximo teste.<br>( ) O <code>break<\/code> pode ser usado para sair de um <code>if<\/code> que está fora de qualquer laço ou <code>switch<\/code>.<br>( ) O <code>goto<\/code> só pode desviar o fluxo para um rótulo dentro da mesma função.<br>( ) O <code>continue<\/code> encerra o laço e passa para a primeira instrução depois dele.<br>Assinale a sequência correta:",
+"options": [
+"V – F – V – F",
+"V – V – V – F",
+"F – F – V – V",
+"V – F – F – F",
+"F – V – V – F"
+],
+"correct": 0,
+"why": [
+"Correta.",
+"A 2ª é falsa: <code>break<\/code> só vale dentro de <code>for<\/code>, <code>while<\/code>, <code>do-while<\/code> e <code>switch<\/code>.",
+"A 1ª é verdadeira (é o truque <code>i--; continue;<\/code> do Quadro 4 da Aula 4) e a 4ª é falsa.",
+"A 3ª é verdadeira: o escopo do <code>goto<\/code> é local.",
+"A 1ª é verdadeira e a 2ª é falsa."
+],
+"hint": "Revise a tabela break × continue da Aula 4.",
+"explain": "1ª V (o incremento roda; por isso o <code>i--<\/code> antes do <code>continue<\/code> “volta” para a mesma disciplina no Quadro 4). 2ª F. 3ª V (“escopo local”). 4ª F — isso é o <code>break<\/code>."
+},
+{
+"part": 3,
+"unit": 2,
+"ref": "Nova · U2 — Asserção-razão (menu com do-while)",
+"statement": "I. Para implementar um menu de opções que precisa ser exibido ao usuário pelo menos uma vez, a estrutura <code>do-while<\/code> é a mais adequada.<br>PORQUE<br>II. No <code>do-while<\/code>, a condição é testada no início do laço, antes da execução dos comandos.<br>A respeito dessas asserções, assinale a alternativa correta.",
+"options": [
+"As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+"As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+"A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+"A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+"As asserções I e II são proposições falsas."
+],
+"correct": 2,
+"why": [
+"II é falsa: no <code>do-while<\/code> o teste é no <b>final<\/b>.",
+"II é falsa.",
+"Correta: I é verdadeira (é o menu da conta bancária, Aula 2), II descreve o <code>while<\/code>.",
+"I é verdadeira.",
+"I é verdadeira."
+],
+"hint": "Onde fica o teste no <code>do-while<\/code>?",
+"explain": "A I é o uso do Quadro 3 da U2 · Aula 2 (menu bancário). A II descreve o <code>while<\/code>; no <code>do-while<\/code> o bloco roda primeiro e o teste vem no fim — que é justamente o motivo verdadeiro da I."
+},
+{
+"part": 3,
+"unit": 2,
+"ref": "Nova · U2 — Saída com while (Collatz)",
+"statement": "Qual é a saída do programa? (Ele aplica as regras da conjectura de Collatz vistas na Aula 2.)<pre><code>#include &lt;stdio.h&gt;\nint main(){\n    int n = 6, passos = 0;\n    while (n != 1) {\n        if (n % 2 == 0)\n            n /= 2;\n        else\n            n = 3 * n + 1;\n        passos++;\n    }\n    printf(\"%d\", passos);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"6",
+"7",
+"8",
+"9",
+"O laço nunca termina"
+],
+"correct": 2,
+"why": [
+"Parou antes de chegar a 1.",
+"Esqueceu um passo: conte cada transformação até n == 1.",
+"Correta: 6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1 (8 passos).",
+"Contou também o valor inicial ou o teste final.",
+"Para n = 6 a sequência chega a 1; o laço termina."
+],
+"hint": "Faça o teste de mesa: escreva a sequência de valores de n.",
+"explain": "Sequência: 6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1. São <b>8<\/b> transformações, cada uma somando 1 em <code>passos<\/code>."
+},
+{
+"part": 3,
+"unit": 3,
+"ref": "Nova · U3 — Completar código (diagonal principal)",
+"statement": "Complete a lacuna para que o trecho some a diagonal principal de uma matriz 4×4:<pre><code>int soma = 0;\nfor (int i = 0; i &lt; 4; i++)\n    soma += m[__(1)__];<\/code><\/pre>",
+"options": [
+"<code>i][i<\/code>",
+"<code>i][3 - i<\/code>",
+"<code>0][i<\/code>",
+"<code>i][0<\/code>",
+"<code>i + i<\/code>"
+],
+"correct": 0,
+"why": [
+"Correta: na diagonal principal, linha = coluna.",
+"Seria a diagonal <b>secundária<\/b>.",
+"Soma a primeira linha.",
+"Soma a primeira coluna.",
+"Um índice só não acessa a matriz por linha e coluna."
+],
+"hint": "Qual a relação entre o índice da linha e o da coluna na diagonal principal?",
+"explain": "Diagonal principal: <code>m[i][i]<\/code> (U3 · Aula 2). Com a matriz 1…16, a soma é 1 + 6 + 11 + 16 = 34."
+},
+{
+"part": 3,
+"unit": 3,
+"ref": "Nova · U3 — Strings (V/F)",
+"statement": "Julgue as afirmativas sobre strings em C em (V) ou (F):<br>( ) <code>char nome[20];<\/code> comporta até 19 caracteres úteis.<br>( ) <code>scanf(\"%s\", frase);<\/code> lê frases completas, com espaços.<br>( ) <code>fgets(frase, 101, stdin);<\/code> pode guardar no final da string o <code>'\\n'<\/code> do Enter.<br>( ) Depois de declarar <code>char nome[20];<\/code>, a atribuição <code>nome = \"Ana\";<\/code> é válida.<br>Assinale a sequência correta:",
+"options": [
+"V – F – V – F",
+"V – V – V – F",
+"F – F – V – V",
+"V – F – F – V",
+"F – V – F – F"
+],
+"correct": 0,
+"why": [
+"Correta.",
+"<code>scanf(\"%s\")<\/code> para no primeiro espaço (2ª é falsa).",
+"A 1ª é verdadeira (a última posição é do <code>'\\0'<\/code>) e a 4ª é falsa.",
+"A 3ª é verdadeira e a 4ª é falsa: vetores não podem ser atribuídos com <code>=<\/code>; use <code>strcpy<\/code>.",
+"A 1ª e a 3ª são verdadeiras e a 2ª é falsa."
+],
+"hint": "Lembre do <code>'\\0'<\/code>, da limitação do <code>scanf<\/code> e do <code>strcpy<\/code> da Aula 3.",
+"explain": "1ª V; 2ª F (só palavras simples); 3ª V (por isso o Quadro 2 da Aula 3 usa <code>strcspn<\/code> para remover o <code>'\\n'<\/code>); 4ª F (é preciso <code>strcpy(nome, \"Ana\");<\/code>)."
+},
+{
+"part": 3,
+"unit": 3,
+"ref": "Nova · U3 — Asserção-razão (aritmética de ponteiros)",
+"statement": "Considere <code>int v[5];<\/code> e <code>int *p = v;<\/code>.<br>I. A expressão <code>p + 1<\/code> aponta para <code>v[1]<\/code>.<br>PORQUE<br>II. Somar 1 a um ponteiro soma exatamente 1 byte ao endereço armazenado nele.<br>A respeito dessas asserções, assinale a alternativa correta.",
+"options": [
+"As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+"As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+"A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+"A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+"As asserções I e II são proposições falsas."
+],
+"correct": 2,
+"why": [
+"II é falsa.",
+"II é falsa.",
+"Correta: <code>p + 1<\/code> avança <code>sizeof(int)<\/code> = 4 bytes, chegando a v[1].",
+"I é verdadeira.",
+"I é verdadeira."
+],
+"hint": "Se cada <code>int<\/code> ocupa 4 bytes, quantos bytes o endereço precisa andar para chegar ao próximo elemento?",
+"explain": "A I é verdadeira. A II é a afirmação corrigida pela nota de revisão da U3 · Aula 4: <code>p + 1<\/code> soma <b><code>sizeof(*p)<\/code> bytes<\/b> (4 para <code>int<\/code>), e é por isso que chega ao próximo elemento."
+},
+{
+"part": 3,
+"unit": 3,
+"ref": "Nova · U3 — Relacionar estruturas",
+"statement": "Relacione cada estrutura à sua descrição:<br>I – Vetor; II – Matriz; III – Struct; IV – Ponteiro.<br>1 – Variável que armazena um endereço de memória.<br>2 – Estrutura heterogênea, que agrupa campos de tipos diferentes.<br>3 – Estrutura homogênea unidimensional, acessada por um único índice.<br>4 – Estrutura homogênea bidimensional, acessada por linha e coluna.",
+"options": [
+"I-3; II-4; III-2; IV-1",
+"I-4; II-3; III-2; IV-1",
+"I-3; II-4; III-1; IV-2",
+"I-2; II-4; III-3; IV-1",
+"I-3; II-2; III-4; IV-1"
+],
+"correct": 0,
+"why": [
+"Correta: é a tabela-resumo da U3 · Aula 5.",
+"Inverteu vetor (1 dimensão) e matriz (2 dimensões).",
+"Inverteu struct e ponteiro.",
+"Vetor é homogêneo, não heterogêneo.",
+"Matriz é homogênea; struct é a heterogênea."
+],
+"hint": "Homogêneo × heterogêneo e número de índices.",
+"explain": "Vetor: <code>v[i]<\/code>; matriz: <code>m[i][j]<\/code>; struct: <code>s.campo<\/code>; ponteiro: guarda endereço (<code>*p<\/code>)."
+},
+{
+"part": 3,
+"unit": 4,
+"ref": "Nova · U4 — Completar código (troca por referência)",
+"statement": "Complete a função para que ela troque os valores de duas variáveis do <code>main<\/code>:<pre><code>void troca(int __(1)__a, int __(1)__b) {\n    int t = *a;\n    *a = *b;\n    *b = t;\n}\n/* no main: */\ntroca(__(2)__x, __(2)__y);<\/code><\/pre>",
+"options": [
+"(1) &amp;; (2) *",
+"(1) *; (2) &amp;",
+"(1) *; (2) *",
+"(1) &amp;; (2) &amp;",
+"(1) nada; (2) nada"
+],
+"correct": 1,
+"why": [
+"Inverteu os operadores: o parâmetro é declarado com <code>*<\/code> e o argumento passado com <code>&amp;<\/code>.",
+"Correta: parâmetros <code>int *<\/code> e chamada com os endereços <code>&amp;x<\/code>, <code>&amp;y<\/code>.",
+"<code>*x<\/code> tentaria desreferenciar um <code>int<\/code>; é preciso passar o endereço.",
+"<code>int &amp;a<\/code> não é sintaxe de C (existe em C++).",
+"Sem ponteiros, a função receberia cópias e não trocaria nada no <code>main<\/code>."
+],
+"hint": "Na definição: <code>tipo *<\/code>. Na chamada: <code>&amp;variável<\/code>.",
+"explain": "É o padrão da U4 · Aula 3: “na definição da função, os parâmetros devem ser declarados com <code>*<\/code>… ao chamar a função, os parâmetros devem ser passados com <code>&amp;<\/code>”. Com x = 1 e y = 2, a saída é 2 1."
+},
+{
+"part": 3,
+"unit": 4,
+"ref": "Nova · U4 — Asserção-razão (caso base)",
+"statement": "I. Uma função recursiva sem caso base tende a terminar com estouro de memória (<i>stack overflow<\/i>).<br>PORQUE<br>II. Cada chamada recursiva cria uma nova instância da função na memória, com suas próprias variáveis.<br>A respeito dessas asserções, assinale a alternativa correta.",
+"options": [
+"As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+"As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+"A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+"A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+"As asserções I e II são proposições falsas."
+],
+"correct": 0,
+"why": [
+"Correta: as instâncias se acumulam sem parar porque nenhuma chamada deixa de chamar a si mesma.",
+"II é exatamente o mecanismo que explica a I.",
+"II é verdadeira (Figura 1 da Aula 4).",
+"I é verdadeira.",
+"As duas são verdadeiras."
+],
+"hint": "Por que a falta do caso base consome memória?",
+"explain": "Sem caso base, cada chamada cria outra instância (II), que nunca é liberada porque nenhuma retorna — a memória da pilha se esgota (I)."
+},
+{
+"part": 3,
+"unit": 4,
+"ref": "Nova · U4 — Funções (afirmativas)",
+"statement": "Analise as afirmativas:<br>I. Uma função com tipo de retorno <code>void<\/code> é chamada de procedimento.<br>II. Uma função pode devolver dois valores ao mesmo tempo com <code>return a, b;<\/code>.<br>III. A execução de um <code>return<\/code> encerra a função e devolve o controle a quem a chamou.<br>IV. Na passagem por valor, a função recebe cópias dos argumentos.<br>É correto o que se afirma em:",
+"options": [
+"I e II, apenas.",
+"I, III e IV, apenas.",
+"II e IV, apenas.",
+"I, II, III e IV.",
+"III e IV, apenas."
+],
+"correct": 1,
+"why": [
+"II é falsa.",
+"Correta.",
+"II é falsa e I é verdadeira.",
+"II é falsa: somente um valor é retornado (a vírgula descartaria <code>a<\/code>).",
+"I também é verdadeira."
+],
+"hint": "Quantos valores um <code>return<\/code> devolve?",
+"explain": "I: V (Aula 1). II: F — “somente um valor pode ser retornado”; para devolver vários, use parâmetros por referência (Aula 3). III: V. IV: V (Aula 2)."
+},
+{
+"part": 3,
+"unit": 4,
+"ref": "Nova · U4 — Ordem de execução na recursão",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nvoid conta(int n) {\n    if (n == 0)\n        return;\n    printf(\"%d \", n);\n    conta(n - 1);\n    printf(\"%d \", n);\n}\n\nint main() {\n    conta(3);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"3 2 1",
+"3 2 1 0",
+"3 2 1 1 2 3",
+"1 2 3 3 2 1",
+"3 2 1 3 2 1"
+],
+"correct": 2,
+"why": [
+"Esqueceu o segundo <code>printf<\/code>, que roda na “volta” de cada chamada.",
+"Para n = 0 a função retorna antes de imprimir.",
+"Correta: na ida imprime 3 2 1; na volta (do caso base para trás) imprime 1 2 3.",
+"A primeira impressão acontece antes da chamada recursiva, então a ida é decrescente.",
+"Na volta as instâncias terminam da mais recente para a mais antiga: 1, depois 2, depois 3."
+],
+"hint": "O que é impresso antes da chamada recursiva acontece na ida; o que vem depois só acontece quando a chamada interna retorna.",
+"explain": "conta(3) imprime 3 e chama conta(2) → imprime 2 e chama conta(1) → imprime 1 e chama conta(0), que retorna. Aí cada instância termina na ordem inversa: 1, 2, 3. Saída: <b>3 2 1 1 2 3<\/b>."
+},
+{
+"part": 3,
+"unit": 4,
+"ref": "Nova · U4 — Struct por valor × por referência",
+"statement": "Qual é a saída do programa?<pre><code>#include &lt;stdio.h&gt;\nstruct Conta {\n    float saldo;\n};\n\nvoid depositaV(struct Conta c, float v) {\n    c.saldo += v;\n}\n\nvoid depositaR(struct Conta *c, float v) {\n    c-&gt;saldo += v;\n}\n\nint main() {\n    struct Conta k = {100};\n    depositaV(k, 50);\n    depositaR(&amp;k, 30);\n    printf(\"%.0f\", k.saldo);\n    return 0;\n}<\/code><\/pre>",
+"options": [
+"180",
+"130",
+"150",
+"100",
+"80"
+],
+"correct": 1,
+"why": [
+"Struct passada por valor é <b>copiada<\/b>: o depósito de 50 fica na cópia.",
+"Correta: só o depósito por referência (30) altera k.",
+"O depósito de 50 foi feito na cópia; o de 30 foi no original.",
+"<code>depositaR<\/code> recebeu o endereço e alterou k.",
+"Não há subtração no programa."
+],
+"hint": "Revise a tabela final da U4 · Aula 3: como uma struct é passada por padrão?",
+"explain": "Diferente de vetores, a struct é passada por valor (cópia inteira). Para alterar o original, passa-se <code>&amp;k<\/code> e acessa-se com <code>-&gt;<\/code>, como no sistema bancário da Aula 5. Saída: <b>130<\/b>."
+}
+];
+
+const SRC = {
+  pres:{label:"Prova presencial 2023/2024 (Studocu)", url:"https://www.studocu.com/pt-br/document/anhanguera-educational/algoritmos-e-programacao-estruturada/prova-presencial-algoritmos-e-programacao-estruturada/77610643"}
+};
+
+/* ---------- Dicas de estudo por unidade (aparecem quando há erros) ---------- */
+const unitTips = {
+  1:`<b>Unidade 1: fundamentos.</b> Reveja o tutorial da Unidade 1 e use a ferramenta de divisão inteira. Antes de calcular, pergunte: <i>os dois operandos são int?</i> (divisão inteira) e <i>é pré ou pós-incremento?</i>. Lembre que comparações valem 1 ou 0 e que <code>%.2f</code> fixa as casas decimais.`,
+  2:`<b>Unidade 2: decisão e repetição.</b> Faça teste de mesa anotando a variável de controle a cada volta, inclusive o valor que torna a condição falsa (use a ferramenta do <code>for</code>). No <code>switch</code>, procure os <code>break</code>; no <code>if-else-if</code>, só o primeiro bloco verdadeiro executa.`,
+  3:`<b>Unidade 3: vetores, structs e ponteiros.</b> Índices começam em 0; strings precisam de uma posição para o <code>'\\0'</code>. Em ponteiros, separe <code>p</code> (endereço), <code>*p</code> (conteúdo) e <code>&amp;x</code> (endereço de x); <code>p + 1</code> anda um elemento inteiro. Struct: <code>v[i].campo</code> e <code>ptr-&gt;campo</code>.`,
+  4:`<b>Unidade 4: funções.</b> Para cada chamada, pergunte: o argumento foi copiado (valor) ou foi passado o endereço (referência)? Vetores vão por referência; structs e variáveis simples, por valor. Na recursão, expanda as chamadas até o caso base e depois volte.`
+};
+
+const unitInfo = {
+  1:{name:"Unidade 1: fundamentos de algoritmos e da linguagem C", short:"Unidade 1", color:"var(--u1)"},
+  2:{name:"Unidade 2: estruturas de decisão e repetição", short:"Unidade 2", color:"var(--u2)"},
+  3:{name:"Unidade 3: vetores, matrizes, structs e ponteiros", short:"Unidade 3", color:"var(--u3)"},
+  4:{name:"Unidade 4: funções, parâmetros e recursividade", short:"Unidade 4", color:"var(--u4)"}
+};
+const partInfo = {
+  1:{name:"Parte 1: fixação por aula", short:"Fixação", desc:"Questões originais, uma ou mais por aula. Gabaritos de saída de programa conferidos compilando o código.", cls:""},
+  2:{name:"Parte 2: prova anterior (real)", short:"Prova real", desc:"Questões da prova presencial de Algoritmos e Programação Estruturada publicada no Studocu (ano letivo 2023/2024). Cada uma tem o link da fonte.", cls:"p3"},
+  3:{name:"Parte 3: novas no estilo da prova", short:"Novas", desc:"Questões inéditas no formato Anhanguera: asserção-razão, V/F, afirmativas, relacionar colunas e completar código.", cls:"p4"}
+};
+const letters = ["A","B","C","D","E"];
+const accepted = q => Array.isArray(q.correct) ? q.correct : [q.correct];
+questions.forEach((q, i) => { q.id = "p" + q.part + "|" + q.ref; q.idx = i; });
+
+/* ---------- Estado persistente (localStorage) ---------- */
+const STORE_KEY = "aps-simulado-v1";
+const defaultState = () => ({
+  answers:{}, mode:"instant", submitted:false, hints:{}, history:[],
+  tab:"tutoriais", filter:"all", reviewed:{}, theme:null,
+  calc:{atual:50, prova:50, minimo:60, criterio:"gte", nq:10}
+});
+function loadState(){
+  const d = defaultState();
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return {...d, ...s, calc:{...d.calc, ...(s.calc || {})}};
+    }
+  } catch (e) {}
+  return d;
+}
+let state = loadState();
+const savedFlag = document.getElementById("savedFlag");
+function save(){
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    savedFlag.textContent = "💾 salvo neste navegador";
+  } catch (e) {
+    savedFlag.textContent = "⚠️ não foi possível salvar";
+  }
+}
+
+/* ---------- Tema ---------- */
+function applyTheme(){
+  if (state.theme) document.documentElement.setAttribute("data-theme", state.theme);
+  else document.documentElement.removeAttribute("data-theme");
+}
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const dark = state.theme ? state.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  state.theme = dark ? "light" : "dark";
+  applyTheme(); save();
+});
+applyTheme();
+
+/* ---------- Abas ---------- */
+function showTab(tab){
+  state.tab = tab;
+  document.querySelectorAll("nav.tabs button[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === "tab-" + tab));
+  if (tab === "nota") renderCalc();
+  save();
+}
+document.querySelectorAll("nav.tabs button[data-tab]").forEach(b => b.addEventListener("click", () => { showTab(b.dataset.tab); window.scrollTo(0, 0); }));
+
+/* ---------- Render das questões ---------- */
+const quiz = document.getElementById("quiz");
+let lastPart = null, lastUnit = null;
+questions.forEach((q, i) => {
+  if (q.part !== lastPart) {
+    lastPart = q.part; lastUnit = null;
+    const pt = document.createElement("div");
+    pt.className = "part-title " + partInfo[q.part].cls;
+    pt.dataset.part = q.part;
+    pt.innerHTML = `<h2>${partInfo[q.part].name}</h2><p>${partInfo[q.part].desc}</p>`;
+    quiz.appendChild(pt);
+  }
+  if (q.unit !== lastUnit) {
+    lastUnit = q.unit;
+    const ut = document.createElement("div");
+    ut.className = "unit-title";
+    ut.dataset.part = q.part; ut.dataset.unit = q.unit;
+    ut.innerHTML = `<div class="dot" style="background:${unitInfo[q.unit].color}"></div><h3>${unitInfo[q.unit].name}</h3>`;
+    quiz.appendChild(ut);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.id = "card-" + i;
+  const fig = q.svg ? `<figure class="qfig">${q.svg}<figcaption>${q.caption || ""}</figcaption></figure>` : "";
+
+  let badges = "";
+  if (q.real) badges += `<a class="badge real" href="${SRC[q.src].url}" target="_blank" rel="noopener">prova real · ${SRC[q.src].label} ${q.srcQ} ↗</a>`;
+  if (q.rebuilt) badges += `<span class="badge rebuilt">${q.real ? "texto reconstruído" : "alternativas recriadas"}</span>`;
+  if (q.diverge) badges += `<span class="badge diverge">gabarito original corrigido</span>`;
+  if (q.offsyl) badges += `<span class="badge offsyl">fora do material escrito</span>`;
+
+  const opts = q.options.map((opt, j) => `
+    <label class="opt" id="opt-${i}-${j}">
+      <input type="radio" name="q${i}" value="${j}">
+      <span><span class="letter">${letters[j]}</span> ${opt}</span>
+    </label>`).join("");
+
+  let extra = "";
+  if (q.why) extra += `<ul class="why">${q.why.map((w, j) => { const ok = accepted(q).includes(j); return `<li class="${ok ? "ok" : "no"}"><b class="l">${letters[j]}${ok ? "✓" : "✗"}</b> ${w}</li>`; }).join("")}</ul>`;
+  if (q.fix) extra += `<div class="fix"><b>💡 Para fixar:</b> ${q.fix}</div>`;
+  if (q.note) extra += `<div class="note"><b>Nota:</b> ${q.note}</div>`;
+
+  card.innerHTML = `
+    <div class="qhead"><span class="qnum">Questão ${i + 1}</span><span class="qtag" id="tag-${i}"></span></div>
+    <div class="qref"><span>${q.ref}</span>${badges}</div>
+    <div class="statement">${q.statement}</div>
+    ${fig}
+    <div class="options">${opts}</div>
+    ${q.hint ? `<button class="hint-btn" data-hint="${i}">💡 Dica</button><div class="hint" id="hint-${i}">${q.hint}</div>` : ""}
+    <div class="explain" id="explain-${i}"><b>Explicação:</b> ${q.explain}${extra}</div>`;
+  card.querySelectorAll("input").forEach(inp => inp.addEventListener("change", () => choose(i, +inp.value)));
+  const hb = card.querySelector(".hint-btn");
+  if (hb) hb.addEventListener("click", () => {
+    if (state.hints[q.id]) delete state.hints[q.id]; else state.hints[q.id] = true;
+    paintCard(i); save();
+  });
+  quiz.appendChild(card);
+});
+
+document.getElementById("metaTotal").textContent = questions.length;
+document.getElementById("metaReal").textContent = questions.filter(q => q.part === 2).length;
+
+const answerOf = q => (q.id in state.answers) ? state.answers[q.id] : null;
+const isRevealed = q => state.submitted || (state.mode === "instant" && answerOf(q) !== null);
+const isWrong = q => answerOf(q) !== null && !accepted(q).includes(answerOf(q));
+
+function choose(i, j){
+  const q = questions[i];
+  if (isRevealed(q)) { paintCard(i); return; }
+  state.answers[q.id] = j;
+  save(); paintCard(i); updateProgress();
+}
+
+function paintCard(i){
+  const q = questions[i], sel = answerOf(q), rev = isRevealed(q), ok = accepted(q);
+  const card = document.getElementById("card-" + i), tag = document.getElementById("tag-" + i);
+  card.classList.remove("correct-card", "incorrect-card");
+  q.options.forEach((_, j) => {
+    const el = document.getElementById(`opt-${i}-${j}`), inp = el.querySelector("input");
+    inp.checked = sel === j;
+    inp.disabled = rev;
+    el.classList.toggle("locked", rev);
+    el.classList.toggle("correct", rev && ok.includes(j));
+    el.classList.toggle("incorrect", rev && j === sel && !ok.includes(j));
+  });
+  tag.className = "qtag";
+  if (rev) {
+    if (sel !== null && ok.includes(sel)) { tag.textContent = "correta"; tag.classList.add("good"); card.classList.add("correct-card"); }
+    else { tag.textContent = sel === null ? "sem resposta" : "incorreta"; tag.classList.add("bad"); card.classList.add("incorrect-card"); }
+  } else if (sel !== null) { tag.textContent = "respondida"; tag.classList.add("done"); }
+  else tag.textContent = "não respondida";
+  document.getElementById("explain-" + i).classList.toggle("show", rev);
+  const h = document.getElementById("hint-" + i);
+  if (h) h.classList.toggle("show", !!state.hints[q.id]);
+}
+const paintAll = () => questions.forEach((_, i) => paintCard(i));
+
+/* ---------- Filtros ---------- */
+function matchesFilter(q){
+  const f = state.filter;
+  if (f === "all") return true;
+  if (f[0] === "u") return q.unit === +f.slice(1);
+  if (f[0] === "p") return q.part === +f.slice(1);
+  if (f === "todo") return answerOf(q) === null;
+  if (f === "wrong") return isRevealed(q) && isWrong(q);
+  return true;
+}
+function applyFilter(){
+  let visible = 0;
+  const shownParts = new Set(), shownUnits = new Set();
+  questions.forEach((q, i) => {
+    const show = matchesFilter(q);
+    document.getElementById("card-" + i).classList.toggle("hidden", !show);
+    if (show) { visible++; shownParts.add(q.part); shownUnits.add(q.part + "-" + q.unit); }
+  });
+  quiz.querySelectorAll(".part-title").forEach(el => el.classList.toggle("hidden", !shownParts.has(+el.dataset.part)));
+  quiz.querySelectorAll(".unit-title").forEach(el => el.classList.toggle("hidden", !shownUnits.has(el.dataset.part + "-" + el.dataset.unit)));
+  document.getElementById("emptyMsg").style.display = visible ? "none" : "block";
+  document.getElementById("filterSel").value = state.filter;
+}
+document.getElementById("filterSel").addEventListener("change", e => { state.filter = e.target.value; applyFilter(); save(); });
+
+/* ---------- Modo ---------- */
+function paintMode(){
+  document.querySelectorAll("#modeSeg button").forEach(b => b.classList.toggle("on", b.dataset.mode === state.mode));
+}
+document.querySelectorAll("#modeSeg button").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.mode === state.mode) return;
+  state.mode = b.dataset.mode;
+  paintMode(); paintAll(); updateProgress(); applyFilter(); save();
+}));
+
+/* ---------- Progresso ---------- */
+function tally(list){
+  let c = 0, w = 0, a = 0;
+  list.forEach(q => {
+    const s = answerOf(q);
+    if (s === null) return;
+    a++;
+    if (accepted(q).includes(s)) c++; else w++;
+  });
+  return {c, w, a, t:list.length};
+}
+function updateProgress(){
+  const t = tally(questions);
+  document.getElementById("progressFill").style.width = (t.a / t.t * 100) + "%";
+  document.getElementById("progressText").textContent = `${t.a} / ${t.t} respondidas`;
+  const live = document.getElementById("liveScore");
+  if (state.mode === "instant" || state.submitted) live.textContent = t.a ? `✔ ${t.c} certas · ✘ ${t.w} erradas · ${Math.round(t.c / t.a * 100)}% de acerto` : "";
+  else live.textContent = "modo prova: a correção aparece no final";
+}
+
+/* ---------- Resultado ---------- */
+function barRow(label, s, color){
+  const p = s.t ? Math.round(s.c / s.t * 100) : 0;
+  return `<div class="bar-row"><div>${label}</div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${color}"></div></div><div>${s.c}/${s.t}</div></div>`;
+}
+function projectionText(pct){
+  const c = state.calc;
+  if (!(c.nq > 0) || !(c.prova > 0)) return "";
+  const hits = Math.round(pct / 100 * c.nq);
+  const final = c.atual + hits * c.prova / c.nq;
+  const pass = c.criterio === "gte" ? final >= c.minimo - 1e-9 : final > c.minimo + 1e-9;
+  return `Se você mantiver esse aproveitamento na prova (${c.nq} questões valendo ${fmt(c.prova)}): ≈ <b>${hits} acertos</b> → nota final <b>${fmt(final)}</b> ${pass ? "✅ aprovado" : "❌ abaixo do mínimo"} · <a href="#" data-goto="nota">ajustar na calculadora</a>`;
+}
+function renderResults(){
+  const total = tally(questions);
+  const pct = Math.round(total.c / total.t * 100);
+  document.getElementById("scoreBig").textContent = pct + "%";
+  document.getElementById("scoreSub").textContent = `${total.c} de ${total.t} corretas` + (total.a < total.t ? ` (${total.t - total.a} sem resposta)` : "");
+  document.getElementById("scoreProj").innerHTML = projectionText(pct);
+
+  let bars = "<h4>Por unidade</h4>";
+  [1,2,3,4].forEach(u => {
+    const s = tally(questions.filter(q => q.unit === u));
+    bars += barRow(unitInfo[u].short, s, unitInfo[u].color);
+  });
+  bars += "<h4>Por parte</h4>";
+  [1,2,3].forEach(p => {
+    const s = tally(questions.filter(q => q.part === p));
+    bars += barRow(partInfo[p].short, s, "var(--accent)");
+  });
+  document.getElementById("unitBars").innerHTML = bars;
+
+  const weak = [1,2,3,4].map(u => ({u, s:tally(questions.filter(q => q.unit === u))}))
+    .filter(x => x.s.c < x.s.t).sort((a, b) => a.s.c / a.s.t - b.s.c / b.s.t);
+  document.getElementById("tipsCard").style.display = weak.length ? "block" : "none";
+  document.getElementById("tipsList").innerHTML = weak.map(x => `<div class="tip">${unitTips[x.u]}</div>`).join("");
+
+  const wrong = questions.filter(q => !accepted(q).includes(answerOf(q)));
+  document.getElementById("reviewCard").style.display = wrong.length ? "block" : "none";
+  document.getElementById("reviewList").innerHTML = wrong.map(q =>
+    `<a href="#card-${q.idx}" data-jump="${q.idx}">Questão ${q.idx + 1}: ${q.ref}${answerOf(q) === null ? " (sem resposta)" : ""}</a>`).join("");
+
+  const hist = state.history.slice(-10).reverse();
+  document.getElementById("historyCard").style.display = hist.length ? "block" : "none";
+  document.getElementById("historyTable").innerHTML = `<tr><th>Data</th><th>Modo</th><th>Acertos</th><th>%</th></tr>` +
+    hist.map(h => `<tr><td>${new Date(h.date).toLocaleString("pt-BR", {dateStyle:"short", timeStyle:"short"})}</td><td>${h.mode === "exam" ? "prova" : "estudo"}</td><td>${h.c}/${h.t}</td><td>${h.pct}%</td></tr>`).join("");
+
+  document.getElementById("results").classList.add("show");
+}
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const t = tally(questions);
+  if (t.a < t.t && !confirm(`Você ainda não respondeu ${t.t - t.a} questão(ões). Finalizar mesmo assim?`)) return;
+  state.submitted = true;
+  state.history.push({date:new Date().toISOString(), mode:state.mode, c:t.c, t:t.t, pct:Math.round(t.c / t.t * 100)});
+  save(); paintAll(); updateProgress(); applyFilter(); renderResults();
+  document.getElementById("results").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("retryBtn").addEventListener("click", () => {
+  if (!confirm("Apagar todas as respostas e começar de novo? (o histórico de tentativas é mantido)")) return;
+  state.answers = {}; state.submitted = false; state.hints = {}; state.filter = "all";
+  save(); paintAll(); updateProgress(); applyFilter();
+  document.getElementById("results").classList.remove("show");
+  window.scrollTo(0, 0);
+});
+document.getElementById("retryWrongBtn").addEventListener("click", () => {
+  questions.forEach(q => { if (!accepted(q).includes(answerOf(q))) { delete state.answers[q.id]; delete state.hints[q.id]; } });
+  state.submitted = false; state.filter = "todo";
+  save(); paintAll(); updateProgress(); applyFilter();
+  document.getElementById("results").classList.remove("show");
+  window.scrollTo(0, 0);
+});
+
+document.addEventListener("click", e => {
+  const jump = e.target.closest("[data-jump]");
+  if (jump) {
+    e.preventDefault();
+    if (state.filter !== "all") { state.filter = "all"; applyFilter(); save(); }
+    document.getElementById("card-" + jump.dataset.jump).scrollIntoView({behavior:"smooth", block:"center"});
+  }
+  const go = e.target.closest("[data-goto]");
+  if (go) { e.preventDefault(); showTab(go.dataset.goto); window.scrollTo(0, 0); }
+  const pr = e.target.closest("[data-practice]");
+  if (pr) { state.filter = pr.dataset.practice; applyFilter(); showTab("simulado"); window.scrollTo(0, 0); }
+});
+
+/* ---------- Tutoriais: "revisei" ---------- */
+function paintReviewed(){
+  [1,2,3,4].forEach(u => {
+    const yes = !!state.reviewed[u];
+    document.querySelector(`[data-review="${u}"]`).checked = yes;
+    const chip = document.querySelector(`[data-chip="${u}"]`);
+    chip.textContent = yes ? "✓ revisada" : "não revisada";
+    chip.classList.toggle("yes", yes);
+  });
+}
+document.querySelectorAll("[data-review]").forEach(cb => cb.addEventListener("change", () => {
+  state.reviewed[cb.dataset.review] = cb.checked; paintReviewed(); save();
+}));
+
+/* ---------- Ferramenta U1: divisão inteira ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtC = (x, d) => (Math.round(x * 10 ** d) / 10 ** d).toFixed(d);
+function renderOps(){
+  const a = parseInt(document.getElementById("opA").value), b = parseInt(document.getElementById("opB").value);
+  const out = document.getElementById("opOut");
+  if (!Number.isFinite(a) || !Number.isFinite(b)) { out.innerHTML = "Digite dois inteiros."; return; }
+  const rows = [];
+  if (b === 0) {
+    rows.push(["a / b", "—", "divisão por zero: comportamento indefinido em C (o programa pode travar)"]);
+  } else {
+    const q = Math.trunc(a / b), r = a % b;
+    rows.push(["a / b", String(q), "int / int → divisão inteira (a parte decimal é descartada)"]);
+    rows.push(["a % b", String(r), `resto: ${a} = ${b} · ${q} + ${r}`]);
+    rows.push(["(float) a / b", fmtC(a / b, 6), "um operando real → divisão real (<code>%f</code> mostra 6 casas)"]);
+    rows.push(["printf(\"%.2f\", (float) a / b)", fmtC(a / b, 2), "<code>%.2f</code> → duas casas"]);
+    rows.push(["float m = a / b;", fmtC(q, 6), "a divisão inteira acontece <b>antes</b> de guardar em m"]);
+  }
+  rows.push(["y = a++;", `y = ${a}, a = ${a + 1}`, "pós-incremento: usa e depois soma"]);
+  rows.push(["y = ++a;", `y = ${a + 1}, a = ${a + 1}`, "pré-incremento: soma e depois usa"]);
+  rows.push(["a &gt; b", a > b ? "1" : "0", "comparação vale 1 (V) ou 0 (F)"]);
+  rows.push(["a == b || a % 2 == 0", (a === b || a % 2 === 0) ? "1" : "0", "basta um lado verdadeiro"]);
+  out.innerHTML = `<table><tr><th>Expressão em C</th><th>Resultado</th><th>Por quê</th></tr>` +
+    rows.map(r => `<tr><td><code>${r[0]}</code></td><td><b>${r[1]}</b></td><td style="text-align:left">${r[2]}</td></tr>`).join("") + `</table>`;
+}
+["opA","opB"].forEach(id => document.getElementById(id).addEventListener("input", renderOps));
+
+/* ---------- Ferramenta U2: teste de mesa do for ---------- */
+function renderFor(){
+  const ini = parseInt(document.getElementById("frIni").value), lim = parseInt(document.getElementById("frLim").value);
+  const passo = parseInt(document.getElementById("frPasso").value), op = document.getElementById("frOp").value;
+  const out = document.getElementById("frOut");
+  if (![ini, lim, passo].every(Number.isFinite)) { out.innerHTML = "Preencha os três números."; return; }
+  const test = i => ({"<":i < lim, "<=":i <= lim, ">":i > lim, ">=":i >= lim, "!=":i !== lim})[op];
+  const vals = []; let i = ini; const MAX = 60;
+  while (test(i) && vals.length < MAX) { vals.push(i); i += passo; }
+  const sum = vals.reduce((s, v) => s + v, 0);
+  let html = `<div style="margin-bottom:6px"><code>for (i = ${ini}; i ${esc(op)} ${lim}; i += ${passo})</code></div>`;
+  if (vals.length >= MAX && test(i)) {
+    html += `<span class="chip bad">laço infinito?</span> Depois de ${MAX} voltas a condição continua verdadeira. Com esse passo, <code>i</code> nunca torna <code>i ${esc(op)} ${lim}</code> falso.`;
+  } else if (!vals.length) {
+    html += `<span class="chip mid">0 voltas</span> A condição já é falsa no primeiro teste (<code>${ini} ${esc(op)} ${lim}</code>), então o corpo não executa. <code>i</code> continua ${ini}.`;
+  } else {
+    html += `<table><tr><th>Volta</th>${vals.map((_, k) => `<th>${k + 1}</th>`).join("")}</tr><tr><td>i</td>${vals.map(v => `<td>${v}</td>`).join("")}</tr></table>`;
+    html += `<div><span class="chip good">${vals.length} ${vals.length === 1 ? "volta" : "voltas"}</span> soma dos valores de i = <b>${sum}</b> · ao sair do laço, <b>i = ${i}</b> (o primeiro valor que torna a condição falsa).</div>`;
+  }
+  out.innerHTML = html;
+}
+["frIni","frLim","frPasso"].forEach(id => document.getElementById(id).addEventListener("input", renderFor));
+document.getElementById("frOp").addEventListener("change", renderFor);
+
+/* ---------- Ferramenta U3: endereços ---------- */
+function renderMem(){
+  const tv = document.getElementById("mmTipo").value, size = parseInt(tv), tname = {"1":"char","4":"int","4f":"float","8":"double"}[tv];
+  const base = parseInt(document.getElementById("mmBase").value, 10);
+  const L = Math.max(1, Math.min(10, parseInt(document.getElementById("mmL").value) || 1));
+  const C = Math.max(1, Math.min(10, parseInt(document.getElementById("mmC").value) || 1));
+  const i = parseInt(document.getElementById("mmI").value) || 0, j = parseInt(document.getElementById("mmJ").value) || 0;
+  const out = document.getElementById("mmOut");
+  if (!Number.isFinite(base)) { out.innerHTML = "Endereço inicial inválido (use um número decimal)."; return; }
+  const vet = L === 1;
+  const ii = vet ? 0 : i, pos = ii * C + j, addr = base + pos * size;
+  const nome = vet ? `v[${j}]` : `m[${ii}][${j}]`;
+  const decl = vet ? `${tname} v[${C}];` : `${tname} m[${L}][${C}];`;
+  const oob = j < 0 || j >= C || ii < 0 || ii >= L;
+  let html = `<div><code>${decl}</code> ocupa ${L * C} · ${size} = <b>${L * C * size} bytes</b>, de ${base} a ${base + L * C * size - 1}.</div>`;
+  if (oob) html += `<div style="margin-top:6px"><span class="chip bad">fora dos limites</span> Índices válidos: ${vet ? `0 a ${C - 1}` : `linha 0 a ${L - 1}, coluna 0 a ${C - 1}`}. Acessar <code>${nome}</code> lê memória que não pertence ${vet ? "ao vetor" : "à matriz"} (o C não avisa).</div>`;
+  else html += `<div style="margin-top:6px"><code>&amp;${nome}</code> = ${base} + ${vet ? j : `(${ii} · ${C} + ${j})`} · ${size} = <b>${addr}</b>${vet ? ` · com <code>${tname} *p = v;</code>, isso é <code>p + ${j}</code> e o valor é <code>*(p + ${j})</code>` : ` · é o elemento nº ${pos} na fila linear (linha por linha)`}</div>`;
+  let cells = "";
+  for (let r = 0; r < L; r++) for (let c = 0; c < C; c++) {
+    const k = r * C + c, hit = !oob && r === ii && c === j;
+    cells += `<td style="${hit ? "background:var(--accent-soft);font-weight:700" : ""}">${vet ? `v[${c}]` : `m[${r}][${c}]`}<br><span style="color:var(--muted);font-size:11px">${base + k * size}</span></td>`;
+  }
+  html += `<div style="overflow-x:auto"><table><tr>${cells}</tr></table></div>`;
+  out.innerHTML = html;
+}
+["mmTipo","mmBase","mmL","mmC","mmI","mmJ"].forEach(id => document.getElementById(id).addEventListener("input", renderMem));
+
+/* ---------- Ferramenta U4: pilha de recursão ---------- */
+function renderRec(){
+  const f = document.getElementById("rcF").value;
+  const n = Math.max(0, Math.min(12, parseInt(document.getElementById("rcN").value) || 0));
+  const def = {
+    fat:{name:"fatorial", call:k => `fatorial(${k})`, step:k => `${k} * fatorial(${k - 1})`, base:() => 1, comb:(k, r) => k * r, show:(k, r) => `${k} * ${r}`},
+    som:{name:"somar", call:k => `somar(${k})`, step:k => `${k} + somar(${k - 1})`, base:() => 0, comb:(k, r) => k + r, show:(k, r) => `${k} + ${r}`},
+    pot:{name:"potencia", call:k => `potencia(2, ${k})`, step:k => `2 * potencia(2, ${k - 1})`, base:() => 1, comb:(k, r) => 2 * r, show:(k, r) => `2 * ${r}`}
+  }[f];
+  const lines = [];
+  for (let k = n; k > 0; k--) lines.push(`${"  ".repeat(n - k)}→ ${def.call(k)} = ${def.step(k)}      (instância ${n - k + 1})`);
+  lines.push(`${"  ".repeat(n)}→ ${def.call(0)} = ${def.base()}      ← caso base (instância ${n + 1})`);
+  let r = def.base();
+  for (let k = 1; k <= n; k++) {
+    const nr = def.comb(k, r);
+    lines.push(`${"  ".repeat(n - k)}← ${def.call(k)} devolve ${def.show(k, r)} = ${nr}`);
+    r = nr;
+  }
+  document.getElementById("rcOut").innerHTML = esc(lines.join("\n")) +
+    `\n\n<b>Resultado: ${r}</b> · ${n + 1} instâncias ficaram na memória ao mesmo tempo (a mais funda é o caso base).`;
+}
+document.getElementById("rcF").addEventListener("change", renderRec);
+document.getElementById("rcN").addEventListener("input", renderRec);
+
+/* ---------- Calculadora de nota ---------- */
+const fmt = x => (Math.round(x * 100) / 100).toLocaleString("pt-BR");
+const calcIds = {atual:"cAtual", prova:"cProva", minimo:"cMin", criterio:"cCrit", nq:"cNq"};
+Object.entries(calcIds).forEach(([k, id]) => {
+  const el = document.getElementById(id);
+  el.value = state.calc[k];
+  el.addEventListener("input", () => {
+    state.calc[k] = k === "criterio" ? el.value : parseFloat(el.value);
+    save(); renderCalc();
+  });
+});
+function renderCalc(){
+  const {atual, prova, minimo, criterio, nq} = state.calc;
+  const v = document.getElementById("calcVerdict"), tb = document.getElementById("calcTable"), pj = document.getElementById("calcProj");
+  if ([atual, prova, minimo, nq].some(x => !isFinite(x)) || prova <= 0 || nq < 1) {
+    v.innerHTML = `<div class="verdict need">Preencha todos os campos com números (prova e nº de questões maiores que zero).</div>`;
+    tb.innerHTML = ""; pj.innerHTML = ""; return;
+  }
+  const n = Math.round(nq), per = prova / n;
+  const passes = f => criterio === "gte" ? f >= minimo - 1e-9 : f > minimo + 1e-9;
+  const sign = criterio === "gte" ? "≥" : "&gt;";
+  let k = null;
+  for (let a = 0; a <= n; a++) if (passes(atual + a * per)) { k = a; break; }
+  const needPts = minimo - atual;
+  if (k === 0) {
+    v.innerHTML = `<div class="verdict ok">✅ Você <b>já tem a nota mínima</b>: ${fmt(atual)} ${sign} ${fmt(minimo)}. Mesmo zerando a prova, passa por esse critério. (Confira se a sua disciplina exige nota mínima na própria prova.)</div>`;
+  } else if (k === null) {
+    v.innerHTML = `<div class="verdict no">❌ Mesmo acertando tudo, a nota máxima seria <b>${fmt(atual + prova)}</b>, que não passa de ${fmt(minimo)}. Veja no AVA as opções de prova substitutiva ou recuperação.</div>`;
+  } else {
+    v.innerHTML = `<div class="verdict need">Você precisa de <span class="num">${k} de ${n} questões</span>
+      Ou seja, <b>${fmt(k * per)} pontos</b> na prova (${Math.round(k / n * 100)}% de acerto). Em pontos exatos, faltam ${fmt(needPts)}${criterio === "gt" ? " e um pouco mais" : ""}; cada questão vale ${fmt(per)}.<br>
+      Nota final com ${k} acertos: <b>${fmt(atual + k * per)}</b> ${sign} ${fmt(minimo)} ✅</div>`;
+  }
+  const last = state.history[state.history.length - 1];
+  const myHits = last ? Math.round(last.pct / 100 * n) : null;
+  pj.innerHTML = last ? `<div class="key" style="font-size:14px">📈 No último simulado você acertou <b>${last.pct}%</b>. Na prova isso dá cerca de <b>${myHits} de ${n}</b> → nota final <b>${fmt(atual + myHits * per)}</b> ${passes(atual + myHits * per) ? "✅ passaria" : "❌ ainda não passaria"}. (Linha destacada em azul na tabela.)</div>`
+    : `<div style="font-size:13px;color:var(--muted)">Termine um simulado (botão "Finalizar e ver resultado") para ver aqui a projeção da sua nota.</div>`;
+  let html = `<tr><th>Acertos</th><th>Pontos na prova</th><th>Nota final</th><th>Situação</th></tr>`;
+  for (let a = 0; a <= n; a++) {
+    const f = atual + a * per, ok = passes(f);
+    const cls = [ok ? "pass" : "", a === k ? "min" : "", a === myHits ? "me" : ""].join(" ");
+    html += `<tr class="${cls}"><td>${a}/${n}</td><td>${fmt(a * per)}</td><td>${fmt(f)}</td><td>${ok ? "✅ aprovado" : "❌"}${a === k ? " ← mínimo" : ""}</td></tr>`;
+  }
+  tb.innerHTML = html;
+}
+
+/* ---------- Inicialização ---------- */
+paintMode(); paintAll(); updateProgress(); applyFilter(); paintReviewed();
+renderOps(); renderFor(); renderMem(); renderRec();
+if (state.submitted) renderResults();
+showTab(state.tab || "tutoriais");
+</script>
+</body>
+</html>
