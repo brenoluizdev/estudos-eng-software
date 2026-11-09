@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado — Análise e Modelagem de Sistemas</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --ink:#1e2433; --muted:#5b6478; --line:#e2e6f0; --soft:#f1f3f9;
+    --accent:#3454d1; --accent-ink:#233a9e; --accent-soft:#eaf0ff;
+    --brand:#233a9e; --brand2:#3454d1;
+    --good:#1a8f5e; --good-soft:#e7f7ef; --good-ink:#145c3d;
+    --bad:#c93838; --bad-soft:#fdecec; --bad-ink:#7a1f1f; --bad-line:#f2c9c9;
+    --hint:#b8860b; --hint-soft:#fff8e6; --hint-ink:#5a4410; --hint-line:#f0d98c;
+    --explain-bg:#f7f9ff; --explain-ink:#2a3150;
+    --pre-bg:#1e2433; --pre-ink:#e8ecf8;
+    --u1:#3454d1; --u2:#1a8f5e; --u3:#b8860b; --u4:#8a3ffc;
+    --radius:14px;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10131a; --card:#181d28; --ink:#e6e9f2; --muted:#9aa3b8; --line:#2b3243; --soft:#222a39;
+      --accent:#5b78f0; --accent-ink:#aab8ff; --accent-soft:#1f2848;
+      --good:#3cc489; --good-soft:#12301f; --good-ink:#9be3c0;
+      --bad:#ff6b6b; --bad-soft:#3a1717; --bad-ink:#ffb3b3; --bad-line:#6b2a2a;
+      --hint:#e0b341; --hint-soft:#2e2510; --hint-ink:#f1d999; --hint-line:#5c4a17;
+      --explain-bg:#1c2233; --explain-ink:#d5dbec;
+      --pre-bg:#0b0d13; --pre-ink:#e8ecf8;
+      --u1:#7b93ff; --u2:#3cc489; --u3:#e0b341; --u4:#b48cff;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10131a; --card:#181d28; --ink:#e6e9f2; --muted:#9aa3b8; --line:#2b3243; --soft:#222a39;
+    --accent:#5b78f0; --accent-ink:#aab8ff; --accent-soft:#1f2848;
+    --good:#3cc489; --good-soft:#12301f; --good-ink:#9be3c0;
+    --bad:#ff6b6b; --bad-soft:#3a1717; --bad-ink:#ffb3b3; --bad-line:#6b2a2a;
+    --hint:#e0b341; --hint-soft:#2e2510; --hint-ink:#f1d999; --hint-line:#5c4a17;
+    --explain-bg:#1c2233; --explain-ink:#d5dbec;
+    --pre-bg:#0b0d13; --pre-ink:#e8ecf8;
+    --u1:#7b93ff; --u2:#3cc489; --u3:#e0b341; --u4:#b48cff;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;}
+  a{color:var(--accent-ink);}
+  code{background:var(--soft);padding:1px 5px;border-radius:5px;font-size:.93em;}
+  pre{background:var(--pre-bg);color:var(--pre-ink);padding:12px 14px;border-radius:10px;font-size:13px;overflow-x:auto;line-height:1.45;}
+  pre code{background:none;padding:0;color:inherit;}
+  table{border-collapse:collapse;}
+  input, select, button, textarea{font:inherit;color:inherit;}
+
+  header.exam{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;padding:26px 16px 20px;}
+  header.exam .wrap{max-width:920px;margin:0 auto;}
+  header.exam .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-bottom:6px;}
+  header.exam h1{margin:0 0 10px;font-size:26px;}
+  header.exam .meta{display:flex;flex-wrap:wrap;gap:12px 26px;font-size:13.5px;opacity:.95;}
+  header.exam .meta b{display:block;font-weight:600;}
+
+  nav.tabs{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);}
+  nav.tabs .wrap{max-width:920px;margin:0 auto;display:flex;gap:4px;padding:0 10px;overflow-x:auto;align-items:center;}
+  nav.tabs button{background:none;border:none;border-bottom:3px solid transparent;padding:13px 12px 10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--muted);white-space:nowrap;}
+  nav.tabs button.active{color:var(--accent-ink);border-bottom-color:var(--accent);}
+  nav.tabs .saved{margin-left:auto;font-size:11.5px;color:var(--muted);white-space:nowrap;padding-left:10px;}
+  nav.tabs .theme-btn{font-size:16px;padding:8px;border-bottom:none;}
+
+  .container{max-width:920px;margin:0 auto;padding:20px 16px 80px;}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+  .notice{background:var(--hint-soft);border:1px solid var(--hint-line);color:var(--hint-ink);border-radius:var(--radius);padding:14px 16px;font-size:13.8px;margin-bottom:20px;}
+  .notice ul{margin:6px 0 0;padding-left:20px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;}
+
+  /* ---------- Tutoriais ---------- */
+  .cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:10px 0 4px;}
+  .cheat > div{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:13.4px;}
+  .cheat h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .cheat ul{margin:0;padding-left:18px;}
+  details.tut{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--uc,var(--accent));border-radius:var(--radius);margin-bottom:16px;}
+  details.tut > summary{cursor:pointer;padding:16px 18px;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  details.tut > summary::-webkit-details-marker{display:none;}
+  details.tut > summary::before{content:"▸";color:var(--muted);transition:transform .15s;}
+  details.tut[open] > summary::before{transform:rotate(90deg);}
+  details.tut > summary h2{margin:0;font-size:17px;flex:1;min-width:200px;}
+  details.tut > summary .done-chip{font-size:11.5px;padding:2px 10px;border-radius:99px;background:var(--soft);color:var(--muted);}
+  details.tut > summary .done-chip.yes{background:var(--good-soft);color:var(--good-ink);}
+  .tut-body{padding:0 20px 18px;font-size:14.4px;}
+  .tut-body h3{font-size:15.5px;margin:22px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line);}
+  .tut-body table{margin:8px 0 12px;font-size:13.6px;display:block;overflow-x:auto;}
+  .tut-body th,.tut-body td{border:1px solid var(--line);padding:5px 10px;text-align:left;vertical-align:top;}
+  .tut-body th{background:var(--soft);}
+  .tut-body td.c,.tut-body th.c{text-align:center;}
+  .key{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;}
+  .trap{background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;color:var(--bad-ink);}
+  .trap b{color:inherit;}
+  .tool{border:1px dashed var(--accent);border-radius:12px;padding:14px 16px;margin:16px 0 6px;background:var(--explain-bg);}
+  .tool h4{margin:0 0 10px;font-size:14px;color:var(--accent-ink);}
+  .tool .row{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:10px;font-size:13.8px;}
+  .tool input[type=number],.tool input[type=text],.tool select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 9px;}
+  .tool input[type=number]{width:80px;}
+  .tool input[type=text]{min-width:0;flex:1 1 220px;}
+  .tool .out{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.8px;overflow-x:auto;}
+  .tool .out table{font-size:13px;margin:6px 0;display:table;}
+  .tool .out td,.tool .out th{border:1px solid var(--line);padding:3px 9px;text-align:center;}
+  .tool .out th{background:var(--soft);}
+  .tool .out td.v{color:var(--good);font-weight:700;}
+  .tool .out td.f{color:var(--bad);font-weight:700;}
+  .chip{display:inline-block;font-size:12px;padding:2px 10px;border-radius:99px;font-weight:600;}
+  .chip.good{background:var(--good-soft);color:var(--good-ink);}
+  .chip.bad{background:var(--bad-soft);color:var(--bad-ink);}
+  .chip.mid{background:var(--hint-soft);color:var(--hint-ink);}
+  .btn{background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:99px;cursor:pointer;font-weight:600;font-size:13.5px;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn.ghost{background:none;color:var(--accent-ink);border:1px solid var(--accent);}
+  .btn.small{padding:4px 11px;font-size:12.5px;}
+  .presets{display:flex;flex-wrap:wrap;gap:6px;}
+  .tut-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px;padding-top:12px;border-top:1px solid var(--line);}
+  .tut-foot label{font-size:13.5px;display:flex;gap:6px;align-items:center;cursor:pointer;}
+
+  /* ---------- Simulado ---------- */
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:13.5px;}
+  .toolbar .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;}
+  .seg button{background:var(--card);border:none;padding:6px 12px;cursor:pointer;font-size:13px;color:var(--muted);}
+  .seg button.on{background:var(--accent);color:#fff;}
+  .toolbar select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%;}
+  .progress-wrap{position:sticky;top:47px;z-index:5;background:var(--bg);padding:10px 0 8px;}
+  .progress-bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
+  .progress-bar > div{height:100%;background:var(--accent);width:0%;transition:width .25s ease;}
+  .progress-label{font-size:12px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .part-title{margin:34px 0 4px;padding:16px 18px;border-radius:var(--radius);background:var(--brand);color:#fff;}
+  .part-title h2{margin:0;font-size:19px;}
+  .part-title p{margin:4px 0 0;font-size:13px;opacity:.92;}
+  .part-title.p2{background:#5b2bb5;}
+  .part-title.p3{background:#0f766e;}
+  .part-title.p4{background:#a3236f;}
+  .unit-title{margin:26px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:10px;}
+  .unit-title .dot{width:12px;height:12px;border-radius:50%;flex:none;}
+  .unit-title h3{font-size:16px;margin:0;}
+  .qhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap;}
+  .qnum{font-weight:700;font-size:14.5px;color:var(--accent-ink);}
+  .qtag{font-size:11px;color:#fff;background:var(--muted);padding:2px 9px;border-radius:99px;white-space:nowrap;}
+  .qtag.done{background:var(--accent);}
+  .qtag.good{background:var(--good);}
+  .qtag.bad{background:var(--bad);}
+  .qref{font-size:11.5px;color:var(--muted);margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .badge{font-size:10.5px;padding:1px 8px;border-radius:99px;border:1px solid var(--line);background:var(--soft);color:var(--muted);text-decoration:none;}
+  .badge.rebuilt{border-color:var(--hint-line);background:var(--hint-soft);color:var(--hint-ink);}
+  .badge.diverge{border-color:var(--bad-line);background:var(--bad-soft);color:var(--bad-ink);}
+  .badge.real{border-color:#5fb3a9;background:rgba(15,118,110,.12);color:var(--good-ink);}
+  .badge.offsyl{border-color:var(--hint-line);background:var(--hint-soft);color:var(--hint-ink);}
+  .statement{font-size:14.8px;margin-bottom:12px;}
+  .statement table,.explain table{margin:8px 0;font-size:13.5px;display:block;overflow-x:auto;}
+  .statement th,.statement td,.explain th,.explain td{border:1px solid var(--line);padding:4px 12px;text-align:center;}
+  .statement th,.explain th{background:var(--soft);}
+  .explain td{background:var(--card);}
+  .statement blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--line);color:var(--muted);}
+  figure.qfig{margin:8px 0 14px;text-align:center;}
+  figure.qfig svg{max-width:100%;height:auto;background:#fbfcff;border:1px solid var(--line);border-radius:10px;}
+  figure.qfig figcaption{font-size:11.5px;color:var(--muted);margin-top:5px;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .opt{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:14.3px;transition:border-color .15s,background .15s;}
+  .opt:hover{border-color:var(--accent);background:var(--accent-soft);}
+  .opt input{margin-top:4px;flex:none;accent-color:var(--accent);}
+  .opt .letter{font-weight:700;color:var(--accent-ink);margin-right:2px;}
+  .opt.correct{border-color:var(--good);background:var(--good-soft);}
+  .opt.incorrect{border-color:var(--bad);background:var(--bad-soft);}
+  .opt.correct .letter::after{content:" ✓";}
+  .opt.incorrect .letter::after{content:" ✗";}
+  .opt.locked{cursor:default;}
+  .opt.locked:hover{background:inherit;}
+  .opt.correct.locked:hover{background:var(--good-soft);}
+  .opt.incorrect.locked:hover{background:var(--bad-soft);}
+  .hint-btn{margin-top:10px;background:none;border:1px dashed var(--hint);color:var(--hint);border-radius:99px;padding:4px 12px;font-size:12.5px;cursor:pointer;}
+  .hint-btn:hover{background:var(--hint-soft);}
+  .hint{display:none;margin-top:8px;padding:10px 14px;background:var(--hint-soft);border-left:4px solid var(--hint);border-radius:0 8px 8px 0;font-size:13.6px;color:var(--hint-ink);}
+  .hint.show{display:block;}
+  .explain{display:none;margin-top:12px;padding:12px 14px;background:var(--explain-bg);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;font-size:13.8px;color:var(--explain-ink);}
+  .explain.show{display:block;}
+  .explain b{color:var(--accent-ink);}
+  .explain .fix{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+  .explain .note{margin-top:8px;padding:8px 10px;background:var(--bad-soft);border-radius:8px;color:var(--bad-ink);}
+  .explain .note b{color:inherit;}
+  .card.correct-card{border-color:var(--good);}
+  .card.incorrect-card{border-color:var(--bad);}
+  .card.hidden,.part-title.hidden,.unit-title.hidden{display:none;}
+  .empty{text-align:center;color:var(--muted);padding:30px 10px;}
+  .actions{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,var(--bg) 35%);padding:18px 0 6px;text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .big-btn{background:var(--accent);color:#fff;border:none;padding:13px 30px;font-size:15px;border-radius:99px;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(52,84,209,.3);}
+  .big-btn:hover{filter:brightness(1.08);}
+  .big-btn.ghost{background:var(--card);color:var(--accent-ink);border:1px solid var(--accent);box-shadow:none;}
+  #results{display:none;margin-top:10px;}
+  #results.show{display:block;}
+  .score-hero{text-align:center;}
+  .score-hero .big{font-size:44px;font-weight:800;color:var(--accent-ink);}
+  .score-hero .sub{color:var(--muted);font-size:14px;margin-top:4px;}
+  .score-hero .proj{margin-top:10px;font-size:14px;}
+  .bars{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+  .bars h4{margin:8px 0 0;font-size:12.5px;color:var(--muted);text-align:left;text-transform:uppercase;letter-spacing:.08em;}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;font-size:13px;text-align:left;}
+  .bar-track{height:14px;background:var(--line);border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;}
+  .review-list a{display:block;padding:8px 12px;margin-bottom:6px;border-radius:8px;background:var(--bad-soft);color:var(--bad-ink);text-decoration:none;font-size:13.3px;border:1px solid var(--bad-line);}
+  .tips .tip{padding:10px 12px;margin-bottom:8px;border-radius:8px;background:var(--hint-soft);border:1px solid var(--hint-line);color:var(--hint-ink);font-size:13.6px;}
+  .tips .tip b{color:inherit;}
+  .history{font-size:13px;width:100%;}
+  .history td,.history th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;}
+
+  /* ---------- Nota ---------- */
+  .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px 16px;}
+  .calc-grid label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);}
+  .calc-grid input,.calc-grid select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:15px;color:var(--ink);}
+  .verdict{border-radius:var(--radius);padding:18px 20px;margin:16px 0;font-size:15px;}
+  .verdict.ok{background:var(--good-soft);color:var(--good-ink);border:1px solid var(--good);}
+  .verdict.need{background:var(--accent-soft);color:var(--ink);border:1px solid var(--accent);}
+  .verdict.no{background:var(--bad-soft);color:var(--bad-ink);border:1px solid var(--bad);}
+  .verdict .num{font-size:30px;font-weight:800;display:block;margin:4px 0;}
+  .gtable{width:100%;font-size:13.5px;}
+  .gtable th,.gtable td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:center;}
+  .gtable tr.pass td{color:var(--good-ink);}
+  .gtable tr.min td{background:var(--good-soft);font-weight:700;}
+  .gtable tr.me td{outline:2px solid var(--accent);outline-offset:-2px;}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:40px;}
+  @media (max-width:560px){
+    .bar-row{grid-template-columns:86px 1fr 44px;}
+    header.exam h1{font-size:21px;}
+    .card{padding:14px 14px;}
+    .tut-body{padding:0 14px 16px;}
+    .progress-wrap{top:45px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="exam">
+  <div class="wrap">
+    <div class="kicker">Simulado + revisão · Não vale nota</div>
+    <h1>Análise e Modelagem de Sistemas</h1>
+    <div class="meta">
+      <div><b>Aluno</b>Breno</div>
+      <div><b>Instituição</b>Anhanguera / Unopar</div>
+      <div><b>Questões</b><span id="metaTotal">—</span> · múltipla escolha</div>
+      <div><b>Provas reais</b><span id="metaReal">—</span> questões dos exercícios das unidades</div>
+      <div><b>Unidades</b>1 a 4 (conteúdo completo)</div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap">
+    <button data-tab="tutoriais">📘 Tutoriais</button>
+    <button data-tab="simulado">📝 Simulado</button>
+    <button data-tab="nota">🎯 Minha nota</button>
+    <span class="saved" id="savedFlag">💾 salvo neste navegador</span>
+    <button class="theme-btn" id="themeBtn" title="Alternar tema claro/escuro">🌓</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ======================= TUTORIAIS ======================= -->
+<section class="tab-panel" id="tab-tutoriais">
+
+  <div class="card">
+    <b>📌 Cola de véspera: o que mais cai</b>
+    <div class="cheat">
+      <div><h4>Processos de software</h4><ul>
+        <li>Sommerville (4): <b>especificação, projeto+implementação, validação, evolução</b></li>
+        <li>Pressman (5): <b>comunicação, planejamento, modelagem, construção, entrega</b></li>
+        <li>Cascata: sequencial · Incremental: entregas parciais · Espiral: protótipo + cascata</li>
+        <li>PU: <b>casos de uso, arquitetura, iterativo e incremental</b> (4 fases)</li>
+        <li>Scrum: backlog, sprint, daily · XP: pares, cliente na equipe</li></ul></div>
+      <div><h4>Processos de negócio e BPMN</h4><ul>
+        <li>Primário (valor ao cliente) · Suporte · Gerenciamento (mede e controla)</li>
+        <li>Macroprocesso → processo → subprocesso</li>
+        <li>Visão funcional = silos, vertical · Ponta a ponta = horizontal</li>
+        <li>BPMN: <b>atividade, evento, gateway, conector</b> (+ pool/lane, artefatos)</li>
+        <li>Único diagrama: <b>BPD</b> · BPMS é evolução do workflow</li></ul></div>
+      <div><h4>Engenharia de requisitos</h4><ul>
+        <li><b>RF</b> = o que o sistema faz · <b>RNF</b> = qualidade/restrição (mensurável)</li>
+        <li>Domínio: condições do ambiente sobre os RF</li>
+        <li>Prioridade: <b>essencial · importante · desejável</b></li>
+        <li>Etapas: concepção, elicitação, elaboração, negociação, especificação, validação, gerenciamento</li>
+        <li>Rastreabilidade: para trás, para frente, horizontal</li></ul></div>
+      <div><h4>UML</h4><ul>
+        <li>Estruturais (6) × comportamentais (7)</li>
+        <li>Caso de uso: <b>include = obrigatório</b>, <b>extend = opcional</b></li>
+        <li>Atividade: fork/join, decisão, swimlane</li>
+        <li>Classe: composição &gt; agregação &gt; associação &gt; dependência</li>
+        <li><b>+</b> público · <b>−</b> privado</li></ul></div>
+    </div>
+    <p style="font-size:13.4px;color:var(--muted);margin:10px 0 0">Cada unidade abaixo tem explicação, armadilhas que a prova usa e uma <b>ferramenta interativa</b> para testar seus próprios exemplos. Marque "Revisei esta unidade" quando terminar: fica salvo.</p>
+  </div>
+
+  <!-- ---------- U1 ---------- -->
+  <details class="tut" data-unit="1" style="--uc:var(--u1)">
+    <summary><h2>Unidade 1 · Introdução à análise e modelagem de sistemas</h2><span class="done-chip" data-chip="1">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Software e analista de sistemas</h3>
+      <table>
+        <tr><th>Tema</th><th>O que a prova cobra</th></tr>
+        <tr><td><b>Software (Pressman)</b></td><td>3 elementos: <b>instruções</b>, <b>estruturas de dados</b> e <b>documentação</b>.</td></tr>
+        <tr><td><b>Crise do software</b></td><td>Décadas de 1960–70: muitos sistemas, quase sem planejamento → atrasos e custos acima do orçamento. Motivou a engenharia de software.</td></tr>
+        <tr><td><b>Curva de defeitos</b></td><td>O software não se desgasta fisicamente, mas <b>deteriora com as mudanças</b>: cada alteração pode gerar novos defeitos (picos na curva real).</td></tr>
+        <tr><td><b>Fases da análise (Pressman)</b></td><td>Análise → Projeto → Implementação → Testes → Documentação → Manutenção, com <b>homologação</b> (aprovação formal do cliente).</td></tr>
+        <tr><td><b>Analista de sistemas</b></td><td><b>Intermediário</b> entre desenvolvedores e usuários finais: coleta, interpreta e traduz necessidades para a equipe de forma técnica.</td></tr>
+      </table>
+      <div class="key"><b>Análise × projeto:</b> na <b>análise</b> avalia-se viabilidade (custo-benefício), funcionalidades e escopo. No <b>projeto</b> definem-se layouts de telas e relatórios, banco de dados e diagramas.</div>
+
+      <h3>2. Processo de software e suas atividades</h3>
+      <table>
+        <tr><th>Autor</th><th>Atividades</th></tr>
+        <tr><td>Sommerville (4)</td><td>Especificação · Projeto e implementação · Validação · Evolução</td></tr>
+        <tr><td>Pressman (5)</td><td>Comunicação · Planejamento · Modelagem · Construção · Entrega</td></tr>
+        <tr><td>Lista "clássica" (6)</td><td>Especificação · Projeto · Implementação · Validação · Manutenção · Evolução</td></tr>
+      </table>
+      <div class="trap"><b>Pegadinha:</b> ter um processo definido <b>não garante</b> qualidade, prazo nem cumprimento integral dos requisitos. A qualidade vem dos padrões aplicados <b>ao longo</b> do processo. Para avaliar: SCAMPI (CMMI), SPICE (ISO/IEC 15504) e ISO 9001.</div>
+
+      <h3>3. Modelos de processo</h3>
+      <table>
+        <tr><th>Modelo</th><th>Ideia central</th><th>Ponto de atenção</th></tr>
+        <tr><td><b>Cascata</b></td><td>Fases sequenciais; cada uma só começa quando a anterior termina</td><td>Atrasos se propagam; cliente espera muito</td></tr>
+        <tr><td><b>Incremental</b></td><td>Versões parciais entregues ao cliente; cada incremento passa por todo o ciclo</td><td>Feedback rápido entre atividades</td></tr>
+        <tr><td><b>Espiral</b></td><td>Prototipação (iterativa) + controle do cascata</td><td>Cada ciclo gera versão mais completa</td></tr>
+        <tr><td><b>Processo Unificado</b></td><td>Orientado a <b>casos de uso</b>, centrado na <b>arquitetura</b>, <b>iterativo e incremental</b>; usa UML</td><td>RUP é a versão proprietária (Rational/IBM); o PU é de domínio público</td></tr>
+        <tr><td><b>Ágil</b></td><td>Cliente ativo, incrementos, pessoas &gt; processos, aceita mudanças, simplicidade</td><td>Menos documentação extensa</td></tr>
+      </table>
+      <table>
+        <tr><th>Fase do PU</th><th>Foco</th></tr>
+        <tr><td><b>Concepção</b></td><td>Visão, escopo, requisitos básicos, viabilidade</td></tr>
+        <tr><td><b>Elaboração</b></td><td>Detalha requisitos, define <b>arquitetura base</b>, avalia riscos</td></tr>
+        <tr><td><b>Construção</b></td><td>Desenvolve e testa; do simples ao complexo; produto quase final (beta)</td></tr>
+        <tr><td><b>Transição</b></td><td>Entrega ao usuário final, ajustes, treinamento</td></tr>
+      </table>
+      <table>
+        <tr><th>Método ágil</th><th>Marca registrada</th></tr>
+        <tr><td><b>XP</b></td><td>Planejamento, projeto, codificação, testes · <b>trabalho em pares</b> · representante do cliente na equipe</td></tr>
+        <tr><td><b>Scrum</b></td><td><b>Product Backlog</b> (lista dinâmica), <b>Sprints</b> (Time Box), planejamento, <b>Daily Scrum</b> (15 min, 3 perguntas), Scrum Master</td></tr>
+      </table>
+      <div class="key"><b>Daily Scrum, as 3 perguntas:</b> o que foi feito desde a última reunião? Quais obstáculos? O que está planejado até a próxima?</div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="1"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u1">Praticar Unidade 1 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U2 ---------- -->
+  <details class="tut" data-unit="2" style="--uc:var(--u2)">
+    <summary><h2>Unidade 2 · Processos de negócio e BPMN</h2><span class="done-chip" data-chip="2">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Processo de negócio e classificação</h3>
+      <p><b>Processo</b> = sequência lógica de tarefas: <b>entradas (inputs)</b> são processadas e geram <b>saídas (outputs)</b>. Inputs: pessoas, máquinas e equipamentos, materiais, recursos financeiros, informações e procedimentos. Output: o produto ou serviço.</p>
+      <table>
+        <tr><th>Tipo</th><th>Agrega valor a…</th><th>Exemplos</th></tr>
+        <tr><td><b>Primário</b></td><td>O <b>cliente final</b> (core business); pode começar e terminar fora da organização</td><td>Produção, entrega, marketing</td></tr>
+        <tr><td><b>Suporte</b></td><td>Os outros processos (não ao cliente diretamente)</td><td>RH, TI, contabilidade, contas a pagar</td></tr>
+        <tr><td><b>Gerenciamento</b></td><td>Os outros processos: <b>medem, monitoram e controlam</b></td><td>Governança, gestão de desempenho</td></tr>
+      </table>
+      <div class="key"><b>Decomposição:</b> macroprocesso → processo → subprocesso (fabricação de veículos → produção → pintura). Problema em processo <b>primário</b> o cliente sente na hora; em suporte/gerenciamento, o impacto é menor ou imperceptível.</div>
+      <div class="trap"><b>Contexto muda a classificação:</b> em um escritório de contabilidade, a contabilidade <b>é</b> o produto, então vira processo primário.</div>
+
+      <h3>2. Visão funcional × ponta a ponta</h3>
+      <table>
+        <tr><th></th><th>Funcional</th><th>Ponta a ponta</th></tr>
+        <tr><td>Direção</td><td>Vertical (hierárquica)</td><td>Horizontal (entre áreas)</td></tr>
+        <tr><td>Foco</td><td>Metas de cada departamento (<b>silos</b>)</td><td>Cliente e objetivos globais</td></tr>
+        <tr><td>Avaliação / orçamento</td><td>Por departamento, local</td><td>Integrado, global</td></tr>
+        <tr><td>Alcance</td><td>—</td><td>Interfuncional e até interorganizacional</td></tr>
+      </table>
+
+      <h3>3. BPM, BPMS e maturidade</h3>
+      <table>
+        <tr><th>Sigla</th><th>O que é</th></tr>
+        <tr><td><b>BPM</b></td><td>Gerenciamento de Processos de Negócio: visão ponta a ponta, integra estratégia e processos; exige governança</td></tr>
+        <tr><td><b>BPMS</b></td><td>Software que <b>mapeia, executa e monitora</b> processos; <b>evolução do workflow</b>, integra fluxos e <b>sistemas legados</b></td></tr>
+        <tr><td><b>BPMN</b></td><td>Notação gráfica padrão (BPMI/OMG) para desenhar processos</td></tr>
+        <tr><td><b>CMM/CMMI</b></td><td>Criado pelo <b>SEI</b>; <b>5 níveis</b> de maturidade: quanto maior o nível, melhor a capacidade de gerenciar processos</td></tr>
+      </table>
+      <p><b>Linha de melhoria:</b> simplificação do trabalho → controle de qualidade → Seis Sigma e Lean → gestão de negócios + TI = BPM. <b>Controle:</b> estratégico (longo prazo), tático (médio, departamental), operacional (curto, tarefas).</p>
+
+      <h3>4. Modelagem: diagrama × mapa × modelo e BPMN</h3>
+      <table>
+        <tr><th>Nível</th><th>Detalhe</th></tr>
+        <tr><td><b>Diagrama</b></td><td>Só os elementos principais do fluxo</td></tr>
+        <tr><td><b>Mapa</b></td><td>Mais detalhe: atores, eventos, resultados</td></tr>
+        <tr><td><b>Modelo</b></td><td>Estado do negócio (atual/futuro) com pessoas, informação, automação, finanças…</td></tr>
+      </table>
+      <table>
+        <tr><th>Elemento BPMN</th><th>Função</th></tr>
+        <tr><td><b>Atividade</b></td><td>Tarefa, subprocesso (colapsado = símbolo <b>+</b>) ou processo. Marcadores: loop, instâncias múltiplas, compensação</td></tr>
+        <tr><td><b>Evento</b></td><td>Início (contorno claro) · intermediário (círculo duplo) · fim (contorno escuro)</td></tr>
+        <tr><td><b>Gateway</b></td><td>Decisões, bifurcações e uniões. <b>Exclusivo por dados</b> (sim/não interno), <b>exclusivo por evento</b> (resposta externa), <b>inclusivo</b> (duas ou mais condições)</td></tr>
+        <tr><td><b>Conector</b></td><td>Sequência de fluxo · fluxo de mensagem (informação, não tarefa) · associação (liga artefatos)</td></tr>
+        <tr><td><b>Pool / lane</b></td><td>Pool: duas ou mais entidades/atores · lane: papel específico dentro do pool</td></tr>
+        <tr><td><b>Artefatos</b></td><td>Objeto de dados · grupo · anotação</td></tr>
+      </table>
+      <div class="key">O BPMN usa um <b>único diagrama: o BPD</b> (<i>Business Process Diagram</i>). Arquitetura de <b>negócio</b> = O QUE (eficácia) · arquitetura de <b>processos</b> = COMO (eficiência).</div>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: qual a classificação deste processo?</h4>
+        <div class="row"><span>O processo entrega valor <b>direto ao cliente final</b>?</span>
+          <select id="pcDireto"><option value="s">Sim</option><option value="n">Não</option></select></div>
+        <div class="row" id="pcRow2"><span>Ele existe para…</span>
+          <select id="pcPapel"><option value="apoiar">apoiar a execução dos outros processos</option><option value="controlar">medir, monitorar e controlar a organização</option></select></div>
+        <div class="out" id="pcOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="2"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u2">Praticar Unidade 2 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U3 ---------- -->
+  <details class="tut" data-unit="3" style="--uc:var(--u3)">
+    <summary><h2>Unidade 3 · Engenharia de requisitos</h2><span class="done-chip" data-chip="3">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. Requisitos: conceito, qualidades e prioridade</h3>
+      <p>A engenharia de requisitos produz e mantém o <b>documento de requisitos</b>, que especifica <b>o que</b> deve ser implementado antes do desenvolvimento, para que todos tenham uma compreensão <b>compartilhada por escrito</b> do problema.</p>
+      <table>
+        <tr><th>Qualificação</th><th>Ideia</th></tr>
+        <tr><td>Exatidão · Precisão</td><td>É do produto · uma única interpretação</td></tr>
+        <tr><td>Completude · Consistência</td><td>Reflete o acordado · sem conflitos</td></tr>
+        <tr><td>Priorização · Verificabilidade</td><td>Rotulado por importância · dá para provar a conformidade</td></tr>
+        <tr><td>Modificabilidade · Rastreabilidade</td><td>Fácil de mudar · origem e implicações conhecidas</td></tr>
+      </table>
+      <table>
+        <tr><th>Prioridade</th><th>Significa</th></tr>
+        <tr><td><b>Essencial</b></td><td>Sem ele o software fica incompleto: impede a implantação</td></tr>
+        <tr><td><b>Importante</b></td><td>Não crucial para implantar; pode vir em segundo plano</td></tr>
+        <tr><td><b>Desejável</b></td><td>Opcional; pode ser descartado se houver atraso</td></tr>
+      </table>
+
+      <h3>2. Tipos de requisito</h3>
+      <table>
+        <tr><th>Tipo</th><th>O que é</th><th>Exemplo</th></tr>
+        <tr><td><b>RF</b> (funcional)</td><td>O que o sistema <b>faz</b>, em resposta a entradas</td><td>[RF0002] O aluno faz a matrícula por disciplina</td></tr>
+        <tr><td><b>RNF</b> (não funcional)</td><td><b>Qualidade/restrição</b>: desempenho, segurança, usabilidade, tecnologia. Costuma ser <b>mensurável</b></td><td>[RNF0001] Relatórios em até 6 segundos</td></tr>
+        <tr><td><b>Domínio</b></td><td>Características do ambiente; impõem condições ou cálculos sobre os RF</td><td>Aprovado só com 3000 pts nas avaliações <b>e</b> 4000 nas atividades</td></tr>
+      </table>
+      <table>
+        <tr><th>Área dos RNF</th><th>Origem</th></tr>
+        <tr><td>Produto</td><td>Comportamento do sistema (ex.: linguagem de programação)</td></tr>
+        <tr><td>Organizacional</td><td>Políticas e procedimentos da empresa, cliente e desenvolvedor</td></tr>
+        <tr><td>Externo</td><td>Fatores externos, em conformidade com a legislação</td></tr>
+      </table>
+      <div class="key"><b>Usuário × sistema:</b> requisitos do <b>usuário</b> usam linguagem acessível ao cliente (documento sem detalhe técnico); requisitos do <b>sistema</b> detalham, partem dos do usuário e podem integrar o contrato. Um RNF pode gerar vários RF, e os RF costumam ser mais numerosos.</div>
+
+      <h3>3. Atividades, elicitação e especificação</h3>
+      <p><b>Etapas:</b> concepção → elicitação → elaboração → negociação → especificação → validação → <b>gerenciamento</b> (atravessa todo o ciclo). O levantamento é <b>iterativo e contínuo</b>: qualquer alteração repete o ciclo.</p>
+      <table>
+        <tr><th>Técnica de elicitação</th><th>Ideia</th></tr>
+        <tr><td>Pesquisa</td><td>Observar rotinas e outros softwares; achar o que não foi pedido</td></tr>
+        <tr><td>Entrevista</td><td>Questionário + <b>escuta ativa</b></td></tr>
+        <tr><td>Reuniões</td><td><i>Brainstorming</i>; resolver conflitos</td></tr>
+        <tr><td>Documentos</td><td>Relatórios, planilhas, cadernos de anotações</td></tr>
+        <tr><td>Etnografia</td><td>Observar como os usuários <b>realmente</b> trabalham (≠ o que dizem)</td></tr>
+      </table>
+      <table>
+        <tr><th>Prototipagem</th><th>Característica</th></tr>
+        <tr><td>Descartável</td><td>Explora o problema e a viabilidade; depois é <b>jogado fora</b></td></tr>
+        <tr><td>Evolutiva</td><td>Tira dúvidas (geralmente de interface); <b>é integrada</b> ao software final</td></tr>
+        <tr><td>Rápida</td><td>Constrói partes para avaliar a viabilidade dos requisitos</td></tr>
+      </table>
+      <div class="key"><b>Redação em linguagem natural:</b> formato padrão, <b>"deve"</b> (obrigatório) × <b>"pode"</b> (desejável), realce, sem jargão técnico, <b>racional</b> (por quê e quem pediu). Cada requisito com <b>identificador único</b>; "manter" = incluir, consultar, alterar e excluir. A <b>negociação</b> considera orçamento, pessoal, tecnologia e tempo.</div>
+
+      <h3>4. Validação, mudanças e rastreabilidade</h3>
+      <table>
+        <tr><th>Verificação</th><th>Pergunta</th></tr>
+        <tr><td>Validade · Consistência</td><td>Reflete as necessidades reais? · Há conflito entre requisitos?</td></tr>
+        <tr><td>Completude · Realismo</td><td>Cobre tudo? · Cabe em orçamento, tecnologia e prazo?</td></tr>
+        <tr><td>Verificabilidade · Ambiguidade</td><td>Dá para escrever testes? · Só uma interpretação?</td></tr>
+      </table>
+      <p><b>Técnicas:</b> revisões, prototipação, geração de casos de teste, <i>checklist</i>. <b>Mudança</b> (3 etapas): análise do problema e especificação → análise do impacto e custo → implementação. <b>Nunca</b> altere o sistema e deixe o documento para depois.</p>
+      <table>
+        <tr><th>Rastreabilidade</th><th>Aponta para…</th></tr>
+        <tr><td><b>Para trás</b></td><td>A <b>origem</b> (stakeholder, objetivo estratégico)</td></tr>
+        <tr><td><b>Para frente</b></td><td>Os <b>artefatos gerados</b> (caso de uso, teste, módulo)</td></tr>
+        <tr><td><b>Horizontal</b></td><td>Outros requisitos do mesmo tipo (dependências)</td></tr>
+      </table>
+      <div class="trap"><b>Pegadinha:</b> rastreabilidade mostra que o requisito foi <b>tratado</b>, não que foi implementado <b>corretamente</b>. E informação de rastreio incompleta ou errada é pior do que nenhuma.</div>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: é RF, RNF ou requisito de domínio?</h4>
+        <div class="row"><span>O requisito descreve…</span>
+          <select id="rqTipo">
+            <option value="acao">uma ação ou serviço que o sistema executa</option>
+            <option value="medida">um limite mensurável (tempo, tamanho, disponibilidade) ou uma tecnologia obrigatória</option>
+            <option value="acesso">quem pode acessar ou qual padrão visual deve seguir</option>
+            <option value="regra">uma regra do ambiente de uso que condiciona uma funcionalidade</option>
+          </select></div>
+        <div class="out" id="rqOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="3"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u3">Praticar Unidade 3 →</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- ---------- U4 ---------- -->
+  <details class="tut" data-unit="4" style="--uc:var(--u4)">
+    <summary><h2>Unidade 4 · Modelagem de sistemas (UML)</h2><span class="done-chip" data-chip="4">não revisada</span></summary>
+    <div class="tut-body">
+      <h3>1. UML e seus diagramas</h3>
+      <p>A <b>UML</b> é uma <b>notação visual</b> padronizada para modelar sistemas orientados a objetos. <b>Não é linguagem de programação</b> e <b>não depende</b> de um processo de desenvolvimento específico. Um <b>modelo</b> é uma representação abstrata com um propósito (casos de uso: requisitos · conceitual: classes do domínio · domínio: + métodos).</p>
+      <table>
+        <tr><th>Estruturais (visão estática, 6)</th><th>Comportamentais (dinâmica, 7)</th></tr>
+        <tr><td><b>Classes</b> · Pacotes · Componentes · Instalação · Objetos · Estrutura composta</td><td><b>Casos de uso</b> · <b>Atividade</b> · Visão geral de interação · <b>Sequência</b> · Máquina de estados · Comunicação · Tempo</td></tr>
+      </table>
+      <table>
+        <tr><th>Diagrama</th><th>Foco</th></tr>
+        <tr><td>Sequência</td><td><b>Ordem temporal</b> das mensagens entre objetos</td></tr>
+        <tr><td>Comunicação</td><td>Mesma informação, mas destaca <b>como os elementos se conectam</b></td></tr>
+        <tr><td>Máquina de estados</td><td>Transições de estado de um elemento</td></tr>
+        <tr><td>Instalação</td><td>Hardware (nós) e software que executa neles</td></tr>
+        <tr><td>Pacotes</td><td>Subsistemas e camadas</td></tr>
+        <tr><td>Componentes</td><td>Módulos de código, bibliotecas, arquivos</td></tr>
+        <tr><td>Objetos</td><td>Valores dos objetos em um instante (depende do de classes)</td></tr>
+      </table>
+
+      <h3>2. Diagrama de casos de uso</h3>
+      <div class="key"><b>Ator ≠ usuário.</b> Ator = <b>papel</b> de uma entidade externa (pessoa, hardware ou outro sistema), desenhada como "boneco magro". <b>Caso de uso</b> = funcionalidade, desenhada como <b>elipse</b>. É o diagrama mais abstrato e informal, ótimo para as primeiras reuniões com o cliente.</div>
+      <table>
+        <tr><th>Relacionamento</th><th>Significa</th><th>Notação</th></tr>
+        <tr><td><b>Associação</b></td><td>Ator ↔ caso de uso</td><td>Linha</td></tr>
+        <tr><td><b>Generalização</b></td><td>Herança: o especializado herda associações, include e extend do genérico</td><td>Seta espessa</td></tr>
+        <tr><td><b>Include</b></td><td>Dependência <b>obrigatória</b> (como chamar uma sub-rotina)</td><td>Tracejada + &lt;&lt;include&gt;&gt;</td></tr>
+        <tr><td><b>Extend</b></td><td>Cenário <b>opcional</b>, sob condição</td><td>Tracejada + &lt;&lt;extend&gt;&gt;</td></tr>
+      </table>
+      <p><b>Casos de uso primários</b> (requisito funcional crucial: sacar, gerar extrato) × <b>secundários</b> (periféricos: manter cadastro). Não há formato fixo de documentação (nome, atores, resumo, pré-condições, fluxo principal e alternativos).</p>
+
+      <h3>3. Diagrama de atividades</h3>
+      <table>
+        <tr><th>Elemento</th><th>Símbolo / função</th></tr>
+        <tr><td>Nó inicial · final</td><td>Círculo preenchido · círculo preenchido dentro de um vazio</td></tr>
+        <tr><td>Atividade · nó de ação</td><td>Retângulo grande arredondado · retângulo pequeno (<b>atômico</b>)</td></tr>
+        <tr><td>Fluxo de controle</td><td>Seta entre nós (pode ter condição de guarda)</td></tr>
+        <tr><td>Nó de decisão / junção</td><td>Losango com guardas entre colchetes</td></tr>
+        <tr><td><b>Fork</b> · <b>Join</b></td><td>Barra que <b>divide</b> em fluxos concorrentes · barra que <b>sincroniza</b> (espera todos)</td></tr>
+        <tr><td>Swimlane</td><td>Partição por responsável (quem faz cada etapa)</td></tr>
+      </table>
+      <p>Desde a UML 2.0 deixou de se basear em máquinas de estados e passou a se basear em <b>redes de Petri</b>. É o diagrama mais focado em nível de <b>algoritmo</b>, parecido com um fluxograma. Modela fluxo de <b>controle</b> e de <b>objetos</b>.</p>
+
+      <h3>4. Orientação a objetos e diagrama de classes</h3>
+      <table>
+        <tr><th>Conceito</th><th>Definição</th></tr>
+        <tr><td><b>Abstração</b></td><td>Reconhecer o objeto sem se prender a detalhes</td></tr>
+        <tr><td><b>Classe × objeto</b></td><td>Classe é a abstração (atributos + métodos); objeto é a <b>instância</b> concreta e única</td></tr>
+        <tr><td><b>Herança</b></td><td>Subclasse reaproveita a superclasse, sem duplicar código (a seta aponta da subclasse para a superclasse)</td></tr>
+        <tr><td><b>Encapsulamento</b></td><td>Oculta detalhes de implementação · <b>−</b> privado, <b>+</b> público</td></tr>
+        <tr><td><b>Polimorfismo</b></td><td>A mesma operação se comporta de modo diverso em classes diferentes</td></tr>
+      </table>
+      <table>
+        <tr><th>Relacionamento</th><th>Regra de bolso</th></tr>
+        <tr><td>Dependência</td><td>O mais <b>fraco</b>: mudar um pode afetar o outro</td></tr>
+        <tr><td>Associação</td><td>O mais comum, genérico</td></tr>
+        <tr><td>Agregação</td><td>A parte <b>existe sem</b> o todo (Produto — Cobertura)</td></tr>
+        <tr><td>Composição</td><td>A parte <b>não faz sentido sem</b> o todo (Pedido — Item de pedido)</td></tr>
+        <tr><td>Generalização</td><td>Filha herda da pai</td></tr>
+        <tr><td>Multiplicidade</td><td>Quantas instâncias participam</td></tr>
+      </table>
+      <p><b>Estereótipos:</b> <code>&lt;&lt;entity&gt;&gt;</code> classes de persistência · <code>&lt;&lt;boundary&gt;&gt;</code> fronteira (atores externos ↔ sistema) · <code>&lt;&lt;control&gt;&gt;</code> regras de negócio.</p>
+
+      <div class="tool">
+        <h4>🧮 Ferramenta: include, extend ou generalização?</h4>
+        <div class="row"><span>Entre dois casos de uso, a execução do segundo é…</span>
+          <select id="ucRel">
+            <option value="inc">sempre obrigatória quando o primeiro é executado</option>
+            <option value="ext">opcional, só em certas condições</option>
+            <option value="gen">uma variação do primeiro (mesmo objetivo, pequenas diferenças)</option>
+          </select></div>
+        <div class="out" id="ucOut"></div>
+      </div>
+
+      <div class="tut-foot">
+        <label><input type="checkbox" data-review="4"> Revisei esta unidade</label>
+        <button class="btn small" data-practice="u4">Praticar Unidade 4 →</button>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ======================= SIMULADO ======================= -->
+<section class="tab-panel" id="tab-simulado">
+  <div class="notice">
+    Suas respostas são <b>salvas automaticamente</b> neste navegador. Pode fechar a aba e voltar depois.
+    <ul>
+      <li><b>Correção imediata:</b> cada questão é corrigida assim que você responde (bom para estudar). <b>Modo prova:</b> tudo é corrigido só no final (bom para medir sua nota).</li>
+      <li><b>Parte 1</b> traz as <b>20 questões reais</b> dos seus exercícios das unidades (as que a instituição já aplicou), com o gabarito da plataforma. É o conteúdo mais próximo do que cai na prova.</li>
+      <li><b>Parte 2</b> traz questões novas de fixação, com dicas, cobrindo as quatro unidades.</li>
+      <li><b>Parte 3</b> traz questões novas no formato da prova: julgamento V/F, asserção-razão, lacunas e associação de colunas.</li>
+    </ul>
+  </div>
+
+  <div class="card toolbar">
+    <div class="grp"><span>Modo:</span>
+      <div class="seg" id="modeSeg"><button data-mode="instant">Correção imediata</button><button data-mode="exam">Modo prova</button></div>
+    </div>
+    <div class="grp"><label for="filterSel">Mostrar:</label>
+      <select id="filterSel">
+        <option value="all">Todas as questões</option>
+        <option value="u1">Unidade 1: processos de software</option>
+        <option value="u2">Unidade 2: processos de negócio e BPMN</option>
+        <option value="u3">Unidade 3: engenharia de requisitos</option>
+        <option value="u4">Unidade 4: modelagem (UML)</option>
+        <option value="p1">Parte 1: exercícios das unidades</option>
+        <option value="p2">Parte 2: fixação</option>
+        <option value="p3">Parte 3: estilo da prova</option>
+        <option value="todo">Só as não respondidas</option>
+        <option value="wrong">Só as que errei</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div id="progressFill"></div></div>
+    <div class="progress-label"><span id="liveScore"></span><span id="progressText">0 respondidas</span></div>
+  </div>
+
+  <div id="quiz"></div>
+  <div class="empty" id="emptyMsg" style="display:none">Nenhuma questão neste filtro. 🎉</div>
+
+  <div class="actions">
+    <button class="big-btn" id="submitBtn">Finalizar e ver resultado</button>
+  </div>
+
+  <div id="results">
+    <div class="card score-hero">
+      <div class="big" id="scoreBig">0%</div>
+      <div class="sub" id="scoreSub">0 corretas</div>
+      <div class="proj" id="scoreProj"></div>
+      <div class="bars" id="unitBars"></div>
+    </div>
+    <div class="card" id="tipsCard" style="display:none"><b>Sugestões de estudo (com base nos seus erros)</b><div class="tips" id="tipsList"></div></div>
+    <div class="card" id="reviewCard" style="display:none"><b>Questões para revisar</b><div class="review-list" id="reviewList" style="margin-top:8px"></div></div>
+    <div class="card" id="historyCard" style="display:none"><b>Suas tentativas</b><table class="history" id="historyTable" style="margin-top:8px"></table></div>
+    <div class="actions" style="position:static">
+      <button class="big-btn ghost" id="retryWrongBtn">Refazer só as que errei</button>
+      <button class="big-btn" id="retryBtn">Refazer tudo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= NOTA ======================= -->
+<section class="tab-panel" id="tab-nota">
+  <div class="card">
+    <b>🎯 Quanto preciso tirar na prova?</b>
+    <p style="font-size:13.6px;color:var(--muted);margin:6px 0 14px">Preencha com os seus números. A calculadora mostra quantos pontos e quantas questões você precisa acertar para passar. Os valores ficam salvos.</p>
+    <div class="calc-grid">
+      <label>Pontos que você já tem<input type="number" id="cAtual" step="0.1" min="0"></label>
+      <label>Quanto vale a prova<input type="number" id="cProva" step="0.1" min="0"></label>
+      <label>Nota mínima para aprovação<input type="number" id="cMin" step="0.1" min="0"></label>
+      <label>Critério
+        <select id="cCrit"><option value="gte">nota ≥ mínima</option><option value="gt">nota &gt; mínima (estritamente maior)</option></select>
+      </label>
+      <label>Nº de questões da prova<input type="number" id="cNq" step="1" min="1" max="100"></label>
+    </div>
+    <div id="calcVerdict"></div>
+    <div id="calcProj"></div>
+  </div>
+  <div class="card">
+    <b>Nota final por número de acertos</b>
+    <div style="overflow-x:auto;margin-top:8px"><table class="gtable" id="calcTable"></table></div>
+    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">A calculadora supõe que todas as questões valem o mesmo (valor da prova ÷ nº de questões). Confira no AVA as regras da sua disciplina: nota mínima, se é "≥" ou "&gt;", e se existe prova substitutiva ou recuperação.</p>
+  </div>
+</section>
+
+<footer>Gerado a partir das 20 aulas, dos exercícios das 4 unidades da disciplina e de questões novas · bons estudos!</footer>
+</div>
+
+<script>
+const assertOpts = [
+  "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+  "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+  "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+  "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+  "As asserções I e II são proposições falsas."
+];
+
+/* ---------- Banco de questões ----------
+   part: 1 = exercícios reais, 2 = fixação, 3 = estilo da prova
+   correct: índice (ou array de índices aceitos) */
+const questions = [
+// ================= PARTE 1 — EXERCÍCIOS REAIS =================
+// ----- Unidade 1 (Exercicios/exercicio1.md) -----
+{part:1, unit:1, real:true, ref:"Exercício U1 · Q1 — Atividades do processo de software",
+ statement:`A comunicação é um item fundamental no Processo de software. Outros autores levam em consideração que a comunicação está implícita em todos os processos de desenvolvimento, pois existe a necessidade evidente de comunicação entre as partes envolvidas, começando no levantamento dos requisitos até a entrega do produto final.<br><br>Assinale a alternativa correta que apresenta as principais atividades que normalmente um Processo de software possui.`,
+ options:["Especificação, implementação, validação, manutenção e evolução.","Projeto, implementação, codificação, validação, manutenção e evolução.","Implementação, validação, projeto, construção, manutenção e evolução.","Especificação, projeto, implementação, validação, manutenção e evolução.","Evolução, projeto, implementação, codificação, validação, manutenção e evolução."],
+ correct:3,
+ hint:`A lista "clássica" tem 6 atividades, na ordem do ciclo: do que fazer até como o software muda depois de entregue.`,
+ explain:`São <b>especificação → projeto → implementação → validação → manutenção → evolução</b>. A A esquece o projeto; a B separa "codificação" de implementação e esquece a especificação; a C embaralha a ordem; a E repete "evolução" e duplica implementação/codificação.`},
+
+{part:1, unit:1, real:true, ref:"Exercício U1 · Q2 — Afirmativas sobre processos de software",
+ statement:`Pressman (2016) afirma que um Processo de desenvolvimento de software é um conjunto de atividades, ordenadas (de forma parcial), com a intenção de obter um produto de software. É considerado um dos principais mecanismos para se obter software de qualidade e cumprir os contratos de desenvolvimento firmados com o cliente.<br><br>Sobre os Processos de software, analise as afirmativas a seguir.<br><br><b>I.</b> Os Processos de software permitem que sejam repetidos os serviços e produtos, reutilizando partes já produzidas e padronizadas.<br><b>II.</b> Os Processos de software servem para definir e guiar as atividades de um Projeto de Software.<br><b>III.</b> Os Processos de software proporcionam visões comuns para a equipe de desenvolvimento, facilitando a comunicação.<br><b>IV.</b> Os Processos de software determinam as tarefas que deverão ser executadas pelas equipes e de forma individualizada.<br><br>Analisando as afirmativas apresentadas, é correto o que se afirma em:`,
+ options:["II e III, apenas.","I e III, apenas.","I e II, apenas.","III, apenas.","I, II, III e IV."],
+ correct:4,
+ hint:`Todas parafraseiam a lista de benefícios do processo de software (padrão, reuso, conhecimento, guia, tarefas, comunicação).`,
+ explain:`As quatro estão corretas: o processo padroniza e permite reutilizar (I), define e guia as atividades do projeto (II), dá uma base comum à equipe (III) e determina as tarefas da equipe e individuais (IV).`},
+
+{part:1, unit:1, real:true, ref:"Exercício U1 · Q3 — Processo Unificado",
+ statement:`Um processo de desenvolvimento de software descreve uma abordagem para a construção, implantação e, possivelmente, a manutenção de um software. O Processo Unificado (PU) surgiu como um processo iterativo popular para o desenvolvimento de software, visando à construção de sistemas orientados a objetos. Em particular, o Processo Unificado da Rational ou RUP, um refinamento detalhado do PU, é muito adotado. (LARMAN, 2007, p. 46)<br><br>Com relação ao PU, analise as afirmações a seguir:<br><br><b>I.</b> PU é um processo somente interativo.<br><b>II.</b> PU é flexível e pode ser aplicado sem que seja necessário construir todos os artefatos indicados no PU.<br><b>III.</b> PU é centrado em casos de uso e na arquitetura.<br><br>É correto apenas o que se afirma em:`,
+ options:["I e II, apenas.","I e III, apenas.","I, II e III.","II, apenas.","II e III, apenas."],
+ correct:4,
+ hint:`O PU é "iterativo <i>e incremental</i>". A palavra "somente" na afirmação I é suspeita.`,
+ explain:`<b>I</b> é falsa: o PU é <b>iterativo e incremental</b>, não "somente iterativo". <b>II</b> é verdadeira (é flexível, não exige todos os artefatos). <b>III</b> é verdadeira (orientado por casos de uso e centrado na arquitetura).`},
+
+{part:1, unit:1, real:true, ref:"Exercício U1 · Q4 — Conceito de processo de software",
+ statement:`A utilização de um Processo de software é apontada como um fator essencial para o sucesso de empresas de desenvolvimento de software, ajudando no gerenciamento dos Processos de desenvolvimento.<br><br>Um Processo de software pode ser entendido como:`,
+ options:["Uma tarefa específica utilizada no desenvolvimento de um software.","Um conjunto estruturado de atividades exigidas para desenvolver um software.","Uma metodologia de controle de agilidade, utilizada no desenvolvimento do software.","Um diagrama utilizado para especificar o Fluxo de Processos no desenvolvimento do software.","Um padrão de codificação, amplamente utilizado para reutilizar o código do software."],
+ correct:1,
+ hint:`É uma definição direta: um conjunto <i>estruturado</i> de ... o quê?`,
+ explain:`Processo de software = <b>conjunto estruturado de atividades</b> exigidas para desenvolver um software. Uma tarefa é só parte do processo; agilidade é uma abordagem; um diagrama apenas representa o fluxo; padrão de codificação é outro assunto.`},
+
+{part:1, unit:1, real:true, ref:"Exercício U1 · Q5 — V/F sobre processo de software",
+ statement:`Um Processo de software, na Engenharia de software, é um conjunto de atividades e resultados que estão relacionados, no qual levam à produção e ao resultado de um software desenvolvido com eficiência e qualidade.<br><br>Julgue as afirmativas em (V) Verdadeiras ou (F) Falsas.<br><br>( ) Um problema que atinge o desenvolvimento de um software é a troca de pessoal que naturalmente ocorre em qualquer situação, porém, quando os Processos de software são bem definidos, os conhecimentos produzidos em cada etapa (do processo) estarão preservados, garantindo a sua continuidade.<br>( ) O Processo de software adotado em uma empresa pode ser completamente diferente de outra empresa, cada qual procura encontrar e estabelecer atividades que visam aumentar a qualidade e baixar o custo de produção do software produzido.<br>( ) O processo constitui uma série de atividades que serão executadas de forma padronizada, agrupadas em fases (essas atividades mudam conforme há a troca de fase), sendo que em cada fase será definido: as responsabilidades (quem fará o quê), prazos de entregas, e como deverá ser feito para que o objetivo seja alcançado.<br><br>Assinale a alternativa que apresenta a sequência correta:`,
+ options:["V - V - F.","V - V - V.","V - F - F.","F - V - V.","F - V - F."],
+ correct:1,
+ hint:`Releia os benefícios do processo: preserva conhecimento, varia entre empresas, define responsabilidades e prazos por fase.`,
+ explain:`As três são verdadeiras: o processo bem definido preserva o conhecimento mesmo com troca de pessoal; cada empresa adapta o seu; e o processo organiza atividades em fases, com responsabilidades, prazos e métodos. Sequência: <b>V – V – V</b>.`},
+
+// ----- Unidade 2 (Exercicios/exercicio2.md) -----
+{part:1, unit:2, real:true, ref:"Exercício U2 · Q1 — Processos de gerenciamento",
+ statement:`Sempre que falamos de processos de negócio devemos levar em conta a relação com o cliente e pensarmos nos processos que contribuem para que esse seja atendido de forma satisfatória ao longo de sua cadeia. Conforme Brocke e Rosemann (2013), o processo de negócio representa a consolidação de atividades/tarefas que visam atingir um resultado que demonstre valor agregado ao cliente, e são classificados em processos primários, processos de suporte e processos de gerenciamento.<br><br>Assinale a alternativa correta que define o conceito de Processos de Gerenciamento:`,
+ options:["São aqueles que tratam o detalhamento de como as tarefas e atividades devem ser executadas, a quem cabe a execução das tarefas para que o resultado esperado seja atingido, abrangendo todos os níveis organizacionais e áreas funcionais da organização.","São aqueles que medem, monitoram e controlam as atividades de uma organização. São parecidos com os processos de suporte, pois não agregam valor ao cliente, mas a outros processos, como os processos primários e os processos de suporte. Exemplos: Governança Corporativa e Gestão de Performance.","São aqueles que ajudam ou facilitam a execução dos processos de negócio. Não oferecem valor diretamente ao cliente final, mas garantem o sucesso dos processos de negócio. Exemplo: Gestão de Recursos Humanos e Gestão de Tecnologia da Informação.","São aqueles que definem a prioridades dos requisitos (das funcionalidades) do projeto, na qual um item pode ser adicionado ou eliminado a qualquer momento e o gerente do produto deve registrar e atualizar as prioridades.","São aqueles que abrangem as atividades essenciais que uma organização precisa realizar para cumprir sua missão de negócio, gerando valor à entrega final para o cliente. Exemplo: manufatura de produtos e serviços de pós-venda."],
+ correct:1,
+ hint:`Gerenciamento = medir, monitorar e controlar. A C descreve o suporte; a E descreve o primário.`,
+ explain:`<b>Gerenciamento</b> mede, monitora e controla as atividades (governança, gestão de performance). A <b>C</b> define os processos de <b>suporte</b> (RH, TI); a <b>E</b>, os <b>primários</b> (manufatura, pós-venda); a <b>D</b> descreve o Product Backlog; a <b>A</b> descreve um procedimento detalhado, não um tipo de processo.`},
+
+{part:1, unit:2, real:true, ref:"Exercício U2 · Q2 — Diagrama do BPMN",
+ statement:`O Business Process Modeling Notation (BPMN) é um padrão para modelagem de processos. "O BPMN é o resultado de um acordo entre diversas empresas de ferramentas de modelagem, que possuíam suas próprias notações, com a finalidade de criar uma linguagem única e padrão para a modelagem de processos de negócio capaz de facilitar o entendimento e treinamento do usuário final" (VALLE & OLIVEIRA, 2013, p. 53). O BPMN possui um único modelo de diagrama, chamado de ___________________________.<br><br>Assinale a alternativa correta que indica o preenchimento da lacuna acima.`,
+ options:["Data Flow Diagram (DFD).","State Machine Diagram (SMD).","Logical Process Diagram (LPD).","Business Process Diagram (BPD).","Workflow Diagram (WD)."],
+ correct:3,
+ hint:`A sigla BPMN já indica o nome: Business Process ...`,
+ explain:`O único diagrama do BPMN é o <b>BPD — Business Process Diagram</b> (Diagrama de Processo de Negócio). O DFD é da análise estruturada; o diagrama de máquina de estados é da UML; LPD e WD não são diagramas do BPMN.`},
+
+{part:1, unit:2, real:true, ref:"Exercício U2 · Q3 — V/F sobre BPM",
+ statement:`Valle e Oliveira (2013) destacam que com o BPM (Business Process Management) os processos organizacionais são vistos de uma forma diferente, pois a visão é ampliada e há uma percepção de toda a cadeia envolvida para entregar um produto ou serviço. Não se trata de uma visão verticalizada, ou seja, de cima para baixo, de forma hierárquica.<br><br>Julgue as afirmativas em (V) Verdadeiras ou (F) Falsas:<br><br>( ) A utilização do BPM melhora a transparência nos processos, pois os expõem de forma clara para todos os setores da empresa.<br>( ) A eficiência e redução de custos é um dos fatores de destaque da utilização do BPM, pois as equipes estão mais informadas e preparadas, executando os processos com maior eficácia.<br>( ) Com a BPM percebe-se uma crescente na produtividade, pois há mais transparência nos processos nas pessoas que estão envolvidas, com isso obstáculos são eliminados. Proporciona-se com isso fluidez nos processos de trabalho, além de tornar os funcionários mais preparados, aumentando a produtividade de toda equipe.<br>( ) Aplicando BPM é possível estabelecer indicadores de desempenho, para mostrar o desempenho da empresa em relação aos seus processos, agregando qualidade ao cliente.<br><br>Assinale a alternativa que apresenta a sequência CORRETA.`,
+ options:["F – V – V – F.","F – F – V – V.","V – F – V – F.","F – V – F – F.","V – V – V – V."],
+ correct:4,
+ hint:`Todas listam benefícios reais do BPM: transparência, eficiência, produtividade e indicadores.`,
+ explain:`As quatro são verdadeiras: transparência, redução de custos e eficiência, aumento de produtividade (obstáculos eliminados) e possibilidade de estabelecer indicadores de desempenho. Sequência: <b>V – V – V – V</b>.`},
+
+{part:1, unit:2, real:true, ref:"Exercício U2 · Q4 — Asserção-razão sobre BPM",
+ statement:`Segundo a ABPMP (2013), o Gerenciamento de Processos de Negócio (BPM) é uma disciplina gerencial que integra estratégias e objetivos de uma organização com expectativas e necessidades de clientes, por meio do foco em processos ponta a ponta. BPM engloba estratégias, objetivos, cultura, estruturas organizacionais, papéis, políticas, métodos e tecnologias para analisar, desenhar, implementar, gerenciar desempenho, transformar e estabelecer a governança de processos.<br><br>Considerando o gerenciamento de processos de negócios, avalie as seguintes asserções e a relação proposta entre elas.<br><br><b>I.</b> A BPM auxilia no estabelecimento de princípios e práticas que permitem às organizações serem mais eficientes e eficazes na execução de seus processos de negócios.<br><b>PORQUE</b><br><b>II.</b> As pessoas são elementos-chave na execução das tarefas e na adesão às mudanças necessárias à implantação da BPM.<br><br>Com base no exposto, podemos afirmar que:`,
+ options:["As asserções I e II são proposições verdadeiras, e a II é uma justificativa da I.","As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa da I.","A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.","A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.","As asserções I e II são proposições falsas."],
+ correct:0,
+ hint:`A eficiência que o BPM promove depende de quem executa as tarefas e adere à mudança.`,
+ explain:`As duas são verdadeiras e a <b>II justifica a I</b>: a eficiência e a eficácia que o BPM promove dependem das <b>pessoas</b>, que executam as tarefas e precisam aderir às mudanças.`},
+
+{part:1, unit:2, real:true, ref:"Exercício U2 · Q5 — Sistemas legados",
+ statement:`Segundo Araújo, Garcia e Martines (2017) o BPMS (Business Process Management Suite or System) é considerado uma evolução do Workflow, pois é capaz de integrar diversos Workflows. Por conta disso o BPMS traz uma visão muito mais ampla e permite que ocorra integração com Sistemas Legados.<br><br>Assinale a alternativa correta sobre o Sistema Legado.`,
+ options:["Sistemas Legados são sistemas comprados de empresas que tenham o mesmo Workflow da empresa.","Sistemas Legados são sistemas novos que necessitam de atualização constante para manter o Fluxo de Trabalho.","Sistemas Legados são sistemas antigos e obsoletos que mesmo assim permanecem em operação e precisam de atualização.","Sistemas Legados são sistemas herdados de outras administrações e são sempre retirados de funcionamento.","Sistemas Legados são sistemas BPMS antigos e que são utilizados para o Gerenciamento do Fluxo de Trabalho."],
+ correct:2,
+ hint:`Na aula: "sistemas mais antigos que ainda estão em operação".`,
+ explain:`<b>Sistema legado</b> é um sistema <b>antigo</b> que continua <b>em operação</b> e precisa de atualização. Não é "novo" (B), não é "sempre retirado de funcionamento" (D: justamente permanece em uso) e nem todo legado é BPMS (E).`},
+
+// ----- Unidade 3 (Exercicios/exercicio3.md) -----
+{part:1, unit:3, real:true, ref:"Exercício U3 · Q1 — Requisitos de usuário",
+ statement:`As Atividades do Processo da Engenharia de Requisitos envolvem a coleta de informações sobre o software (sistema) a ser realizado, gerando a Análise do Problema, para em seguida realizar a Descrição dos Requisitos, Classificação e Priorização.<br><br>Com relação à Engenharia de requisitos, no que tange aos tipos de requisitos, complete as lacunas da sentença a seguir:<br><br><i>Os _____________ estão relacionados diretamente tanto com os Requisitos funcionais como os Requisitos não funcionais do sistema, utilizando uma linguagem ____________ aos usuários do sistema (clientes), assim possibilitando uma melhor compreensão sobre as funções e as restrições que o sistema deverá possuir. Dessa forma o resultado será a produção de ____________ que não contenha detalhamento técnico do sistema e sim uma comunicação facilitada entre os desenvolvedores e clientes.</i><br><br>Assinale a alternativa que preenche corretamente as lacunas:`,
+ options:["Requisitos de Usuários / complexa / um documento.","Requisitos de Usuários / acessível / uma programação.","Requisitos de Usuários / acessível / um documento.","Requisitos de Sistemas / complexa / uma programação.","Requisitos de Sistemas / acessível / um documento."],
+ correct:2,
+ hint:`Linguagem para o <i>cliente</i> e sem detalhe técnico: de usuário ou de sistema? E o resultado é código ou documento?`,
+ explain:`Os <b>requisitos de usuário</b> usam linguagem <b>acessível</b> ao cliente e geram um <b>documento</b> sem detalhe técnico. Os requisitos de <b>sistema</b> é que detalham tecnicamente. O resultado nunca é "uma programação".`},
+
+{part:1, unit:3, real:true, ref:"Exercício U3 · Q2 — Classificação dos requisitos",
+ statement:`A Engenharia de requisitos é uma maneira de entender e refletir sobre as etapas da documentação considerando a relação cliente versus empresa. Um requisito é uma funcionalidade do sistema ou capacidade que pode ser validada e encontrada ou possuída por um sistema para resolver um problema do cliente ou para atingir um objetivo do usuário. Sobre a classificação dos requisitos, analise as afirmações:<br><br><b>I.</b> A declaração de um requisito funcional deve ser realizada do ponto de vista do usuário, e deve determinar o que o software deve ou não fazer, não importando como será feito.<br><b>II.</b> Os requisitos funcionais são declarações de todas as restrições que o software deve possuir, mediante as necessidades do cliente ou usuário.<br><b>III.</b> Os requisitos não funcionais são restrições sobre os serviços ou funções oferecidas pelo sistema. São exemplos de requisitos não funcionais: tempo de resposta, escalabilidade, usabilidade, padrões e segurança.<br><b>IV.</b> Os requisitos não funcionais são declarações que definem as qualidades globais ou atributos a serem atendidos pelo sistema resultante.<br><br>Assinale a alternativa correta:`,
+ options:["I e II, apenas.","II e III, apenas.","III e IV, apenas.","I, II, III e IV.","I, III e IV, apenas."],
+ correct:4,
+ hint:`Quem trata de <b>restrições</b> e qualidades: funcionais ou não funcionais?`,
+ explain:`<b>I</b> correta (o quê, não o como). <b>II</b> incorreta: quem trata de <b>restrições</b> são os requisitos <b>não</b> funcionais. <b>III</b> e <b>IV</b> corretas (tempo de resposta, escalabilidade, usabilidade, segurança; qualidades globais do sistema).`},
+
+{part:1, unit:3, real:true, ref:"Exercício U3 · Q3 — Vantagem da prototipagem",
+ statement:`A Prototipagem é a criação de uma versão menor do sistema a ser desenvolvido e tem como princípio a verificação de custo-benefício, onde a experiência do usuário é uma parte fundamental do desenvolvimento do protótipo.<br><br>Assinale a alternativa que apresenta uma vantagem da técnica de prototipagem.`,
+ options:["Permite verificar que os requisitos do software satisfazem as necessidades dos clientes.","Possibilita especificar os requisitos de forma que não haja duplicidade de interpretações.","Coleta de documentos que possam auxiliar na clareza das funcionalidades do sistema.","Elencar o máximo de requisitos dos stakeholders.","Estabelecer um entendimento básico sobre o problema a ser resolvido."],
+ correct:0,
+ hint:`As demais alternativas descrevem outras técnicas: documentos, entrevistas e brainstorming, concepção.`,
+ explain:`O protótipo permite ao cliente <b>validar</b> se os requisitos satisfazem suas necessidades, identificar problemas cedo e melhorar a comunicação. "Coletar documentos" é análise de documentos; elencar requisitos e entender o problema são objetivos de técnicas de levantamento inicial.`},
+
+{part:1, unit:3, real:true, ref:"Exercício U3 · Q4 — Características da engenharia de requisitos",
+ statement:`No desenvolvimento de um sistema de software é necessário abstrair a necessidade do usuário. Isso envolve compreender o domínio da aplicação, as funcionalidades específicas requeridas pelos usuários e características essenciais como performance, segurança e dependabilidade. Considerando as características da engenharia de requisitos, julgue as afirmativas a seguir:<br><br><b>I.</b> A compreensão completa dos requisitos de software é fundamental para um desenvolvimento bem-sucedido de software.<br><b>II.</b> O levantamento dos requisitos tem sua importância destacada devido ao aumento da complexidade dos softwares e também a necessidade da garantia de qualidade de software.<br><b>III.</b> A maior dificuldade em engenharia de requisitos é o fato de o usuário não ter conhecimento para estimar a dificuldade e custo da implementação dos requisitos.<br><b>IV.</b> Erros ou omissões dos requisitos não funcionais na especificação, estão entre os mais caros e de difícil correção, já que com o sistema desenvolvido deve-se percorrer todo o ciclo de desenvolvimento novamente para que haja alguma correção.<br><b>V.</b> Os requisitos não funcionais representam os serviços/funcionalidades que o sistema a ser desenvolvido deve abranger.<br><br>Assinale a alternativa correta:`,
+ options:["I, II e III, apenas.","III, IV e V, apenas.","I, III e V, apenas.","I, II, III e IV, apenas.","I, II, III, IV e V."],
+ correct:3,
+ hint:`Qual afirmativa troca o conceito de funcional por não funcional?`,
+ explain:`<b>I a IV</b> estão corretas. A <b>V</b> é falsa: serviços e funcionalidades são os requisitos <b>funcionais</b>; os não funcionais tratam de qualidades e restrições.`},
+
+{part:1, unit:3, real:true, ref:"Exercício U3 · Q5 — Padrões da especificação",
+ statement:`Não há regras rígidas sobre a criação de um Documento de Especificação de Requisitos, entretanto, Sommerville (2011) afirma que um documento de Especificação de requisitos deve seguir alguns padrões para auxiliar na compreensão do que está descrito na especificação.<br><br>Analise as afirmativas a seguir sobre os padrões a serem seguidos na Especificação de requisitos.<br><br><b>I.</b> Separação entre os Requisitos funcionais e os Requisitos não funcionais.<br><b>II.</b> Linguagem natural para facilitar a leitura de todos os envolvidos.<br><b>III.</b> Uso de identificador único para cada requisito.<br><b>IV.</b> Uso de jargões técnicos para um melhor entendimento da equipe de desenvolvimento.<br><br>É correto o que se afirma em:`,
+ options:["I e II, apenas.","I e III, apenas.","II, III e IV, apenas.","I, II e III, apenas.","I, II, III e IV."],
+ correct:3,
+ hint:`A recomendação é evitar jargões e abreviações para quem não é da área.`,
+ explain:`<b>I</b> (separar RF e RNF), <b>II</b> (linguagem natural) e <b>III</b> (identificador único, para rastrear) estão corretas. <b>IV</b> é falsa: jargões técnicos prejudicam a compreensão de quem não é da área.`},
+
+// ----- Unidade 4 (Exercicios/exercicio4.md) -----
+{part:1, unit:4, real:true, ref:"Exercício U4 · Q1 — UML e orientação a objetos",
+ statement:`Com a introdução do Paradigma Orientado a Objeto, surgiu a necessidade de métodos específicos voltados para análise e projetos orientados a objetos. A Linguagem de Modelagem Unificada (UML) foi criada a partir da fusão de três métodos, dos autores Booch, Rumbaugh (OMT) e Jacobson (OOSE). A concretização da UML aconteceu em 1997.<br><br>Sobre a modelagem Orientada a Objetos, julgue as sentenças a seguir:<br><br><b>I.</b> Na década de 90, os pesquisadores James Rumbaugh, Ivar Jacobson e Grady Booch uniram as melhores características destacadas em suas técnicas de modelagem e construíram um padrão de referência para modelagem orientada a objetos, surgindo a UML.<br><b>II.</b> A notação utilizada pela metodologia UML não é padronizada pela OMG e facilita a compreensão de cada parte do sistema que está sendo modelado, por qualquer pessoa que tenha conhecimento sobre a linguagem.<br><b>III.</b> A UML apresenta um conjunto de técnicas de modelagem gráficas, integrando vários elementos (objetos, classes, atributos etc.) do paradigma orientado a objetos.<br><b>IV.</b> Os diagramas da UML são recursos gráficos para a visualização de um sistema sob diferentes perspectivas e geralmente por itens e relacionamentos.<br><br>Estão corretas as alternativas:`,
+ options:["I e II, apenas.","II e III, apenas.","III e IV, apenas.","I, III e IV, apenas.","I, II, III e IV."],
+ correct:3,
+ hint:`A afirmativa II nega que a notação seja padronizada. Quem padroniza a UML?`,
+ explain:`<b>I</b> correta (fusão de Booch, Rumbaugh e Jacobson). <b>II</b> incorreta: a notação <b>é</b> padronizada pela <b>OMG</b>. <b>III</b> e <b>IV</b> corretas.`},
+
+{part:1, unit:4, real:true, ref:"Exercício U4 · Q2 — Componentes do diagrama de casos de uso",
+ statement:`O Diagrama de caso de uso é uma forma de comunicação entre o analista de sistemas e os programadores, pois os diagramas detalham o que precisará ser implementado (codificado). Faça a correspondência correta entre os componentes do Diagrama de casos de uso com suas respectivas características.<br><table><tr><th>Coluna A</th><th>Coluna B</th></tr>
+ <tr><td>I. Include</td><td>1. Representam a herança entre componentes (atores ou casos de uso).</td></tr>
+ <tr><td>II. Generalização</td><td>2. Esse relacionamento mostra que o tipo de relacionamento entre dois casos de uso implica na obrigatoriedade da execução do caso de uso que está sendo incluído.</td></tr>
+ <tr><td>III. Extend</td><td>3. É o relacionamento (a ligação) entre os atores e outros casos de uso.</td></tr>
+ <tr><td>IV. Associação</td><td>4. Compartilhar pedaços de pequenas funcionalidades.</td></tr></table>
+ Assinale a alternativa com a associação correta das colunas em:`,
+ options:["I-1; II-2; III-3; IV-4.","I-2; II-3; III-1; IV-4.","I-4; II-3; III-2; IV-1.","I-1; II-4; III-2; IV-3.","I-2; II-1; III-4; IV-3."],
+ correct:4,
+ hint:`Obrigatoriedade → include. Herança → generalização. Ligação ator–caso de uso → associação.`,
+ explain:`<b>Include</b> → obrigatoriedade (2). <b>Generalização</b> → herança (1). <b>Extend</b> → compartilhar pedaços de pequenas funcionalidades (4). <b>Associação</b> → ligação entre atores e casos de uso (3). Resposta: <b>I-2; II-1; III-4; IV-3</b>.`},
+
+{part:1, unit:4, real:true, ref:"Exercício U4 · Q3 — V/F sobre casos de uso",
+ statement:`Conforme a classificação das técnicas de modelagem da UML, o Diagrama de Casos de Uso é uma técnica de modelagem comportamental.<br><br>Considerando as características do Diagrama de casos de uso, indique "V" para os itens verdadeiros e "F" para os itens falsos.<br><br>( ) Apresenta uma linguagem simples e de fácil compreensão para que os usuários possam ter uma ideia geral de como o sistema irá se comportar. É um diagrama adotado para representar os requisitos funcionais.<br>( ) É um diagrama abstrato e flexível com poucos elementos de notação, que representa a interação entre os elementos ator e casos de uso.<br>( ) Os casos de uso são utilizados para capturar os requisitos não-funcionais do sistema, sendo usados para definir a arquitetura e o desempenho pretendidos para cada caso de uso.<br>( ) Demonstra o comportamento de um objeto através de um conjunto de estados e suas transições em um determinado instante de tempo de execução do sistema.<br><br>Assinale a alternativa correta:`,
+ options:["F; F; V; V.","V; V; F; F.","V; V; V; V.","F; F; F; F.","V; F; V; F."],
+ correct:1,
+ hint:`A 3ª fala de requisitos não funcionais; a 4ª descreve estados e transições, de outro diagrama.`,
+ explain:`1 <b>V</b> (linguagem simples; requisitos funcionais). 2 <b>V</b> (abstrato, poucos elementos). 3 <b>F</b>: casos de uso capturam requisitos <b>funcionais</b>. 4 <b>F</b>: estados e transições são do diagrama de <b>máquina de estados</b>. Sequência: <b>V; V; F; F</b>.`},
+
+{part:1, unit:4, real:true, ref:"Exercício U4 · Q4 — Identificando relacionamentos no diagrama",
+ statement:`No sistema da biblioteca da universidade XP, o aluno ao reservar um livro deve receber um e-mail confirmando a reserva. Outras funcionalidades, como emitir comprovante de reserva e consultar o livro, não são obrigatórias. No caso de uso a seguir, está representada a descrição anterior.<br><figure class="qfig"><img src="../Exercicios/image.png" alt="Diagrama de casos de uso da biblioteca, com quatro elementos numerados" style="max-width:100%;height:auto;border:1px solid var(--line);border-radius:10px;background:#fff"><figcaption>Fonte: elaborada pela autora.</figcaption></figure>Após a análise do diagrama, assinale a alternativa que apresenta os elementos destacados, na ordem numérica expressa:`,
+ options:["1- Generalização/especialização; 2- include; 3- extend; 4- extend;","1- Generalização/especialização; 2- extend; 3- extend; 4- extend;","1- Generalização/especialização; 2- extend; 3- include; 4- extend;","1- extend; 2- extend; 3- extend; 4- extend;","1- include; 2- extend; 3- include; 4- extend;"],
+ correct:2,
+ hint:`O e-mail é obrigatório (include); consultar livro e emitir comprovante são opcionais (extend). O elemento 1 liga o Aluno aos seus tipos.`,
+ explain:`O elemento <b>1</b> liga "Aluno" a "Aluno de Graduação" e "Aluno de Pós-Graduação": <b>generalização/especialização</b>. O e-mail de confirmação é <b>obrigatório</b> (<b>3 = include</b>); consultar livro (<b>2</b>) e emitir comprovante (<b>4</b>) são opcionais (<b>extend</b>).`,
+ note:`A imagem é a do próprio exercício (arquivo na pasta <i>Exercicios</i>). Se ela não aparecer, o simulado precisa estar em <i>simulados/</i> ao lado dessa pasta.`},
+
+{part:1, unit:4, real:true, ref:"Exercício U4 · Q5 — Classe e objeto",
+ statement:`O paradigma de orientação a objetos visualiza um software como uma coleção de agentes interconectados chamados de objetos, sendo que cada objeto é responsável por realizar sua tarefa e que de forma colaborativa resultam às funcionalidades de um sistema computacional.<br><br>Nesse sentido, para um entendimento de conceitos de análise orientada a objetos, é importante entender que uma _________________ é uma abstração que define um tipo de __________________ e que esse mesmo tipo possui seus _________________, que pelos _________________, são definidas as ações que esse tipo será capaz de realizar.<br><br>Assinale a alternativa correta que preenche as lacunas acima:`,
+ options:["Classe; objeto; atributos; métodos.","Classe; atributo; métodos; eventos.","Classe; objeto; eventos; identificadores.","Operação; atributo; métodos; eventos.","Operação; objeto; eventos; identificadores."],
+ correct:0,
+ hint:`Quem define um tipo de objeto? E as ações que ele realiza chamam-se...?`,
+ explain:`Uma <b>classe</b> é a abstração que define um tipo de <b>objeto</b>; esse tipo tem <b>atributos</b> (dados) e, pelos <b>métodos</b>, são definidas as ações que ele é capaz de realizar.`},
+
+// ================= PARTE 2 — FIXAÇÃO =================
+// ----- Unidade 1 -----
+{part:2, unit:1, ref:"Fixação U1 · Q1 — Elementos do software",
+ statement:`Segundo Pressman (2021), o software de computador é constituído por três elementos principais. Qual alternativa os apresenta corretamente?`,
+ options:["Código-fonte, hardware e usuários.","Instruções, estruturas de dados e documentação.","Instruções, hardware e documentação.","Estruturas de dados, rede e interface gráfica.","Requisitos, projeto e testes."],
+ correct:1,
+ hint:`Pense no que um software "carrega": o que ele executa, como organiza as informações e o que o descreve.`,
+ explain:`Os três elementos são <b>instruções</b> (fornecem os atributos e funções desejados), <b>estruturas de dados</b> (manipulam as informações) e <b>documentação</b> (descreve a operação, diagramas etc.). Hardware e usuários não são parte do software; "requisitos, projeto e testes" são atividades do processo.`},
+
+{part:2, unit:1, ref:"Fixação U1 · Q2 — Crise do software",
+ statement:`A chamada "crise do software", nas décadas de 1960 e 1970, esteve associada a:`,
+ options:["Falta de linguagens de programação, o que impedia criar sistemas operacionais.","Escassez de computadores pessoais, que impedia testar os programas.","Grande crescimento do número de sistemas com quase nenhum planejamento e controle, gerando atrasos e custos acima do orçamento.","Surgimento da internet, que tornou obsoletos os sistemas desktop.","Adoção precoce de metodologias ágeis, que reduziram a documentação."],
+ correct:2,
+ hint:`A crise é o motivo pelo qual surgiu a necessidade de criar métodos de engenharia de software.`,
+ explain:`Com muitos sistemas sendo criados de modo informal, havia atrasos e custos acima do orçamento. Isso fez surgir a necessidade de métodos de <b>engenharia de software</b>. As linguagens (COBOL, LISP, ALGOL, BASIC) já existiam; a internet e o ágil vieram depois.`},
+
+{part:2, unit:1, ref:"Fixação U1 · Q3 — Software e mudanças",
+ statement:`O software não sofre deterioração física como o hardware. Mesmo assim, ele pode se tornar mais propenso a falhas ao longo do tempo. Por quê?`,
+ options:["Porque o código-fonte se oxida com o tempo, como componentes eletrônicos.","Porque a poeira e a temperatura alteram as instruções armazenadas.","Porque a curva teórica de defeitos sempre cresce, independentemente de mudanças.","Porque as mudanças implementadas (correções e novas funcionalidades) podem introduzir novos defeitos, gerando picos na curva real de defeitos.","Porque a documentação é apagada automaticamente após a entrega."],
+ correct:3,
+ hint:`Compare a curva teórica (cai e estabiliza) com a curva real (picos). O que causa os picos?`,
+ explain:`O software "se deteriora" pelas <b>mudanças</b> feitas nele. Cada alteração, muitas vezes feita às pressas e sem atualizar a documentação, pode gerar novos erros, formando picos na curva real. Fatores ambientais (calor, poeira) afetam o <b>hardware</b>, não o código.`},
+
+{part:2, unit:1, ref:"Fixação U1 · Q4 — Fases da análise",
+ statement:`Na visão de Pressman (2021) sobre as fases da análise de sistemas, em qual fase são elaborados os layouts de telas e relatórios, a estrutura do banco de dados e os diagramas gráficos?`,
+ options:["Análise","Implementação","Testes","Manutenção","Projeto"],
+ correct:4,
+ hint:`É a definição <i>lógica</i> do software, antes de codificar.`,
+ explain:`No <b>Projeto</b> define-se a estrutura lógica: telas, relatórios, banco de dados e diagramas. A <b>Análise</b> avalia viabilidade, funcionalidades e escopo; a <b>Implementação</b> é a codificação; os <b>Testes</b> verificam os componentes; a <b>Manutenção</b> acompanha o software em operação.`},
+
+{part:2, unit:1, ref:"Fixação U1 · Q5 — Modelo cascata",
+ statement:`Qual característica descreve corretamente o modelo de processo em cascata?`,
+ options:["O cliente recebe o software em várias entregas parciais ao longo do desenvolvimento.","Cada fase só começa após a conclusão da anterior, com progressão linear; atrasos em uma fase afetam as seguintes.","As atividades de especificação, desenvolvimento e validação ocorrem de forma intercalada.","Combina a prototipação com ciclos de avaliação de risco em formato de espiral.","Dispensa a documentação e prioriza apenas a comunicação oral."],
+ correct:1,
+ hint:`O nome já diz: a água desce sem voltar. E as entregas parciais, de qual modelo são?`,
+ explain:`No cascata (ciclo de vida clássico), uma fase só começa quando a anterior termina. É simples e fácil de gerenciar, mas pode prolongar o desenvolvimento e o cliente espera muito pelo produto final. As alternativas A e C descrevem o <b>incremental</b>; a D, o <b>espiral</b>.`,
+ fix:`Cascata → "só avança quando termina". Incremental → "entrega aos poucos". Espiral → "protótipo + controle".`},
+
+{part:2, unit:1, ref:"Fixação U1 · Q6 — Scrum",
+ statement:`No Scrum, a lista dinâmica de requisitos e funcionalidades do projeto, cujas prioridades podem ser ajustadas a qualquer momento, chama-se:`,
+ options:["Sprint","Daily Scrum","Time Box","Scrum Master","Product Backlog"],
+ correct:4,
+ hint:`É uma "lista de pendências do produto".`,
+ explain:`O <b>Product Backlog</b> reúne as "histórias" do produto. As <b>Sprints</b> são unidades de trabalho com prazo fixo (<b>Time Box</b>); a <b>Daily Scrum</b> é a reunião diária de 15 minutos; o <b>Scrum Master</b> orienta o processo e monitora o progresso.`},
+
+// ----- Unidade 2 -----
+{part:2, unit:2, ref:"Fixação U2 · Q1 — Inputs e outputs",
+ statement:`Segundo Chiavenato (2014), um processo é uma sequência de tarefas que transforma entradas (inputs) em saídas (outputs). Qual das alternativas NÃO é um exemplo de input de um processo de negócio?`,
+ options:["Máquinas e equipamentos.","Recursos financeiros.","Informações do cliente e do mercado.","Procedimentos que definem como a execução deve ocorrer.","O produto ou serviço entregue ao final do processo."],
+ correct:4,
+ hint:`Pergunte: isso entra no processo ou sai dele?`,
+ explain:`Os inputs são pessoas, máquinas e equipamentos, materiais, recursos financeiros, informações e procedimentos. O <b>produto ou serviço entregue</b> é o <b>output</b>, o resultado do processamento.`},
+
+{part:2, unit:2, ref:"Fixação U2 · Q2 — Decomposição",
+ statement:`Em uma montadora de automóveis, a fabricação de veículos é um macroprocesso, a produção é um processo e a pintura é um:`,
+ options:["Macroprocesso.","Subprocesso.","Processo de gerenciamento.","Processo de suporte.","Gateway."],
+ correct:1,
+ hint:`A decomposição vai do mais amplo ao mais detalhado: macroprocesso → processo → ?`,
+ explain:`A decomposição é <b>macroprocesso → processo → subprocesso</b>. Pintura e montagem são subprocessos do processo de produção. (Gateway é um elemento do BPMN, não um nível de decomposição.)`},
+
+{part:2, unit:2, ref:"Fixação U2 · Q3 — Processo de suporte",
+ statement:`Em uma indústria alimentícia, qual dos processos a seguir é tipicamente classificado como processo de suporte?`,
+ options:["Produção dos alimentos.","Entrega dos pedidos ao cliente.","Marketing.","Gestão de recursos humanos.","Atendimento do pedido pelo consultor de vendas."],
+ correct:3,
+ hint:`Suporte não entrega valor direto ao cliente final: ele sustenta os outros processos.`,
+ explain:`<b>Recursos humanos</b> apoia a execução dos demais processos sem agregar valor diretamente ao cliente: é de <b>suporte</b>. Produção, entrega, marketing e vendas estão ligados ao core business e ao cliente final (primários).`,
+ fix:`Contexto importa: em um escritório de contabilidade, a contabilidade passa a ser processo primário, pois é o "produto" entregue.`},
+
+{part:2, unit:2, ref:"Fixação U2 · Q4 — Visão funcional",
+ statement:`Qual característica pertence à visão funcional (hierárquica) de uma organização?`,
+ options:["Processos analisados de ponta a ponta, atravessando departamentos.","Orçamentos integrados, influenciados pelos resultados globais.","Comunicação horizontal entre diretorias e gerências.","Estrutura reconfigurada para priorizar os processos como eixo gerencial.","Cada departamento persegue as próprias metas, com avaliação de desempenho departamental e visão de silos."],
+ correct:4,
+ hint:`Pense em "engrenagens que não se entrelaçam".`,
+ explain:`Na visão funcional, a estrutura é vertical: cada departamento cuida das suas metas e orçamento (<b>silos</b>), com pouca coordenação. As demais alternativas descrevem a <b>visão de processos ponta a ponta</b>, que é horizontal e integrada.`},
+
+{part:2, unit:2, ref:"Fixação U2 · Q5 — BPMS",
+ statement:`Segundo Araújo, Garcia e Martines (2017), o BPMS (Business Process Management Suite or System) é considerado:`,
+ options:["Uma evolução do workflow, capaz de integrar diversos fluxos de trabalho e sistemas legados.","Um sistema legado que substitui o workflow.","Uma notação gráfica para desenhar processos.","Um modelo de maturidade com cinco níveis.","Um método ágil de gestão de projetos."],
+ correct:0,
+ hint:`Sigla terminada em "S" de <i>Suite/System</i>: é um software.`,
+ explain:`O BPMS é o <b>software</b> que mapeia, executa e monitora processos, e é uma evolução do workflow, integrando fluxos e sistemas legados. A notação é o <b>BPMN</b>; o modelo de maturidade com cinco níveis é o <b>CMM/CMMI</b>.`},
+
+{part:2, unit:2, ref:"Fixação U2 · Q6 — Gateway",
+ statement:`No BPMN, qual elemento é usado para controlar o fluxo de sequência, tomando decisões, bifurcações e uniões de caminhos?`,
+ options:["Evento intermediário.","Raia (lane).","Conector de associação.","Artefato.","Gateway."],
+ correct:4,
+ hint:`Os "filtros de decisão" que separam e juntam fluxos.`,
+ explain:`<b>Gateways</b> são filtros de decisão: separam e juntam fluxos. Eventos marcam ocorrências (início, intermediário, fim); lanes dividem papéis; associações ligam artefatos; artefatos trazem informação adicional.`},
+
+// ----- Unidade 3 -----
+{part:2, unit:3, ref:"Fixação U3 · Q1 — Documento de requisitos",
+ statement:`De acordo com Pressman (2021), a engenharia de requisitos engloba atividades que visam produzir e manter um documento cujo objetivo principal é:`,
+ options:["Conter o código-fonte do módulo principal.","Servir de protótipo descartável.","Especificar o que deve ser implementado antes do início do desenvolvimento.","Substituir o plano de testes de aceitação.","Descrever o diagrama de classes final."],
+ correct:2,
+ hint:`O foco é no <b>o quê</b>, antes de qualquer desenvolvimento.`,
+ explain:`O <b>documento de requisitos</b> especifica o que deve ser implementado antes do desenvolvimento e dá a todos uma compreensão compartilhada, por escrito, do problema.`},
+
+{part:2, unit:3, ref:"Fixação U3 · Q2 — Prioridade essencial",
+ statement:`Um requisito que, se não for implementado, impossibilita a implantação ou a conclusão do software é classificado, quanto à prioridade, como:`,
+ options:["Desejável.","Importante.","Opcional.","Essencial.","Descartável."],
+ correct:3,
+ hint:`As três prioridades são essencial, importante e desejável. Qual é "vital para a completude"?`,
+ explain:`O requisito <b>essencial</b> é vital para a completude do software. O <b>importante</b> pode ficar para segundo plano; o <b>desejável</b> é opcional e pode ser descartado se houver atrasos.`},
+
+{part:2, unit:3, ref:"Fixação U3 · Q3 — Identificando RNF",
+ statement:`Qual dos requisitos a seguir é um requisito não funcional?`,
+ options:["O sistema deve permitir o cadastro de fornecedores.","O sistema deve emitir relatório da situação do estoque.","O professor poderá cadastrar as notas dos alunos.","O sistema deve manter os dados dos clientes.","O tempo de geração dos relatórios não poderá ultrapassar seis segundos."],
+ correct:4,
+ hint:`Dica de Paula Filho (2019): se o assunto pode ser <b>mensurado</b> (tempo, velocidade, linguagem, versão), provavelmente é não funcional.`,
+ explain:`"Seis segundos" é uma restrição mensurável de <b>desempenho</b>: RNF. As demais descrevem <b>funções</b> que o sistema executa (cadastrar, emitir, manter): requisitos funcionais.`},
+
+{part:2, unit:3, ref:"Fixação U3 · Q4 — Requisito de domínio",
+ statement:`Em um sistema de biblioteca: <i>"o aluno só pode retirar um livro se tiver no máximo 3 empréstimos ativos e nenhuma multa pendente"</i>. Essa regra é melhor classificada como:`,
+ options:["Requisito funcional, pois descreve uma função do sistema.","Requisito de domínio, pois estabelece condições do ambiente de uso que restringem uma funcionalidade.","Requisito não funcional de desempenho.","Requisito organizacional, pois deriva de políticas do desenvolvedor.","Requisito do usuário, pois só o cliente a enxerga."],
+ correct:1,
+ hint:`Os requisitos de domínio refletem particularidades do ambiente e impõem <b>condições adicionais</b> aos requisitos funcionais.`,
+ explain:`A regra não descreve uma nova função: ela impõe <b>critérios obrigatórios</b> sobre a função "retirar livro", vindos do ambiente (regra da biblioteca). É um <b>requisito de domínio</b>, como "o aluno é aprovado se tiver 3000 pontos nas avaliações e 4000 nas atividades".`},
+
+{part:2, unit:3, ref:"Fixação U3 · Q5 — Etnografia",
+ statement:`Qual técnica de elicitação consiste em observar e analisar o modo como os usuários realmente trabalham, em contraste com o que eles declaram?`,
+ options:["Entrevista.","Reunião de brainstorming.","Análise de documentos.","Etnografia.","Prototipagem."],
+ correct:3,
+ hint:`O prefixo "etno" vem de "povo, cultura": observar o comportamento real.`,
+ explain:`Na <b>etnografia</b>, observa-se o modo real de trabalho, o que revela requisitos que o usuário nem sabe verbalizar. Entrevistas dependem do que o usuário diz; documentos são coletados; reuniões usam brainstorming.`},
+
+{part:2, unit:3, ref:"Fixação U3 · Q6 — Benefício da rastreabilidade",
+ statement:`Qual é um benefício da rastreabilidade de requisitos?`,
+ options:["Dispensar a validação dos requisitos com o cliente.","Identificar requisitos ausentes ou desnecessários e apoiar a análise de impacto de mudanças.","Eliminar totalmente o custo de manutenção do software.","Garantir que todo requisito foi implementado corretamente.","Substituir o documento de requisitos."],
+ correct:1,
+ hint:`A rastreabilidade mostra <b>conexões</b>. O que dá para descobrir olhando conexões que faltam ou sobram?`,
+ explain:`Ela permite achar requisitos de negócio sem requisito de usuário (ausentes), requisitos funcionais sem origem (desnecessários) e avaliar o impacto de mudanças. Ela demonstra que o requisito foi <b>tratado</b>, mas <b>não garante</b> que foi implementado corretamente.`},
+
+// ----- Unidade 4 -----
+{part:2, unit:4, ref:"Fixação U4 · Q1 — O que é a UML",
+ statement:`Sobre a UML (Unified Modeling Language), é correto afirmar que ela é:`,
+ options:["Uma linguagem de programação orientada a objetos.","Um processo de desenvolvimento de software completo.","Uma notação visual padronizada para modelar sistemas, independente do processo de desenvolvimento.","Um banco de dados para armazenar modelos.","Uma ferramenta de teste automatizado."],
+ correct:2,
+ hint:`A UML ajuda a <i>definir</i> as características do sistema, não a executá-las.`,
+ explain:`A UML <b>não é linguagem de programação</b> nem um processo: é uma <b>notação de modelagem</b> que pode ser usada com vários processos de desenvolvimento. Quem completou a UML com um processo foi o RUP/PU.`},
+
+{part:2, unit:4, ref:"Fixação U4 · Q2 — Diagrama estrutural",
+ statement:`Qual dos diagramas abaixo é classificado como estrutural na UML?`,
+ options:["Casos de uso.","Sequência.","Atividade.","Classes.","Máquina de estados."],
+ correct:3,
+ hint:`Estruturais mostram a organização <b>estática</b> do sistema. Os comportamentais mostram a dinâmica ao longo do tempo.`,
+ explain:`<b>Classes</b> é o diagrama estrutural mais usado. Casos de uso, sequência, atividade e máquina de estados são <b>comportamentais</b>. Os seis estruturais são: classes, pacotes, componentes, instalação, objetos e estrutura composta.`},
+
+{part:2, unit:4, ref:"Fixação U4 · Q3 — Atores",
+ statement:`Sobre os atores em um diagrama de casos de uso, é correto afirmar:`,
+ options:["Ator e usuário são sinônimos e representam sempre uma única pessoa.","Um ator representa um papel de uma entidade externa (pessoa, hardware ou outro sistema) que interage com o sistema.","Atores são representados por elipses.","Atores fazem parte do sistema e executam as funcionalidades internamente.","Todo ator deve ser uma pessoa física."],
+ correct:1,
+ hint:`Quem fica <b>fora</b> da fronteira do sistema e interage com ele?`,
+ explain:`Ator é um <b>papel</b> de uma entidade <b>externa</b>, desenhada como "boneco magro". Um mesmo usuário pode assumir vários papéis (vários atores), e um ator pode ser hardware ou outro software. As <b>elipses</b> são os casos de uso.`},
+
+{part:2, unit:4, ref:"Fixação U4 · Q4 — Include",
+ statement:`Em um sistema bancário, sempre que um saque é realizado, o movimento precisa ser registrado. Entre os casos de uso "Realizar Saque" e "Registrar Movimento", utiliza-se:`,
+ options:["Extend, pois o registro é opcional.","Generalização, pois o saque herda o registro.","Include, pois a execução do registro é obrigatória.","Uma associação entre dois atores.","Nenhuma relação: casos de uso são independentes."],
+ correct:2,
+ hint:`"Sempre" é o sinal de dependência <b>obrigatória</b>.`,
+ explain:`Quando um caso de uso exige obrigatoriamente a execução de outro, é <b>include</b> (como chamar uma sub-rotina). O <b>extend</b> é para cenários opcionais, sob condição.`,
+ fix:`Include = "sempre". Extend = "às vezes, se a condição for satisfeita".`},
+
+{part:2, unit:4, ref:"Fixação U4 · Q5 — Join",
+ statement:`Em um diagrama de atividades, qual elemento sincroniza fluxos concorrentes, permitindo que o fluxo de saída prossiga apenas quando todos os fluxos de entrada forem concluídos?`,
+ options:["Fork.","Nó de decisão.","Swimlane.","Nó inicial.","Join."],
+ correct:4,
+ hint:`Um divide em fluxos paralelos; o outro "junta" e espera.`,
+ explain:`O <b>join</b> é uma barra com várias setas chegando e uma saindo: o fluxo de saída só inicia quando todos os de entrada terminam. O <b>fork</b> faz o contrário: separa em fluxos concorrentes.`},
+
+{part:2, unit:4, ref:"Fixação U4 · Q6 — Composição",
+ statement:`No diagrama de classes, entre "Casa" e "Cômodo", se a casa for destruída, os cômodos deixam de ter sentido. Qual relacionamento representa essa situação?`,
+ options:["Dependência.","Agregação.","Generalização.","Composição.","Multiplicidade."],
+ correct:3,
+ hint:`Se a parte pode existir sem o todo, é agregação. Se não faz sentido sem o todo, é qual?`,
+ explain:`Na <b>composição</b>, se o objeto "pai" é destruído, não faz sentido a existência do objeto "filho" (como o pedido e seus itens). Na <b>agregação</b>, a parte continua existindo (produto e cobertura).`},
+
+// ================= PARTE 3 — ESTILO DA PROVA =================
+// ----- Unidade 1 -----
+{part:3, unit:1, ref:"Estilo da prova U1 · Q1 — V/F sobre processos",
+ statement:`Julgue as afirmativas em (V) Verdadeiras ou (F) Falsas.<br><br>( ) O Processo Unificado é orientado por casos de uso, centrado na arquitetura e iterativo e incremental.<br>( ) O RUP é de domínio público, enquanto o PU é um processo proprietário da IBM.<br>( ) O SPICE (ISO/IEC 15504) é um padrão internacional para avaliação de processos de software.<br>( ) Ter um processo de software definido garante automaticamente a qualidade e a entrega no prazo.<br><br>Assinale a sequência correta:`,
+ options:["V – V – F – F.","F – V – V – F.","V – F – F – V.","V – F – V – F.","F – F – V – V."],
+ correct:3,
+ hint:`A afirmação 2 inverte quem é proprietário e quem é de domínio público. A 4 usa "garante automaticamente".`,
+ explain:`1 <b>V</b>. 2 <b>F</b>: o <b>RUP</b> é proprietário (Rational/IBM); o <b>PU</b> é de domínio público. 3 <b>V</b>. 4 <b>F</b>: o processo, por si só, não assegura qualidade nem prazo; depende dos padrões aplicados ao longo dele.`},
+
+{part:3, unit:1, ref:"Estilo da prova U1 · Q2 — Asserção-razão (ágil)",
+ statement:`Avalie as asserções e a relação proposta entre elas.<br><br><b>I.</b> Em um projeto grande, o cliente de um processo ágil não precisa esperar o software inteiro ficar pronto para ver o resultado.<br><b>PORQUE</b><br><b>II.</b> A metodologia ágil divide o software em partes menores e as entrega em incrementos.<br><br>Com base no exposto, podemos afirmar que:`,
+ options:assertOpts,
+ correct:0,
+ hint:`Pergunte: a II explica <i>por que</i> a I acontece?`,
+ explain:`As duas são verdadeiras e a II é a causa da I: como o software é entregue em incrementos, o cliente acompanha o resultado ao longo do desenvolvimento e participa ativamente do processo.`},
+
+{part:3, unit:1, ref:"Estilo da prova U1 · Q3 — Fases do PU",
+ statement:`No Processo Unificado, a fase em que se detalham os requisitos, define-se a arquitetura base do sistema e avaliam-se os principais riscos é a:`,
+ options:["Concepção.","Elaboração.","Construção.","Transição.","Manutenção."],
+ correct:1,
+ hint:`As quatro fases, em ordem: concepção, ... , construção, transição.`,
+ explain:`Na <b>Elaboração</b> os requisitos são detalhados, a arquitetura base é definida e os riscos principais são avaliados. A <b>Concepção</b> estabelece visão e escopo; a <b>Construção</b> desenvolve e testa; a <b>Transição</b> entrega ao usuário final. "Manutenção" não é fase do PU.`},
+
+{part:3, unit:1, ref:"Estilo da prova U1 · Q4 — Método XP",
+ statement:`Qual método ágil adota as atividades de planejamento, projeto, codificação e testes, com trabalho em pares e a participação de um representante do cliente integrado à equipe?`,
+ options:["Scrum.","Cascata.","Espiral.","XP (Extreme Programming).","Métodos formais."],
+ correct:3,
+ hint:`"Pares" e "cliente na equipe" são marcas do método cujo nome começa com a letra X.`,
+ explain:`O <b>XP</b> enfatiza retroalimentação constante, desenvolvimento incremental, comunicação e trabalho em pares. O <b>Scrum</b> usa backlog, sprints e daily; cascata e espiral são modelos prescritivos; métodos formais usam especificações matemáticas.`},
+
+// ----- Unidade 2 -----
+{part:3, unit:2, ref:"Estilo da prova U2 · Q1 — V/F sobre BPMN",
+ statement:`Julgue as afirmativas em (V) Verdadeiras ou (F) Falsas.<br><br>( ) O BPMN utiliza um único diagrama, o Business Process Diagram (BPD).<br>( ) O evento de início é representado por um círculo de contorno escuro e o de encerramento, por um círculo de contorno claro.<br>( ) O gateway exclusivo baseado em evento depende de uma resposta externa ao processo para determinar o desvio.<br>( ) Os conectores de fluxo de mensagem representam tarefas a serem executadas no processo.<br><br>Assinale a sequência correta:`,
+ options:["F – V – V – F.","V – V – F – F.","V – F – F – V.","F – F – V – V.","V – F – V – F."],
+ correct:4,
+ hint:`Na afirmação 2, as cores estão trocadas. Na 4, o fluxo de mensagem transmite o quê?`,
+ explain:`1 <b>V</b>. 2 <b>F</b>: início = contorno <b>claro</b>; encerramento = contorno <b>escuro</b>. 3 <b>V</b> (ex.: o cliente responde "sim" ou "não" a uma cotação). 4 <b>F</b>: o fluxo de mensagem evidencia a transferência de <b>informação</b>, sem envolver tarefas.`},
+
+{part:3, unit:2, ref:"Estilo da prova U2 · Q2 — Asserção-razão (gerenciamento)",
+ statement:`Avalie as asserções e a relação proposta entre elas.<br><br><b>I.</b> Os processos de gerenciamento não agregam valor diretamente ao cliente final.<br><b>PORQUE</b><br><b>II.</b> Eles medem, monitoram e controlam as atividades da organização, agregando valor aos processos primários e de suporte.<br><br>Com base no exposto, podemos afirmar que:`,
+ options:assertOpts,
+ correct:0,
+ hint:`Os processos de gerenciamento melhoram os <i>outros processos</i>; o cliente só percebe indiretamente.`,
+ explain:`As duas são verdadeiras e a II justifica a I: como o papel do gerenciamento é supervisionar e controlar os demais processos, o valor chega ao cliente apenas de forma <b>indireta</b>, pela otimização dos processos.`},
+
+{part:3, unit:2, ref:"Estilo da prova U2 · Q3 — CMM",
+ statement:`O CMM, que deu origem ao CMMI, descreve elementos-chave de um processo de software eficaz. Ele é baseado em quantos níveis de maturidade e foi criado por qual instituição?`,
+ options:["Três níveis, criado pelo OMG.","Cinco níveis, criado pelo SEI.","Quatro níveis, criado pela ABPMP.","Cinco níveis, criado pela ISO.","Sete níveis, criado pela IBM."],
+ correct:1,
+ hint:`SEI = <i>Software Engineering Institute</i>.`,
+ explain:`O <b>SEI</b> criou o CMM, baseado em <b>cinco níveis de maturidade</b>. O CMMI consolidou os modelos de capacitação existentes. Quanto maior o nível, melhor a capacidade de gerenciamento do processo. OMG padronizou o BPMN/UML; a ABPMP publica o BPM CBOK.`},
+
+{part:3, unit:2, ref:"Estilo da prova U2 · Q4 — Subprocesso colapsado",
+ statement:`No BPMN, como é indicado um subprocesso colapsado?`,
+ options:["Por um círculo duplo.","Por um retângulo de bordas arredondadas contendo o símbolo \"+\", que indica outro nível de detalhes.","Por um losango com um \"X\".","Por uma linha tracejada com seta.","Por um retângulo com o canto dobrado."],
+ correct:1,
+ hint:`"+" é o sinal de que existe mais coisa dentro, em outro nível.`,
+ explain:`O subprocesso <b>colapsado</b> traz o símbolo <b>+</b> (outro nível de detalhes); o <b>expandido</b> mostra o processo de negócio dentro dele. Círculo duplo é evento intermediário; losango é gateway; linha tracejada é fluxo de mensagem/associação; canto dobrado é objeto de dados.`},
+
+// ----- Unidade 3 -----
+{part:3, unit:3, ref:"Estilo da prova U3 · Q1 — V/F sobre requisitos",
+ statement:`Julgue as afirmativas em (V) Verdadeiras ou (F) Falsas.<br><br>( ) Um único requisito não funcional pode resultar em vários requisitos funcionais.<br>( ) O protótipo descartável é integrado ao software final.<br>( ) Ao redigir requisitos em linguagem natural, recomenda-se usar "deve" para os obrigatórios e "pode" para os desejáveis.<br>( ) A validação dos requisitos é feita somente no fim do projeto, quando o software está pronto.<br><br>Assinale a sequência correta:`,
+ options:["V – F – V – F.","V – V – F – F.","F – V – V – F.","V – F – F – V.","F – F – V – V."],
+ correct:0,
+ hint:`Descartável é o que se joga fora. E a validação é "continuada".`,
+ explain:`1 <b>V</b>. 2 <b>F</b>: o descartável é <b>abandonado</b> após a fase exploratória; o <b>evolutivo</b> é que é integrado. 3 <b>V</b>. 4 <b>F</b>: o levantamento e a validação são <b>contínuos e iterativos</b>; qualquer mudança em um requisito repete o ciclo.`},
+
+{part:3, unit:3, ref:"Estilo da prova U3 · Q2 — Asserção-razão (prototipagem)",
+ statement:`Avalie as asserções e a relação proposta entre elas.<br><br><b>I.</b> A prototipagem permite identificar problemas nos requisitos precocemente.<br><b>PORQUE</b><br><b>II.</b> A elicitação de requisitos é uma das primeiras etapas da engenharia de requisitos.<br><br>Com base no exposto, podemos afirmar que:`,
+ options:assertOpts,
+ correct:1,
+ hint:`As duas frases são verdadeiras. Mas "ser uma das primeiras etapas" explica a vantagem do protótipo?`,
+ explain:`I é verdadeira (vantagem da prototipagem) e II também é verdadeira, mas <b>II não justifica I</b>: a vantagem do protótipo vem de o usuário experimentar uma versão simplificada do sistema e dar <i>feedback</i>, não da posição da elicitação no processo.`},
+
+{part:3, unit:3, ref:"Estilo da prova U3 · Q3 — Negociação",
+ statement:`A negociação de requisitos visa desenvolver um plano de projeto que atenda às demandas dos stakeholders, considerando as restrições de:`,
+ options:["cor, fonte, ícones e layout.","linguagem de programação, banco de dados e sistema operacional.","orçamento, pessoal, tecnologia e/ou tempo.","marketing, vendas, recursos humanos e jurídico.","versão, status, autor e data."],
+ correct:2,
+ hint:`Pense em tudo o que limita uma equipe de desenvolvimento: dinheiro, gente, ferramentas e prazo.`,
+ explain:`Segundo Pressman (2021), a negociação analisa as restrições de <b>orçamento, pessoal, tecnologia e/ou tempo</b> impostas à equipe. As outras alternativas misturam detalhes de interface, de implementação ou de documentação.`},
+
+{part:3, unit:3, ref:"Estilo da prova U3 · Q4 — Rastreabilidade para trás",
+ statement:`Na matriz de rastreabilidade, relacionar o requisito RF20 ao stakeholder que o solicitou e ao objetivo estratégico OE3 é um exemplo de rastreabilidade:`,
+ options:["Para frente, pois aponta os artefatos gerados.","Horizontal, pois relaciona requisitos do mesmo tipo.","Para trás, pois remete à origem do requisito.","Nenhuma, pois stakeholders não são rastreáveis.","Para frente, pois remete ao código implementado."],
+ correct:2,
+ hint:`Quem pediu e por quê? Isso é "de onde veio" ou "no que virou"?`,
+ explain:`Ligar o requisito à sua <b>origem</b> (solicitante e objetivo estratégico) é a <b>rastreabilidade para trás</b>. Os artefatos gerados (caso de uso, caso de teste, módulo) formam a rastreabilidade <b>para frente</b>; a ligação com outro requisito (ex.: RNF3) é a <b>horizontal</b>.`},
+
+// ----- Unidade 4 -----
+{part:3, unit:4, ref:"Estilo da prova U4 · Q1 — V/F sobre POO e UML",
+ statement:`Julgue as afirmativas em (V) Verdadeiras ou (F) Falsas.<br><br>( ) Um objeto é uma instância única de uma classe, distinta dos demais por seus valores de atributos.<br>( ) No diagrama de classes, o símbolo "+" indica que o atributo ou método é privado.<br>( ) Polimorfismo significa que a mesma operação pode atuar de modos diversos em classes diferentes.<br>( ) O diagrama de casos de uso é o mais focado em nível de algoritmo da UML.<br><br>Assinale a sequência correta:`,
+ options:["F – V – V – F.","V – F – V – F.","V – V – F – F.","F – F – V – V.","V – F – F – V."],
+ correct:1,
+ hint:`O "+" é "público". E "nível de algoritmo" lembra um fluxograma: qual diagrama?`,
+ explain:`1 <b>V</b>. 2 <b>F</b>: <b>+</b> é público; <b>−</b> é privado (encapsulado). 3 <b>V</b>. 4 <b>F</b>: o diagrama mais focado no nível de algoritmo é o de <b>atividades</b>; o de casos de uso é o mais abstrato e informal.`},
+
+{part:3, unit:4, ref:"Estilo da prova U4 · Q2 — Asserção-razão (casos de uso)",
+ statement:`Avalie as asserções e a relação proposta entre elas.<br><br><b>I.</b> O diagrama de casos de uso é adequado para apresentar o sistema ao cliente nas primeiras reuniões.<br><b>PORQUE</b><br><b>II.</b> Ele usa linguagem simples e informal e oferece uma visão geral do comportamento do sistema, sem entrar em detalhes de implementação.<br><br>Com base no exposto, podemos afirmar que:`,
+ options:assertOpts,
+ correct:0,
+ hint:`O cliente costuma ser leigo em programação. O que ele precisa para entender?`,
+ explain:`As duas são verdadeiras e a II justifica a I: por ser informal e abstrato, o diagrama permite que o cliente compreenda o funcionamento do sistema e identifique lacunas na especificação. Recomenda-se apresentá-lo junto de um protótipo.`},
+
+{part:3, unit:4, ref:"Estilo da prova U4 · Q3 — Associação de diagramas",
+ statement:`Faça a correspondência entre cada diagrama da UML (Coluna A) e o seu foco principal (Coluna B).<br><table><tr><th>Coluna A</th><th>Coluna B</th></tr>
+ <tr><td>I. Sequência</td><td>1. Subsistemas e submódulos do sistema</td></tr>
+ <tr><td>II. Instalação</td><td>2. Transições de estado de um elemento</td></tr>
+ <tr><td>III. Máquina de estados</td><td>3. Ordem temporal das mensagens entre objetos</td></tr>
+ <tr><td>IV. Pacotes</td><td>4. Nós de hardware e os componentes executados neles</td></tr></table>
+ Assinale a associação correta:`,
+ options:["I-1; II-2; III-3; IV-4.","I-3; II-1; III-2; IV-4.","I-2; II-4; III-3; IV-1.","I-3; II-4; III-2; IV-1.","I-4; II-3; III-1; IV-2."],
+ correct:3,
+ hint:`Comece pelos mais fáceis: "estado" → máquina de estados; "hardware" → instalação.`,
+ explain:`<b>Sequência</b> → ordem temporal das mensagens (3). <b>Instalação</b> → hardware e software que executa nos nós (4). <b>Máquina de estados</b> → transições de estado (2). <b>Pacotes</b> → subsistemas (1). Resposta: <b>I-3; II-4; III-2; IV-1</b>.`},
+
+{part:3, unit:4, ref:"Estilo da prova U4 · Q4 — Estereótipo control",
+ statement:`Qual estereótipo identifica, no diagrama de classes, as classes responsáveis por implementar regras de negócio?`,
+ options:["&lt;&lt;entity&gt;&gt;","&lt;&lt;boundary&gt;&gt;","&lt;&lt;control&gt;&gt;","&lt;&lt;include&gt;&gt;","&lt;&lt;extend&gt;&gt;"],
+ correct:2,
+ hint:`Quem "controla" as regras? As classes de persistência guardam dados; as de fronteira conversam com atores externos.`,
+ explain:`<code>&lt;&lt;control&gt;&gt;</code> = regras de negócio. <code>&lt;&lt;entity&gt;&gt;</code> = persistência (armazena dados). <code>&lt;&lt;boundary&gt;&gt;</code> = fronteira (comunicação entre atores externos e o sistema). <code>&lt;&lt;include&gt;&gt;</code> e <code>&lt;&lt;extend&gt;&gt;</code> são relacionamentos de casos de uso.`}
+];
+
+/* ---------- Dicas de estudo por unidade (aparecem quando há erros) ---------- */
+const unitTips = {
+  1:`<b>Unidade 1: processos de software.</b> Reveja o tutorial da Unidade 1. Memorize as atividades de Sommerville (4) e Pressman (5), diferencie <b>cascata</b> (sequencial), <b>incremental</b> (entregas parciais) e <b>espiral</b> (protótipo + controle), e lembre que o PU é orientado a casos de uso, centrado na arquitetura e iterativo e incremental.`,
+  2:`<b>Unidade 2: processos de negócio e BPMN.</b> Pergunte sempre: o processo entrega valor <b>direto ao cliente final</b>? Se sim, é primário; se apoia, suporte; se mede e controla, gerenciamento. No BPMN, decore os 4 elementos básicos (atividade, evento, gateway, conector) e o BPD como diagrama único. Teste suas respostas na ferramenta do tutorial.`,
+  3:`<b>Unidade 3: engenharia de requisitos.</b> RF = o que o sistema faz; RNF = qualidade ou restrição, quase sempre <b>mensurável</b>; domínio = regra do ambiente que condiciona um RF. Revise as técnicas de elicitação (etnografia observa o que se faz de fato), os tipos de rastreabilidade e as etapas de mudança.`,
+  4:`<b>Unidade 4: UML.</b> Separe estruturais (classes, pacotes, componentes, instalação, objetos, estrutura composta) de comportamentais. Em casos de uso: <b>include = obrigatório</b>, <b>extend = opcional</b>. Em classes: composição (parte não vive sem o todo) × agregação. Use a ferramenta do tutorial para treinar include/extend.`
+};
+
+const unitInfo = {
+  1:{name:"Unidade 1: introdução e processos de software", short:"Unidade 1", color:"var(--u1)"},
+  2:{name:"Unidade 2: processos de negócio e BPMN", short:"Unidade 2", color:"var(--u2)"},
+  3:{name:"Unidade 3: engenharia de requisitos", short:"Unidade 3", color:"var(--u3)"},
+  4:{name:"Unidade 4: modelagem de sistemas (UML)", short:"Unidade 4", color:"var(--u4)"}
+};
+const partInfo = {
+  1:{name:"Parte 1: exercícios das unidades", short:"Exercícios", desc:"As 20 questões dos seus exercícios das Unidades 1 a 4, com o gabarito da plataforma e explicação de cada alternativa.", cls:""},
+  2:{name:"Parte 2: fixação", short:"Fixação", desc:"Questões novas, com dicas e pontos de fixação, cobrindo as quatro unidades.", cls:"p2"},
+  3:{name:"Parte 3: estilo da prova", short:"Estilo da prova", desc:"Formato Anhanguera: julgamento V/F, asserção-razão (I PORQUE II), lacunas e associação de colunas.", cls:"p3"}
+};
+const letters = ["A","B","C","D","E"];
+const accepted = q => Array.isArray(q.correct) ? q.correct : [q.correct];
+questions.forEach((q, i) => { q.id = "p" + q.part + "|" + q.ref; q.idx = i; });
+
+/* ---------- Estado persistente (localStorage) ---------- */
+const STORE_KEY = "ams-simulado-v1";
+const defaultState = () => ({
+  answers:{}, mode:"instant", submitted:false, hints:{}, history:[],
+  tab:"tutoriais", filter:"all", reviewed:{}, theme:null,
+  calc:{atual:50, prova:50, minimo:60, criterio:"gte", nq:10}
+});
+function loadState(){
+  const d = defaultState();
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return {...d, ...s, calc:{...d.calc, ...(s.calc || {})}};
+    }
+  } catch (e) {}
+  return d;
+}
+let state = loadState();
+const savedFlag = document.getElementById("savedFlag");
+function save(){
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    savedFlag.textContent = "💾 salvo neste navegador";
+  } catch (e) {
+    savedFlag.textContent = "⚠️ não foi possível salvar";
+  }
+}
+
+/* ---------- Tema ---------- */
+function applyTheme(){
+  if (state.theme) document.documentElement.setAttribute("data-theme", state.theme);
+  else document.documentElement.removeAttribute("data-theme");
+}
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const dark = state.theme ? state.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  state.theme = dark ? "light" : "dark";
+  applyTheme(); save();
+});
+applyTheme();
+
+/* ---------- Abas ---------- */
+function showTab(tab){
+  state.tab = tab;
+  document.querySelectorAll("nav.tabs button[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === "tab-" + tab));
+  if (tab === "nota") renderCalc();
+  save();
+}
+document.querySelectorAll("nav.tabs button[data-tab]").forEach(b => b.addEventListener("click", () => { showTab(b.dataset.tab); window.scrollTo(0, 0); }));
+
+/* ---------- Render das questões ---------- */
+const quiz = document.getElementById("quiz");
+let lastPart = null, lastUnit = null;
+questions.forEach((q, i) => {
+  if (q.part !== lastPart) {
+    lastPart = q.part; lastUnit = null;
+    const pt = document.createElement("div");
+    pt.className = "part-title " + partInfo[q.part].cls;
+    pt.dataset.part = q.part;
+    pt.innerHTML = `<h2>${partInfo[q.part].name}</h2><p>${partInfo[q.part].desc}</p>`;
+    quiz.appendChild(pt);
+  }
+  if (q.unit !== lastUnit) {
+    lastUnit = q.unit;
+    const ut = document.createElement("div");
+    ut.className = "unit-title";
+    ut.dataset.part = q.part; ut.dataset.unit = q.unit;
+    ut.innerHTML = `<div class="dot" style="background:${unitInfo[q.unit].color}"></div><h3>${unitInfo[q.unit].name}</h3>`;
+    quiz.appendChild(ut);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.id = "card-" + i;
+
+  const opts = q.options.map((opt, j) => `
+    <label class="opt" id="opt-${i}-${j}">
+      <input type="radio" name="q${i}" value="${j}">
+      <span><span class="letter">${letters[j]}</span> ${opt}</span>
+    </label>`).join("");
+
+  let extra = "";
+  if (q.fix) extra += `<div class="fix"><b>💡 Para fixar:</b> ${q.fix}</div>`;
+  if (q.note) extra += `<div class="note"><b>Nota:</b> ${q.note}</div>`;
+
+  card.innerHTML = `
+    <div class="qhead"><span class="qnum">Questão ${i + 1}</span><span class="qtag" id="tag-${i}"></span></div>
+    <div class="qref"><span>${q.ref}</span>${q.real ? `<span class="badge real">exercício real · gabarito da plataforma</span>` : ""}</div>
+    <div class="statement">${q.statement}</div>
+    <div class="options">${opts}</div>
+    ${q.hint ? `<button class="hint-btn" data-hint="${i}">💡 Dica</button><div class="hint" id="hint-${i}">${q.hint}</div>` : ""}
+    <div class="explain" id="explain-${i}"><b>Explicação:</b> ${q.explain}${extra}</div>`;
+  card.querySelectorAll("input").forEach(inp => inp.addEventListener("change", () => choose(i, +inp.value)));
+  const hb = card.querySelector(".hint-btn");
+  if (hb) hb.addEventListener("click", () => {
+    if (state.hints[q.id]) delete state.hints[q.id]; else state.hints[q.id] = true;
+    paintCard(i); save();
+  });
+  quiz.appendChild(card);
+});
+
+document.getElementById("metaTotal").textContent = questions.length;
+document.getElementById("metaReal").textContent = questions.filter(q => q.part === 1).length;
+
+const answerOf = q => (q.id in state.answers) ? state.answers[q.id] : null;
+const isRevealed = q => state.submitted || (state.mode === "instant" && answerOf(q) !== null);
+const isWrong = q => answerOf(q) !== null && !accepted(q).includes(answerOf(q));
+
+function choose(i, j){
+  const q = questions[i];
+  if (isRevealed(q)) { paintCard(i); return; }
+  state.answers[q.id] = j;
+  save(); paintCard(i); updateProgress();
+}
+
+function paintCard(i){
+  const q = questions[i], sel = answerOf(q), rev = isRevealed(q), ok = accepted(q);
+  const card = document.getElementById("card-" + i), tag = document.getElementById("tag-" + i);
+  card.classList.remove("correct-card", "incorrect-card");
+  q.options.forEach((_, j) => {
+    const el = document.getElementById(`opt-${i}-${j}`), inp = el.querySelector("input");
+    inp.checked = sel === j;
+    inp.disabled = rev;
+    el.classList.toggle("locked", rev);
+    el.classList.toggle("correct", rev && ok.includes(j));
+    el.classList.toggle("incorrect", rev && j === sel && !ok.includes(j));
+  });
+  tag.className = "qtag";
+  if (rev) {
+    if (sel !== null && ok.includes(sel)) { tag.textContent = "correta"; tag.classList.add("good"); card.classList.add("correct-card"); }
+    else { tag.textContent = sel === null ? "sem resposta" : "incorreta"; tag.classList.add("bad"); card.classList.add("incorrect-card"); }
+  } else if (sel !== null) { tag.textContent = "respondida"; tag.classList.add("done"); }
+  else tag.textContent = "não respondida";
+  document.getElementById("explain-" + i).classList.toggle("show", rev);
+  const h = document.getElementById("hint-" + i);
+  if (h) h.classList.toggle("show", !!state.hints[q.id]);
+}
+const paintAll = () => questions.forEach((_, i) => paintCard(i));
+
+/* ---------- Filtros ---------- */
+function matchesFilter(q){
+  const f = state.filter;
+  if (f === "all") return true;
+  if (f[0] === "u") return q.unit === +f.slice(1);
+  if (f[0] === "p") return q.part === +f.slice(1);
+  if (f === "todo") return answerOf(q) === null;
+  if (f === "wrong") return isRevealed(q) && isWrong(q);
+  return true;
+}
+function applyFilter(){
+  let visible = 0;
+  const shownParts = new Set(), shownUnits = new Set();
+  questions.forEach((q, i) => {
+    const show = matchesFilter(q);
+    document.getElementById("card-" + i).classList.toggle("hidden", !show);
+    if (show) { visible++; shownParts.add(q.part); shownUnits.add(q.part + "-" + q.unit); }
+  });
+  quiz.querySelectorAll(".part-title").forEach(el => el.classList.toggle("hidden", !shownParts.has(+el.dataset.part)));
+  quiz.querySelectorAll(".unit-title").forEach(el => el.classList.toggle("hidden", !shownUnits.has(el.dataset.part + "-" + el.dataset.unit)));
+  document.getElementById("emptyMsg").style.display = visible ? "none" : "block";
+  document.getElementById("filterSel").value = state.filter;
+}
+document.getElementById("filterSel").addEventListener("change", e => { state.filter = e.target.value; applyFilter(); save(); });
+
+/* ---------- Modo ---------- */
+function paintMode(){
+  document.querySelectorAll("#modeSeg button").forEach(b => b.classList.toggle("on", b.dataset.mode === state.mode));
+}
+document.querySelectorAll("#modeSeg button").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.mode === state.mode) return;
+  state.mode = b.dataset.mode;
+  paintMode(); paintAll(); updateProgress(); applyFilter(); save();
+}));
+
+/* ---------- Progresso ---------- */
+function tally(list){
+  let c = 0, w = 0, a = 0;
+  list.forEach(q => {
+    const s = answerOf(q);
+    if (s === null) return;
+    a++;
+    if (accepted(q).includes(s)) c++; else w++;
+  });
+  return {c, w, a, t:list.length};
+}
+function updateProgress(){
+  const t = tally(questions);
+  document.getElementById("progressFill").style.width = (t.a / t.t * 100) + "%";
+  document.getElementById("progressText").textContent = `${t.a} / ${t.t} respondidas`;
+  const live = document.getElementById("liveScore");
+  if (state.mode === "instant" || state.submitted) live.textContent = t.a ? `✔ ${t.c} certas · ✘ ${t.w} erradas · ${Math.round(t.c / t.a * 100)}% de acerto` : "";
+  else live.textContent = "modo prova: a correção aparece no final";
+}
+
+/* ---------- Resultado ---------- */
+function barRow(label, s, color){
+  const p = s.t ? Math.round(s.c / s.t * 100) : 0;
+  return `<div class="bar-row"><div>${label}</div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${color}"></div></div><div>${s.c}/${s.t}</div></div>`;
+}
+function projectionText(pct){
+  const c = state.calc;
+  if (!(c.nq > 0) || !(c.prova > 0)) return "";
+  const hits = Math.round(pct / 100 * c.nq);
+  const final = c.atual + hits * c.prova / c.nq;
+  const pass = c.criterio === "gte" ? final >= c.minimo - 1e-9 : final > c.minimo + 1e-9;
+  return `Se você mantiver esse aproveitamento na prova (${c.nq} questões valendo ${fmt(c.prova)}): ≈ <b>${hits} acertos</b> → nota final <b>${fmt(final)}</b> ${pass ? "✅ aprovado" : "❌ abaixo do mínimo"} · <a href="#" data-goto="nota">ajustar na calculadora</a>`;
+}
+function renderResults(){
+  const total = tally(questions);
+  const pct = Math.round(total.c / total.t * 100);
+  document.getElementById("scoreBig").textContent = pct + "%";
+  document.getElementById("scoreSub").textContent = `${total.c} de ${total.t} corretas` + (total.a < total.t ? ` (${total.t - total.a} sem resposta)` : "");
+  document.getElementById("scoreProj").innerHTML = projectionText(pct);
+
+  let bars = "<h4>Por unidade</h4>";
+  [1,2,3,4].forEach(u => {
+    const s = tally(questions.filter(q => q.unit === u));
+    bars += barRow(unitInfo[u].short, s, unitInfo[u].color);
+  });
+  bars += "<h4>Por parte</h4>";
+  [1,2,3].forEach(p => {
+    const s = tally(questions.filter(q => q.part === p));
+    bars += barRow(partInfo[p].short, s, "var(--accent)");
+  });
+  document.getElementById("unitBars").innerHTML = bars;
+
+  const weak = [1,2,3,4].map(u => ({u, s:tally(questions.filter(q => q.unit === u))}))
+    .filter(x => x.s.c < x.s.t).sort((a, b) => a.s.c / a.s.t - b.s.c / b.s.t);
+  document.getElementById("tipsCard").style.display = weak.length ? "block" : "none";
+  document.getElementById("tipsList").innerHTML = weak.map(x => `<div class="tip">${unitTips[x.u]}</div>`).join("");
+
+  const wrong = questions.filter(q => !accepted(q).includes(answerOf(q)));
+  document.getElementById("reviewCard").style.display = wrong.length ? "block" : "none";
+  document.getElementById("reviewList").innerHTML = wrong.map(q =>
+    `<a href="#card-${q.idx}" data-jump="${q.idx}">Questão ${q.idx + 1}: ${q.ref}${answerOf(q) === null ? " (sem resposta)" : ""}</a>`).join("");
+
+  const hist = state.history.slice(-10).reverse();
+  document.getElementById("historyCard").style.display = hist.length ? "block" : "none";
+  document.getElementById("historyTable").innerHTML = `<tr><th>Data</th><th>Modo</th><th>Acertos</th><th>%</th></tr>` +
+    hist.map(h => `<tr><td>${new Date(h.date).toLocaleString("pt-BR", {dateStyle:"short", timeStyle:"short"})}</td><td>${h.mode === "exam" ? "prova" : "estudo"}</td><td>${h.c}/${h.t}</td><td>${h.pct}%</td></tr>`).join("");
+
+  document.getElementById("results").classList.add("show");
+}
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const t = tally(questions);
+  if (t.a < t.t && !confirm(`Você ainda não respondeu ${t.t - t.a} questão(ões). Finalizar mesmo assim?`)) return;
+  state.submitted = true;
+  state.history.push({date:new Date().toISOString(), mode:state.mode, c:t.c, t:t.t, pct:Math.round(t.c / t.t * 100)});
+  save(); paintAll(); updateProgress(); applyFilter(); renderResults();
+  document.getElementById("results").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("retryBtn").addEventListener("click", () => {
+  if (!confirm("Apagar todas as respostas e começar de novo? (o histórico de tentativas é mantido)")) return;
+  state.answers = {}; state.submitted = false; state.hints = {}; state.filter = "all";
+  save(); paintAll(); updateProgress(); applyFilter();
+  document.getElementById("results").classList.remove("show");
+  window.scrollTo(0, 0);
+});
+document.getElementById("retryWrongBtn").addEventListener("click", () => {
+  questions.forEach(q => { if (!accepted(q).includes(answerOf(q))) { delete state.answers[q.id]; delete state.hints[q.id]; } });
+  state.submitted = false; state.filter = "todo";
+  save(); paintAll(); updateProgress(); applyFilter();
+  document.getElementById("results").classList.remove("show");
+  window.scrollTo(0, 0);
+});
+
+document.addEventListener("click", e => {
+  const jump = e.target.closest("[data-jump]");
+  if (jump) {
+    e.preventDefault();
+    if (state.filter !== "all") { state.filter = "all"; applyFilter(); save(); }
+    document.getElementById("card-" + jump.dataset.jump).scrollIntoView({behavior:"smooth", block:"center"});
+  }
+  const go = e.target.closest("[data-goto]");
+  if (go) { e.preventDefault(); showTab(go.dataset.goto); window.scrollTo(0, 0); }
+  const pr = e.target.closest("[data-practice]");
+  if (pr) { state.filter = pr.dataset.practice; applyFilter(); showTab("simulado"); window.scrollTo(0, 0); }
+});
+
+/* ---------- Tutoriais: "revisei" ---------- */
+function paintReviewed(){
+  [1,2,3,4].forEach(u => {
+    const yes = !!state.reviewed[u];
+    document.querySelector(`[data-review="${u}"]`).checked = yes;
+    const chip = document.querySelector(`[data-chip="${u}"]`);
+    chip.textContent = yes ? "✓ revisada" : "não revisada";
+    chip.classList.toggle("yes", yes);
+  });
+}
+document.querySelectorAll("[data-review]").forEach(cb => cb.addEventListener("change", () => {
+  state.reviewed[cb.dataset.review] = cb.checked; paintReviewed(); save();
+}));
+
+/* ---------- Ferramenta: classificação do processo (U2) ---------- */
+function renderProc(){
+  const direto = document.getElementById("pcDireto").value === "s";
+  const papel = document.getElementById("pcPapel").value;
+  document.getElementById("pcRow2").style.display = direto ? "none" : "flex";
+  let html;
+  if (direto) html = `<span class="chip good">Processo primário</span> Está ligado ao <b>core business</b> e agrega valor ao <b>cliente final</b>; pode começar e terminar fora da organização. Ex.: produção, entrega ao cliente, marketing.`;
+  else if (papel === "apoiar") html = `<span class="chip mid">Processo de suporte</span> Sustenta os processos primários e de gerenciamento, mas não entrega valor direto ao cliente. Ex.: RH, TI, contabilidade, contas a pagar.`;
+  else html = `<span class="chip bad">Processo de gerenciamento</span> <b>Mede, monitora e controla</b> as atividades (indicadores, governança), agregando valor aos outros processos. Ex.: gerenciamento estratégico, gestão de desempenho.`;
+  document.getElementById("pcOut").innerHTML = html;
+}
+["pcDireto", "pcPapel"].forEach(id => document.getElementById(id).addEventListener("change", renderProc));
+
+/* ---------- Ferramenta: tipo de requisito (U3) ---------- */
+function renderReq(){
+  const v = document.getElementById("rqTipo").value;
+  const map = {
+    acao:`<span class="chip good">Requisito funcional (RF)</span> Descreve <b>o que o sistema faz</b>, em resposta a entradas. Ex.: <code>[RF0004] O sistema deve permitir a visualização das notas cadastradas.</code>`,
+    medida:`<span class="chip bad">Requisito não funcional (RNF)</span> Se pode ser <b>mensurado</b> (segundos, megabytes, disponibilidade) ou fixa uma tecnologia, é qualidade/restrição. Ex.: <code>[RNF0002] O tempo de espera dos relatórios não poderá ultrapassar 6 segundos.</code>`,
+    acesso:`<span class="chip bad">Requisito não funcional (RNF)</span> Restrições de <b>acesso/segurança</b> e de <b>usabilidade/padrão visual</b> são qualidades do sistema. Ex.: <code>[RNF0005] Apenas supervisor e administrador poderão gerar relatórios.</code>`,
+    regra:`<span class="chip mid">Requisito de domínio</span> Reflete particularidades do <b>ambiente</b> e impõe condições ou cálculos sobre uma funcionalidade. Ex.: <i>aprovado somente com 3000 pontos nas avaliações e 4000 nas atividades.</i>`
+  };
+  document.getElementById("rqOut").innerHTML = map[v];
+}
+document.getElementById("rqTipo").addEventListener("change", renderReq);
+
+/* ---------- Ferramenta: relacionamento entre casos de uso (U4) ---------- */
+function renderUC(){
+  const v = document.getElementById("ucRel").value;
+  const map = {
+    inc:`<span class="chip good">&lt;&lt;include&gt;&gt;</span> Dependência <b>obrigatória</b>: executar o primeiro implica executar o segundo (como chamar uma sub-rotina). Linha tracejada com seta para o caso de uso incluído. Ex.: <i>Realizar Saque</i> inclui <i>Registrar Movimento</i>.`,
+    ext:`<span class="chip mid">&lt;&lt;extend&gt;&gt;</span> Cenário <b>opcional</b>: só ocorre se uma condição for satisfeita. Mesma linha tracejada, com o estereótipo extend. Ex.: <i>Matricular Aluno</i> pode ser estendido por <i>Consultar informações das turmas</i>.`,
+    gen:`<span class="chip bad">Generalização / especialização</span> Casos de uso muito parecidos: cria-se um <b>genérico</b> com o que é comum e <b>especializações</b> só com as diferenças (herdam associações, include e extend). Linha com seta espessa. Ex.: <i>Abrir Conta Comum</i> → <i>Especial</i> e <i>Poupança</i>.`
+  };
+  document.getElementById("ucOut").innerHTML = map[v];
+}
+document.getElementById("ucRel").addEventListener("change", renderUC);
+
+/* ---------- Calculadora de nota ---------- */
+const fmt = x => (Math.round(x * 100) / 100).toLocaleString("pt-BR");
+const calcIds = {atual:"cAtual", prova:"cProva", minimo:"cMin", criterio:"cCrit", nq:"cNq"};
+Object.entries(calcIds).forEach(([k, id]) => {
+  const el = document.getElementById(id);
+  el.value = state.calc[k];
+  el.addEventListener("input", () => {
+    state.calc[k] = k === "criterio" ? el.value : parseFloat(el.value);
+    save(); renderCalc();
+  });
+});
+function renderCalc(){
+  const {atual, prova, minimo, criterio, nq} = state.calc;
+  const v = document.getElementById("calcVerdict"), tb = document.getElementById("calcTable"), pj = document.getElementById("calcProj");
+  if ([atual, prova, minimo, nq].some(x => !isFinite(x)) || prova <= 0 || nq < 1) {
+    v.innerHTML = `<div class="verdict need">Preencha todos os campos com números (prova e nº de questões maiores que zero).</div>`;
+    tb.innerHTML = ""; pj.innerHTML = ""; return;
+  }
+  const n = Math.round(nq), per = prova / n;
+  const passes = f => criterio === "gte" ? f >= minimo - 1e-9 : f > minimo + 1e-9;
+  const sign = criterio === "gte" ? "≥" : "&gt;";
+  let k = null;
+  for (let a = 0; a <= n; a++) if (passes(atual + a * per)) { k = a; break; }
+  const needPts = minimo - atual;
+  if (k === 0) {
+    v.innerHTML = `<div class="verdict ok">✅ Você <b>já tem a nota mínima</b>: ${fmt(atual)} ${sign} ${fmt(minimo)}. Mesmo zerando a prova, passa por esse critério. (Confira se a sua disciplina exige nota mínima na própria prova.)</div>`;
+  } else if (k === null) {
+    v.innerHTML = `<div class="verdict no">❌ Mesmo acertando tudo, a nota máxima seria <b>${fmt(atual + prova)}</b>, que não passa de ${fmt(minimo)}. Veja no AVA as opções de prova substitutiva ou recuperação.</div>`;
+  } else {
+    v.innerHTML = `<div class="verdict need">Você precisa de <span class="num">${k} de ${n} questões</span>
+      Ou seja, <b>${fmt(k * per)} pontos</b> na prova (${Math.round(k / n * 100)}% de acerto). Em pontos exatos, faltam ${fmt(needPts)}${criterio === "gt" ? " e um pouco mais" : ""}; cada questão vale ${fmt(per)}.<br>
+      Nota final com ${k} acertos: <b>${fmt(atual + k * per)}</b> ${sign} ${fmt(minimo)} ✅</div>`;
+  }
+  const last = state.history[state.history.length - 1];
+  const myHits = last ? Math.round(last.pct / 100 * n) : null;
+  pj.innerHTML = last ? `<div class="key" style="font-size:14px">📈 No último simulado você acertou <b>${last.pct}%</b>. Na prova isso dá cerca de <b>${myHits} de ${n}</b> → nota final <b>${fmt(atual + myHits * per)}</b> ${passes(atual + myHits * per) ? "✅ passaria" : "❌ ainda não passaria"}. (Linha destacada em azul na tabela.)</div>`
+    : `<div style="font-size:13px;color:var(--muted)">Termine um simulado (botão "Finalizar e ver resultado") para ver aqui a projeção da sua nota.</div>`;
+  let html = `<tr><th>Acertos</th><th>Pontos na prova</th><th>Nota final</th><th>Situação</th></tr>`;
+  for (let a = 0; a <= n; a++) {
+    const f = atual + a * per, ok = passes(f);
+    const cls = [ok ? "pass" : "", a === k ? "min" : "", a === myHits ? "me" : ""].join(" ");
+    html += `<tr class="${cls}"><td>${a}/${n}</td><td>${fmt(a * per)}</td><td>${fmt(f)}</td><td>${ok ? "✅ aprovado" : "❌"}${a === k ? " ← mínimo" : ""}</td></tr>`;
+  }
+  tb.innerHTML = html;
+}
+
+/* ---------- Inicialização ---------- */
+paintMode(); paintAll(); updateProgress(); applyFilter(); paintReviewed();
+renderProc(); renderReq(); renderUC();
+if (state.submitted) renderResults();
+showTab(state.tab || "tutoriais");
+</script>
+</body>
+</html>
